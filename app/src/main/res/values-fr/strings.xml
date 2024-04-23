@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SAES401</string>
+    <string name="start_game">Commencez une nouvelle aventure</string>
+    <string name="continue_game">Continuez votre aventure</string>
+    <string name="title">Jeu dont vous êtes le héro</string>
+    <string name="credits">Credits</string>
+    <string name="previous">Précédentes parties</string>
+    <string name="creditsName">AlIOUI Scander \n CHAOUCH Zakaria \n OKI Samy</string>
+    <string name="go_back">Revenir au menu</string>
+</resources>

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SAES401</string>
+    <string name="start_game">Start new adventure</string>
+    <string name="continue_game">Continue your adventure</string>
+    <string name="title">The game where you are the hero</string>
+    <string name="credits">Credits</string>
+    <string name="previous">Previous game</string>
+    <string name="creditsName"> AlIOUI Scander\n CHAOUCH Zakaria\n OKI Samy</string>
+    <string name="go_back">Go back to menu</string>
 </resources>
