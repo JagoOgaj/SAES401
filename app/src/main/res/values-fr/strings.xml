@@ -8,4 +8,9 @@
     <string name="previous">Précédentes parties</string>
     <string name="creditsName">AlIOUI Scander \n CHAOUCH Zakaria \n OKI Samy</string>
     <string name="go_back">Revenir au menu</string>
+    <string name="hp">PV : %1$d</string>
+    <string name="time">%1$d s</string>
+    <string name="makeAction">Faire</string>
+    <string name="makeSpeak">Parler</string>
+    <string name="inventory">Inventaire</string>
 </resources>
