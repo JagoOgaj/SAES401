@@ -3,7 +3,6 @@ package com.example.saes401.utilities;
 public abstract class Item {
     private int durability;
     private String name;
-
     private int damage;
     private int heal;
 
@@ -44,5 +43,4 @@ public abstract class Item {
     private int getHeal(){
         return heal;
     }
-
 }

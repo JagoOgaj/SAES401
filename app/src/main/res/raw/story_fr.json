@@ -1,0 +1,54 @@
+{
+  "_title" : "Vengeance",
+  "_story" : [
+    {
+     "chapter" : 0,
+      "chapterName" : "Préambule",
+      "actors" : ["__JsonMainPlayer","Mysterious"],
+      "textIntroduction": "Votre village est attaqué, par un misterieux personnage",
+      "_initContent":
+        {
+          "_activeCharacter" : "__JsonMainPlayer",
+          "_timer": 10,
+          "_currentStep": 0,
+          "_actions" :
+          {
+            "action1" :
+            {
+              "name" : "Fuir",
+              "valueStep" : 0
+            },
+            "action2":
+            {
+              "name" : "Combatre",
+              "valueStep" : 1
+            }
+          }
+        },
+        "_actionsConsequences":
+        [
+          {
+            "choise": "Fuir"
+          },
+          {
+            "choise": "Combatre",
+            "textNaration": "Vous avez choisie de défendre votre village, vous etes face a un guerrier",
+            "type" : "figth",
+            "actors" : ["__JsonMainPlayer","Guerrier"],
+            "numberOfRound" : 3,
+            "actions" : ["Attaquer", "Esquiver"],
+            "textAction": {
+              "onAttack" : "Vous attaquez l'enemis",
+              "onDodge" : "Vous esquivez le prochain coup de l'enemis"
+            },
+            "win" : {
+
+            },
+            "loose" : {
+
+            }
+          }
+        ]
+    }
+  ]
+}
