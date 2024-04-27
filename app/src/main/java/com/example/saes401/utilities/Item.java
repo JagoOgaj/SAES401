@@ -8,7 +8,7 @@ public abstract class Item {
 
     private int inventorySize;
 
-    public Item(int durability, String name, int damage, int heal, int inventorySize){
+    public Item(int durability, String name, int damage, int heal, int inventorySize) {
         this.durability = durability;
         this.name = name;
         this.damage = damage;
@@ -16,31 +16,31 @@ public abstract class Item {
         this.inventorySize = inventorySize;
     }
 
-    private int getDurability(){
+    private int getDurability() {
         return durability;
     }
 
-    private void setDurability(int newDurability){
+    private void setDurability(int newDurability) {
         durability = newDurability;
     }
 
-    private String getName(){
+    private String getName() {
         return name;
     }
 
-    private int getDamage(){
+    private int getDamage() {
         return damage;
     }
 
-    private void setDamage(int newDamage){
+    private void setDamage(int newDamage) {
         damage = newDamage;
     }
 
-    private int getInventorySize(){
+    private int getInventorySize() {
         return inventorySize;
     }
 
-    private int getHeal(){
+    private int getHeal() {
         return heal;
     }
 }

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,21 +24,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void onClickCredits(){
+    private void onClickCredits() {
         //affiche les credits de l'app
         intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 
-    private void onClickStart(){
+    private void onClickStart() {
         //lance une nouvelle aventure
         intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
-    private void onClickPrevious(){
+
+    private void onClickPrevious() {
         //affiche les ancienne partie avec stats
     }
-    private void onClickContinue(){
+
+    private void onClickContinue() {
         //reprend l'ancienne partie pas terminer
     }
 }

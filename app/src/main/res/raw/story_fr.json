@@ -1,54 +1,81 @@
 {
-  "_title" : "Vengeance",
-  "_story" : [
-    {
-     "chapter" : 0,
-      "chapterName" : "Préambule",
-      "actors" : ["__JsonMainPlayer","Mysterious"],
+  "_title": "Vengeance",
+  "_story": {
+    "0-0": {
+      "chapterName": "Préambule",
+      "actors": [
+        "__JsonMainPlayer",
+        "Mysterious"
+      ],
       "textIntroduction": "Votre village est attaqué, par un misterieux personnage",
-      "_initContent":
+      "_initContent": {
+        "_activeCharacter": "__JsonMainPlayer",
+        "_timer": 10,
+        "_currentStep": 0,
+        "_actions": {
+          "action1": {
+            "name": "Fuir",
+            "valueStepActionConsequences": 0
+          },
+          "action2": {
+            "name": "Combatre",
+            "valueStepActionConsequences": 1
+          }
+        }
+      },
+      "_actionsConsequences": [
         {
-          "_activeCharacter" : "__JsonMainPlayer",
-          "_timer": 10,
-          "_currentStep": 0,
-          "_actions" :
-          {
-            "action1" :
-            {
-              "name" : "Fuir",
-              "valueStep" : 0
-            },
-            "action2":
-            {
-              "name" : "Combatre",
-              "valueStep" : 1
-            }
+          "choise": "Fuir",
+          "textNaration": "Vous decidez de fuir vers l'ouest",
+          "valueStepActionFinal": 3
+        },
+        {
+          "choise": "Combatre",
+          "textNaration": "Vous avez choisie de défendre votre village, vous etes face a un guerrier",
+          "type": "figth",
+          "actors": [
+            "__JsonMainPlayer",
+            "Guerrier"
+          ],
+          "numberOfRound": 3,
+          "timer": 5,
+          "actions": [
+            "Attack",
+            "Dodge"
+          ],
+          "textAction": {
+            "onAttack": "Vous attaquez l'enemis",
+            "onDodge": "Vous esquivez le prochain coup de l'enemis"
+          },
+          "win": {
+            "valueStepActionFinal": 0
+          },
+          "loose": {
+            "valueStepActionFinal": 1
+          }
+        }
+      ],
+      "_actionFinal": [
+        {
+          "textNaration": "Après avoir remporté le combat contre le guerrier, vous découvrez un indice crucial sur l'identité du mystérieux personnage qui a attaqué le village",
+          "indice": true,
+          "_rencontre": null
+        },
+        {
+          "textNaration": "Vous avez perdu, vous etes laisser pour mort",
+          "indice": false,
+          "_rencontre": {
+            "personnage": "Inconnu"
           }
         },
-        "_actionsConsequences":
-        [
-          {
-            "choise": "Fuir"
-          },
-          {
-            "choise": "Combatre",
-            "textNaration": "Vous avez choisie de défendre votre village, vous etes face a un guerrier",
-            "type" : "figth",
-            "actors" : ["__JsonMainPlayer","Guerrier"],
-            "numberOfRound" : 3,
-            "actions" : ["Attaquer", "Esquiver"],
-            "textAction": {
-              "onAttack" : "Vous attaquez l'enemis",
-              "onDodge" : "Vous esquivez le prochain coup de l'enemis"
-            },
-            "win" : {
-
-            },
-            "loose" : {
-
-            }
-          }
-        ]
+        {
+          "textNaration": "Vous vous retrouvez dans les bois, vous passerez la nuit ici",
+          "indice": false,
+          "_rencontre": null
+        }
+      ]
+    },
+    "0-1": {
     }
-  ]
+  }
 }
