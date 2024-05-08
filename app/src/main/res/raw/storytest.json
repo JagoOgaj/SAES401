@@ -1,0 +1,29 @@
+{
+  "histoire": [
+    {
+      "id": 1,
+      "texte": "Dans le calme apparent du village de Kage, notre héros, le jeune ninja Hiro, prépare sa vengeance. La nuit dernière, des bandits ont attaqué le village, laissant derrière eux désolation et tristesse.",
+      "suite": 2
+    },
+    {
+      "id": 2,
+      "texte": "Armé de son courage et des enseignements de son maître disparu, Hiro suit la piste laissée par les bandits. La forêt autour du village semble murmurer des indices sur leur direction.",
+      "suite": 3
+    },
+    {
+      "id": 3,
+      "texte": "Au cœur de la forêt, Hiro découvre un camp secret. Il doit décider s'il attaque maintenant avec l'effet de surprise, ou s'il attend la nuit pour une approche plus discrète.",
+      "suite": 4
+    },
+    {
+      "id": 4,
+      "texte": "Choisissant l'obscurité comme alliée, Hiro attend la tombée de la nuit. L'attaque est rapide et silencieuse. Après un combat intense, il confronte le chef des bandits, révélant un complot plus grand impliquant des rivaux de son propre maître.",
+      "suite": 5
+    },
+    {
+      "id": 5,
+      "texte": "Avec le chef des bandits vaincu, Hiro découvre des documents qui indiquent un plan pour anéantir plusieurs villages voisins. La mission de Hiro prend une nouvelle tournure : il doit maintenant alerter et unir les autres villages contre cette menace imminente.",
+      "suite": null
+    }
+  ]
+}
