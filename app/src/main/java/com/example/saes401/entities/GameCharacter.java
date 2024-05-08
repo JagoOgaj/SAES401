@@ -6,7 +6,7 @@ public abstract class GameCharacter {
     private int damage;
 
 
-    public GameCharacter(String name, int HP, int damage){
+    public GameCharacter(String name, int HP, int damage) {
         this.name = name;
         this.HP = HP;
         this.damage = damage;

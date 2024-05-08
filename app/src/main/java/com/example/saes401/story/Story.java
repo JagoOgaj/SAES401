@@ -7,7 +7,8 @@ import com.example.saes401.helper.GameConstant;
 public class Story extends Thread {
     private GameActivity gameActivity;
     private Player player;
-    public Story(GameActivity gameActivity){
+
+    public Story(GameActivity gameActivity) {
         this.player = new Player(GameConstant.PLAYER_NAME, GameConstant.DEFAULT_HP, GameConstant.DEFAULT_MAX_DAMAGE, GameConstant.DEFAULT_COIN);
         this.gameActivity = gameActivity;
     }

@@ -14,7 +14,7 @@ public class CreditsActivity extends AppCompatActivity {
         findViewById(R.id.goBackButton).setOnClickListener(view -> onClickGoBack());
     }
 
-    private void onClickGoBack(){
+    private void onClickGoBack() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
