@@ -1,0 +1,20 @@
+{
+   "objetClee" :
+   {
+     "nom" : "objetClee",
+     "image" : "objetClee.png",
+     "description" : "Description de l'objetClee"
+   },
+   "objetArgent" :
+   {
+     "nom" : "objetArgent",
+     "image" : "objetArgent.png",
+     "description" : "Description de l'objetArgent"
+  }, 
+  "objet1" : 
+  {
+    "nom" : "objet1",
+    "image" : "objet1.png",
+    "description" : "Description de l'objet1"
+  }
+}

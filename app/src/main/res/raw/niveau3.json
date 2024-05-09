@@ -1,0 +1,86 @@
+{
+    "objets": ["objetDebut1", "objetDebut2", "objetDebut3"],
+    "name": "Niveau3",
+    "enemies": [
+      {
+        "nom": "Enemie1",
+        "description": "Description Enemie1",
+        "image": "Enemie1.png",
+        "loose": 0,
+        "win": {
+          "dropPossible": ["objetArgent", "objetClee", "objetEnemie1"],
+          "naration": "Vous avez vaincu l'enemie 2",
+          "suivantPasDeClee": 1,
+          "suivantAvecClee": 5
+        },
+        "stats": {
+          "pv": 100,
+          "degats": 10
+        }
+      },
+      {
+        "nom": "Enemie2",
+        "description": "Description Enemie2",
+        "image": "Enemie2.png",
+        "loose": 0,
+        "win": {
+          "dropPossible": ["objetArgent", "objetClee", "objetEnemie2"],
+          "naration": "Vous avez vaincu l'enemie 2",
+          "suivantPasDeClee": 2,
+          "suivantAvecClee": 5
+        },
+        "stats": {
+          "pv": 100,
+          "degats": 10
+        }
+      },
+      {
+        "nom": "Enemie3",
+        "description": "Description Enemie3",
+        "image": "Enemie3.png",
+        "loose": 0,
+        "win": {
+          "dropPossible": ["objetArgent", "objetClee", "objetEnemie3"],
+          "naration": "Vous avez vaincu l'enemie 2",
+          "suivantPasDeClee": 3,
+          "suivantAvecClee": 5
+        },
+        "stats": {
+          "pv": 100,
+          "degats": 10
+        }
+      },
+      {
+        "nom": "Enemie4",
+        "description": "Description Enemie4",
+        "image": "Enemie4.png",
+        "loose": 0,
+        "win": {
+          "dropPossible": ["objetArgent", "objetClee", "objetEnemie4"],
+          "naration": "Vous avez vaincu l'enemie 2",
+          "suivantPasDeClee": 5,
+          "suivantAvecClee": 5
+        },
+        "stats": {
+          "pv": 100,
+          "degats": 10
+        }
+      },
+      {
+        "nom": "BossNiveau1",
+        "description": "Description Boss de niveau 1",
+        "image": "bossNiveau3.png",
+        "loose": 0,
+        "win": {
+          "dropPossible": ["objetArgent", "objetBossNiveau3"],
+          "naration": "Vous avez vaincu Boss de niveau 3",
+          "suivant": "niveau2"
+        },
+        "stats": {
+          "pv": 100,
+          "degats": 10
+        }
+      }
+    ]
+  }
+  
