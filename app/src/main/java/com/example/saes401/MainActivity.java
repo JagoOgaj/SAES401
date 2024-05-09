@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.previousButton).setOnClickListener(view -> onClickPrevious());
         findViewById(R.id.continueButton).setOnClickListener(view -> onClickContinue());
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
-
 
     }
 

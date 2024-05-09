@@ -1,0 +1,15 @@
+{
+    "catalogues" : 
+    [
+        {
+            "fichier" : "niveau1.json"
+        },
+        {
+            "fichier" : "niveau2.json"
+        },
+        {
+            "fichier" : "niveau3.json"
+        }
+    ]
+}
+  
