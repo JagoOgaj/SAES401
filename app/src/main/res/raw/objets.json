@@ -1,20 +1,256 @@
 {
-   "objetClee" :
-   {
-     "nom" : "objetClee",
-     "image" : "objetClee.png",
-     "description" : "Description de l'objetClee"
-   },
-   "objetArgent" :
-   {
-     "nom" : "objetArgent",
-     "image" : "objetArgent.png",
-     "description" : "Description de l'objetArgent"
-  }, 
-  "objet1" : 
-  {
-    "nom" : "objet1",
-    "image" : "objet1.png",
-    "description" : "Description de l'objet1"
+  "objets": {
+    "epee_fer": {
+      "nom": "Épée en fer",
+      "effet": "Augmente les dégâts de l'utilisateur de 10 points.",
+      "description": "Une épée solide en fer forgé, parfaite pour le combat rapproché.",
+      "taille": "petite",
+      "image": ""
+    },
+    "potion_guerison": {
+      "nom": "Potion de guérison",
+      "effet": "Restaure 50 points de vie.",
+      "description": "Une potion magique qui restaure la santé de son utilisateur.",
+      "taille": "petite",
+      "image": ""
+    },
+    "arc_bois": {
+      "nom": "Arc en bois",
+      "effet": "Permet à l'utilisateur de tirer des flèches avec précision.",
+      "description": "Un arc taillé dans du bois de qualité, idéal pour les attaques à distance.",
+      "taille": "moyenne",
+      "image": ""
+    },
+    "potion_force": {
+      "nom": "Potion de force",
+      "effet": "Augmente la force de l'utilisateur de 20% pendant 1 minute.",
+      "description": "Une potion qui décuple temporairement la force de son utilisateur.",
+      "taille": "petite",
+      "image": ""
+    },
+    "bombe_magique": {
+      "nom": "Bombe magique",
+      "effet": "Inflige 50 points de dégâts magiques à tous les ennemis dans un rayon de 5 mètres.",
+      "description": "Une bombe enchantée qui inflige des dégâts magiques à tous les ennemis à proximité.",
+      "taille": "petite",
+      "image": ""
+    },
+    "armure_plaques": {
+      "nom": "Armure de plaques",
+      "effet": "Réduit les dégâts subis de 20%.",
+      "description": "Une armure lourde faite de plaques d'acier, offrant une excellente protection.",
+      "taille": "grande",
+      "image": ""
+    },
+    "potion_vie_superieure": {
+      "nom": "Potion de vie supérieure",
+      "effet": "Restaure tous les points de vie de l'utilisateur.",
+      "description": "Une potion rare et puissante qui restaure complètement la santé de son utilisateur.",
+      "taille": "petite",
+      "image": ""
+    },
+    "lance_des_anciens": {
+      "nom": "Lance des anciens",
+      "effet": "Ignore 50% de la défense de l'ennemi.",
+      "description": "Une lance antique imprégnée de magie, capable de percer même les armures les plus solides.",
+      "taille": "moyenne",
+      "image": ""
+    },
+    "armure_des_heroes": {
+      "nom": "Armure des héros",
+      "effet": "Réduit les dégâts subis de 30% et augmente la résistance magique de 20%.",
+      "description": "Une armure légendaire portée par les plus grands héros, offrant une protection divine.",
+      "taille": "grande",
+      "image": ""
+    },
+    "piece_d'or": {
+      "nom": "Pièce d'or",
+      "effet": "Monnaie utilisée dans de nombreux royaumes.",
+      "description": "Une pièce d'or brillante, utilisée comme monnaie dans de nombreux royaumes.",
+      "taille": "petite",
+      "image": ""
+    },
+    "cle_rouillee": {
+      "nom": "Clé rouillée",
+      "effet": "Peut ouvrir une porte ou un coffre ancien.",
+      "description": "Une vieille clé rouillée, peut-être utile pour ouvrir une porte ou un coffre ancien.",
+      "taille": "petite",
+      "image": ""
+    },
+    "oreille_de_gobelin": {
+      "nom": "Oreille de gobelin",
+      "effet": "Trophée après la bataille.",
+      "description": "Une oreille de gobelin coupée comme trophée après la bataille.",
+      "taille": "petite",
+      "image": ""
+    },
+    "viande_de_loup": {
+      "nom": "Viande de loup",
+      "effet": "Peut être cuisinée pour un repas copieux.",
+      "description": "De la viande de loup fraîchement chassée, peut être cuisinée pour un repas copieux.",
+      "taille": "moyenne",
+      "image": ""
+    },
+    "potion_de_vitesse": {
+      "nom": "Potion de vitesse",
+      "effet": "Augmente temporairement la vitesse de son utilisateur.",
+      "description": "Une potion qui augmente temporairement la vitesse de son utilisateur.",
+      "taille": "petite",
+      "image": ""
+    },
+    "crocs_de_loup": {
+      "nom": "Crocs de loup",
+      "effet": "Peut être utilisés comme trophée ou comme composant d'alchimie.",
+      "description": "Des crocs acérés arrachés à un loup, peuvent être utilisés comme trophée ou comme composant d'alchimie.",
+      "taille": "petite",
+      "image": ""
+    },
+    "pierre_precieuse": {
+      "nom": "Pierre précieuse",
+      "effet": "Peut être vendue ou utilisée pour l'artisanat de bijoux.",
+      "description": "Une gemme précieuse de grande valeur, peut être vendue ou utilisée pour l'artisanat de bijoux.",
+      "taille": "petite",
+      "image": ""
+    },
+    "bague_ensorcelee": {
+      "nom": "Bague ensorcelée",
+      "effet": "Confère des bénéfices à son porteur.",
+      "description": "Une bague enchantée avec des pouvoirs magiques, peut conférer des bénéfices à son porteur.",
+      "taille": "petite",
+      "image": ""
+    },
+    "aile_de_chauve-souris": {
+      "nom": "Aile de chauve-souris",
+      "effet": "Peut être utilisée comme ingrédient pour des potions ou des sortilèges.",
+      "description": "Une grande aile de chauve-souris, peut-être utilisée comme ingrédient pour des potions ou des sortilèges.",
+      "taille": "moyenne",
+      "image": ""
+    },
+    "feuille_d'argent": {
+      "nom": "Feuille d'argent",
+      "effet": "Souvent utilisée dans l'alchimie ou la fabrication de bijoux magiques.",
+      "description": "Une feuille d'argent brillante, souvent utilisée dans l'alchimie ou la fabrication de bijoux magiques.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_de_la_nature": {
+      "nom": "Essence de la nature",
+      "effet": "Peut être utilisée pour lancer des sorts ou fabriquer des potions.",
+      "description": "Une essence pure de la nature, peut être utilisée pour lancer des sorts ou fabriquer des potions.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_spirituelle": {
+      "nom": "Essence spirituelle",
+      "effet": "Utilisée dans divers rituels et enchantements.",
+      "description": "Une essence spirituelle chargée d'énergie positive, utilisée dans divers rituels et enchantements.",
+      "taille": "petite",
+      "image": ""
+    },
+    "eclat_de_cristal": {
+      "nom": "Éclat de cristal",
+      "effet": "Souvent utilisé comme composant dans la fabrication d'objets magiques.",
+      "description": "Un fragment de cristal étincelant, souvent utilisé comme composant dans la fabrication d'objets magiques.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_de_sagesse": {
+      "nom": "Essence de sagesse",
+      "effet": "Peut conférer la clarté mentale ou l'intuition.",
+      "description": "Une essence imprégnée de sagesse ancienne, peut conférer la clarté mentale ou l'intuition.",
+      "taille": "petite",
+      "image": ""
+    },
+    "clé_de_la_caverne": {
+      "nom": "Clé de la caverne",
+      "effet": "Peut ouvrir les portes de la caverne souterraine.",
+      "description": "Une clé spéciale qui peut ouvrir les portes de la caverne souterraine.",
+      "taille": "petite",
+      "image": ""
+    },
+    "oreille_de_gobelin_des_profondeurs": {
+      "nom": "Oreille de gobelin des profondeurs",
+      "effet": "Trophée après la bataille, provenant d'un gobelin des profondeurs.",
+      "description": "Une oreille de gobelin coupée comme trophée après la bataille, provenant d'un gobelin des profondeurs.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_vitale": {
+      "nom": "Essence vitale",
+      "effet": "Souvent utilisée pour restaurer la santé ou renforcer les potions.",
+      "description": "Une essence vitale puissante, souvent utilisée pour restaurer la santé ou renforcer les potions.",
+      "taille": "petite",
+      "image": ""
+    },
+    "potion_d'invisibilité": {
+      "nom": "Potion d'invisibilité",
+      "effet": "Rend son utilisateur invisible pendant un court laps de temps.",
+      "description": "Une potion qui rend son utilisateur invisible pendant un court laps de temps.",
+      "taille": "petite",
+      "image": ""
+    },
+    "crocs_de_chauve-souris_vampirique": {
+      "nom": "Crocs de chauve-souris vampirique",
+      "effet": "Peuvent être utilisés comme arme ou composant d'alchimie.",
+      "description": "Les crocs tranchants d'une chauve-souris vampirique, peuvent être utilisés comme arme ou composant d'alchimie.",
+      "taille": "petite",
+      "image": ""
+    },
+    "éclat_d'obscurité": {
+      "nom": "Éclat d'obscurité",
+      "effet": "Peut être utilisé pour des rituels sombres ou la fabrication d'objets maléfiques.",
+      "description": "Un éclat d'obscurité ténébreuse, peut être utilisé pour des rituels sombres ou la fabrication d'objets maléfiques.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_de_mystère": {
+      "nom": "Essence de mystère",
+      "effet": "Utilisée dans les enchantements et les potions liées à l'occulte.",
+      "description": "Une essence envoûtante de mystère, utilisée dans les enchantements et les potions liées à l'occulte.",
+      "taille": "petite",
+      "image": ""
+    },
+    "larme_de_l'esprit": {
+      "nom": "Larme de l'esprit",
+      "effet": "Possédant des propriétés curatives et spirituelles.",
+      "description": "Une larme pure et lumineuse, possédant des propriétés curatives et spirituelles.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_de_désespoir": {
+      "nom": "Essence de désespoir",
+      "effet": "Utilisée dans les rituels de malédiction ou pour invoquer des entités maléfiques.",
+      "description": "Une essence chargée d'émotions sombres, utilisée dans les rituels de malédiction ou pour invoquer des entités maléfiques.",
+      "taille": "petite",
+      "image": ""
+    },
+    "cristal_d'ombre": {
+      "nom": "Cristal d'ombre",
+      "effet": "Utilisé dans les rituels d'invocation et les sorts de manipulation de l'ombre.",
+      "description": "Un cristal imprégné de ténèbres, utilisé dans les rituels d'invocation et les sorts de manipulation de l'ombre.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_de_puissance": {
+      "nom": "Essence de puissance",
+      "effet": "Utilisée pour renforcer les enchantements ou les sorts de destruction.",
+      "description": "Une essence chargée de pouvoir magique, utilisée pour renforcer les enchantements ou les sorts de destruction.",
+      "taille": "petite",
+      "image": ""
+    },
+    "éclat_de_lune_noire": {
+      "nom": "Éclat de lune noire",
+      "effet": "Utilisé dans les rituels de nuit et les sorts d'obscurité.",
+      "description": "Un fragment de lune noire chargé de magie, utilisé dans les rituels de nuit et les sorts d'obscurité.",
+      "taille": "petite",
+      "image": ""
+    },
+    "essence_de_destruction": {
+      "nom": "Essence de destruction",
+      "effet": "Capable de causer des ravages dans les rangs ennemis lorsqu'elle est canalisée correctement.",
+      "description": "Une essence dévastatrice, capable de causer des ravages dans les rangs ennemis lorsqu'elle est canalisée correctement.",
+      "taille": "petite",
+      "image": ""
+    }
   }
 }

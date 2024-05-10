@@ -30,9 +30,6 @@ public class ParametreActivity extends AppCompatActivity {
     private Intent intent;
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +39,8 @@ public class ParametreActivity extends AppCompatActivity {
         findViewById(R.id.menuprincipaleButton).setOnClickListener(view -> onClickMenu());
 
 
-
         // Créer un ArrayAdapter en utilisant le tableau de chaînes et un layout par défaut du spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.langues_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.langues_array, android.R.layout.simple_spinner_item);
 
         // Spécifier le layout à utiliser lorsque la liste des choix apparaît
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -73,7 +68,8 @@ public class ParametreActivity extends AppCompatActivity {
             }
         });
     }
-    private void onClickMenu(){
+
+    private void onClickMenu() {
 
         intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -85,7 +81,6 @@ public class ParametreActivity extends AppCompatActivity {
         } else if ("English".equalsIgnoreCase(lang) || "Anglais".equalsIgnoreCase(lang)) {
             lang = "en";
         }
-
 
 
         updateLocale(lang);
@@ -107,7 +102,6 @@ public class ParametreActivity extends AppCompatActivity {
         finish();
         startActivity(getIntent());
     }
-
 
 
 }

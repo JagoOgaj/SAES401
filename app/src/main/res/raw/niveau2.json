@@ -1,86 +1,106 @@
 {
-    "objets": ["objetDebut1", "objetDebut2", "objetDebut3"],
-    "name": "Niveau2",
-    "enemies": [
-      {
-        "nom": "Enemie1",
-        "description": "Description Enemie1",
-        "image": "Enemie1.png",
-        "loose": 0,
-        "win": {
-          "dropPossible": ["objetArgent", "objetClee", "objetEnemie1"],
-          "naration": "Vous avez vaincu l'enemie 2",
-          "suivantPasDeClee": 1,
-          "suivantAvecClee": 5
-        },
-        "stats": {
-          "pv": 100,
-          "degats": 10
-        }
+  "objets": [
+    "potion_force",
+    "bombe_magique",
+    "armure_plaques"
+  ],
+  "name": "Caverne souterraine",
+  "enemies": [
+    {
+      "nom": "Gobelin des profondeurs",
+      "description": "Un gobelin adapté à la vie souterraine, armé d'une lame rouillée.",
+      "image": "gobelin_souterrain.png",
+      "loose": 0,
+      "win": {
+        "dropPossible": [
+          "pièce_d'or",
+          "clé_de_la_caverne",
+          "oreille_de_gobelin_des_profondeurs"
+        ],
+        "naration": "Le gobelin des profondeurs gît vaincu à vos pieds !",
+        "suivantPasDeClee": 1,
+        "suivantAvecClee": 5
       },
-      {
-        "nom": "Enemie2",
-        "description": "Description Enemie2",
-        "image": "Enemie2.png",
-        "loose": 0,
-        "win": {
-          "dropPossible": ["objetArgent", "objetClee", "objetEnemie2"],
-          "naration": "Vous avez vaincu l'enemie 2",
-          "suivantPasDeClee": 2,
-          "suivantAvecClee": 5
-        },
-        "stats": {
-          "pv": 100,
-          "degats": 10
-        }
-      },
-      {
-        "nom": "Enemie3",
-        "description": "Description Enemie3",
-        "image": "Enemie3.png",
-        "loose": 0,
-        "win": {
-          "dropPossible": ["objetArgent", "objetClee", "objetEnemie3"],
-          "naration": "Vous avez vaincu l'enemie 2",
-          "suivantPasDeClee": 3,
-          "suivantAvecClee": 5
-        },
-        "stats": {
-          "pv": 100,
-          "degats": 10
-        }
-      },
-      {
-        "nom": "Enemie4",
-        "description": "Description Enemie4",
-        "image": "Enemie4.png",
-        "loose": 0,
-        "win": {
-          "dropPossible": ["objetArgent", "objetClee", "objetEnemie4"],
-          "naration": "Vous avez vaincu l'enemie 2",
-          "suivantPasDeClee": 5,
-          "suivantAvecClee": 5
-        },
-        "stats": {
-          "pv": 100,
-          "degats": 10
-        }
-      },
-      {
-        "nom": "BossNiveau1",
-        "description": "Description Boss de niveau 1",
-        "image": "bossNiveau1.png",
-        "loose": 0,
-        "win": {
-          "dropPossible": ["objetArgent", "objetBossNiveau2"],
-          "naration": "Vous avez vaincu Boss de niveau 2",
-          "suivant": "niveau2"
-        },
-        "stats": {
-          "pv": 100,
-          "degats": 10
-        }
+      "stats": {
+        "pv": 60,
+        "degats": 12
       }
-    ]
-  }
-  
+    },
+    {
+      "nom": "Chauve-souris vampirique",
+      "description": "Une chauve-souris de taille inhabituelle, assoiffée de sang.",
+      "image": "chauve-souris_vampirique.png",
+      "loose": 0,
+      "win": {
+        "dropPossible": [
+          "essence_vitale",
+          "potion_d'invisibilité",
+          "crocs_de_chauve-souris_vampirique"
+        ],
+        "naration": "La chauve-souris vampirique est vaincue !",
+        "suivantPasDeClee": 2,
+        "suivantAvecClee": 5
+      },
+      "stats": {
+        "pv": 70,
+        "degats": 15
+      }
+    },
+    {
+      "nom": "Gardien des ombres",
+      "description": "Un être fait de ténèbres, protégeant les secrets de la caverne.",
+      "image": "gardien_ombre.png",
+      "loose": 0,
+      "win": {
+        "dropPossible": [
+          "éclat_d'obscurité",
+          "essence_de_mystère"
+        ],
+        "naration": "Le gardien des ombres est dissipé par votre bravoure !",
+        "suivantPasDeClee": 3,
+        "suivantAvecClee": 5
+      },
+      "stats": {
+        "pv": 80,
+        "degats": 18
+      }
+    },
+    {
+      "nom": "Esprit tourmenteur",
+      "description": "Un esprit malveillant, alimenté par les tourments de la caverne.",
+      "image": "esprit_tourmenteur.png",
+      "loose": 0,
+      "win": {
+        "dropPossible": [
+          "larme_de_l'esprit",
+          "essence_de_désespoir"
+        ],
+        "naration": "L'esprit tourmenteur est apaisé par votre courage !",
+        "suivantPasDeClee": 5,
+        "suivantAvecClee": 5
+      },
+      "stats": {
+        "pv": 90,
+        "degats": 20
+      }
+    },
+    {
+      "nom": "Maître des ténèbres",
+      "description": "Un sorcier puissant, cherchant à contrôler les énergies souterraines.",
+      "image": "maitre_tenebres.png",
+      "loose": 0,
+      "win": {
+        "dropPossible": [
+          "cristal_d'ombre",
+          "essence_de_puissance"
+        ],
+        "naration": "Vous avez triomphé du maître des ténèbres !",
+        "suivant": "Niveau final"
+      },
+      "stats": {
+        "pv": 120,
+        "degats": 25
+      }
+    }
+  ]
+}

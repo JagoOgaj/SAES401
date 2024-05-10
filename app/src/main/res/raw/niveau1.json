@@ -1,84 +1,107 @@
 {
-  "objets": ["objetDebut1", "objetDebut2", "objetDebut3"],
-  "name": "Niveau1",
+  "objets": [
+    "epee_fer",
+    "potion_guerison",
+    "arc_bois"
+  ],
+  "name": "Forêt sombre",
   "enemies": [
     {
-      "nom": "Enemie1",
-      "description": "Description Enemie1",
-      "image": "Enemie1.png",
+      "nom": "Gobelin",
+      "description": "Un petit être vert et poilu avec une dentition pointue.",
+      "image": "gobelin.png",
       "loose": 0,
       "win": {
-        "dropPossible": ["objetArgent", "objetClee", "objetEnemie1"],
-        "naration": "Vous avez vaincu l'enemie 2",
+        "dropPossible": [
+          "pièce_d'or",
+          "clé_rouillée",
+          "oreille_de_gobelin"
+        ],
+        "naration": "Vous avez vaincu le gobelin !",
         "suivantPasDeClee": 1,
         "suivantAvecClee": 5
       },
       "stats": {
-        "pv": 100,
-        "degats": 10
+        "pv": 50,
+        "degats": 8
       }
     },
     {
-      "nom": "Enemie2",
-      "description": "Description Enemie2",
-      "image": "Enemie2.png",
+      "nom": "Loup affamé",
+      "description": "Un grand loup gris aux yeux brillants de malice.",
+      "image": "loup.png",
       "loose": 0,
       "win": {
-        "dropPossible": ["objetArgent", "objetClee", "objetEnemie2"],
-        "naration": "Vous avez vaincu l'enemie 2",
+        "dropPossible": [
+          "viande_de_loup",
+          "potion_de_vitesse",
+          "crocs_de_loup"
+        ],
+        "naration": "Vous avez terrassé le loup affamé !",
         "suivantPasDeClee": 2,
         "suivantAvecClee": 5
       },
       "stats": {
-        "pv": 100,
-        "degats": 10
+        "pv": 60,
+        "degats": 12
       }
     },
     {
-      "nom": "Enemie3",
-      "description": "Description Enemie3",
-      "image": "Enemie3.png",
+      "nom": "Chauve-souris géante",
+      "description": "Une créature nocturne aux ailes immenses et aux crocs acérés.",
+      "image": "chauve-souris.png",
       "loose": 0,
       "win": {
-        "dropPossible": ["objetArgent", "objetClee", "objetEnemie3"],
-        "naration": "Vous avez vaincu l'enemie 2",
+        "dropPossible": [
+          "pierre_précieuse",
+          "bague_ensorcelée",
+          "aile_de_chauve-souris"
+        ],
+        "naration": "Vous avez vaincu la chauve-souris géante !",
         "suivantPasDeClee": 3,
         "suivantAvecClee": 5
       },
       "stats": {
-        "pv": 100,
-        "degats": 10
+        "pv": 70,
+        "degats": 15
       }
     },
     {
-      "nom": "Enemie4",
-      "description": "Description Enemie4",
-      "image": "Enemie4.png",
+      "nom": "Esprit de la forêt",
+      "description": "Une entité spectrale entourée de brume mystique.",
+      "image": "esprit.png",
       "loose": 0,
       "win": {
-        "dropPossible": ["objetArgent", "objetClee", "objetEnemie4"],
-        "naration": "Vous avez vaincu l'enemie 2",
+        "dropPossible": [
+          "feuille_d'argent",
+          "essence_de_la_nature",
+          "essence_spirituelle"
+        ],
+        "naration": "Vous avez dispersé l'esprit de la forêt !",
         "suivantPasDeClee": 5,
         "suivantAvecClee": 5
       },
       "stats": {
-        "pv": 100,
-        "degats": 10
+        "pv": 80,
+        "degats": 18
       }
     },
     {
-      "nom": "BossNiveau1",
-      "description": "Description Boss de niveau 1",
-      "image": "bossNiveau1.png",
+      "nom": "Gardien des bois",
+      "description": "Un colosse de bois vivant, protecteur de la forêt.",
+      "image": "gardien.png",
       "loose": 0,
       "win": {
-        "dropPossible": ["objetArgent", "objetBossNiveau1"],
-        "naration": "Vous avez vaincu Boss de niveau 1",
-        "suivant": "niveau2"
+        "dropPossible": [
+          "éclat_de_cristal",
+          "essence_de_sagesse"
+        ],
+        "naration": "Vous avez triomphé du gardien des bois !",
+        "suivant": "Caverne souterraine"
       },
       "stats": {
         "pv": 100,
-        "degats": 10
+        "degats": 20
       }
     }
   ]

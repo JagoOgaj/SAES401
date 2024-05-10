@@ -10,4 +10,6 @@ public final class GameConstant {
     public static final int DEFAULT_MAX_DAMAGE = 10;
     public static final int DEFAULT_INVENTORY_SLOT = 3;
     public static final int DEFAULT_COIN = 0;
+    public static final String CATALOGUE = "catalogue.json";
+    public static final String OBJETS = "objets.json";
 }

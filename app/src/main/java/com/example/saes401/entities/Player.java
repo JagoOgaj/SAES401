@@ -11,7 +11,10 @@ public class Player extends GameCharacter {
         super(name, HP, damage);
         inventory = new Inventory(GameConstant.DEFAULT_INVENTORY_SLOT);
         this.coin = coin;
+    }
 
+    public void setInventory(){
+        //Modifier item en cohérence avec le json
     }
 
 
