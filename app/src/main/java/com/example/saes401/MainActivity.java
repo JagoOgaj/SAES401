@@ -22,32 +22,26 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.creditsButton).setOnClickListener(view -> onClickCredits());
         findViewById(R.id.startButton).setOnClickListener(view -> onClickStart());
-        findViewById(R.id.previousButton).setOnClickListener(view -> onClickPrevious());
         findViewById(R.id.continueButton).setOnClickListener(view -> onClickContinue());
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
-
     }
 
 
     private void onClickCredits() {
-        //affiche les credits de l'app
         intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 
-    private void onClickStart(){
-
+    private void onClickStart() {
         intent = new Intent(this, GameActivity.class);
+        intent.putExtra("storyLevel", "niveau1");
         startActivity(intent);
     }
-    private void onClickPrevious(){
-        intent = new Intent(this, DialogueStory.class);
-        startActivity(intent);
-    }
-    private void onClickContinue(){
 
+    private void onClickContinue() {
     }
-    private void onClickSettings(){
+
+    private void onClickSettings() {
         intent = new Intent(this, ParametreActivity.class);
         startActivity(intent);
 
