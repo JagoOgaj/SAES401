@@ -16,18 +16,15 @@ public class Story extends AppCompatActivity {
     private GameActivity gameActivity;
     private Player player;
 
-    public Story(GameActivity gameActivity) {
-        this.player = new Player(GameConstant.PLAYER_NAME, GameConstant.DEFAULT_HP, GameConstant.DEFAULT_MAX_DAMAGE, GameConstant.DEFAULT_COIN);
-        this.gameActivity = gameActivity;
-        this.curentLevel = this.gameActivity.getLevel();
-        launchStory();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+
         intent = getIntent();
-        curentLevel = intent.getStringExtra("curentLevel");
+        if(intent != null)
+            curentLevel = intent.getStringExtra("curentLevel");
+        this.player = new Player(GameConstant.PLAYER_NAME, GameConstant.DEFAULT_HP, GameConstant.DEFAULT_MAX_DAMAGE, GameConstant.DEFAULT_COIN);
+        launchStory();
     }
 
     private void level(){
@@ -37,7 +34,7 @@ public class Story extends AppCompatActivity {
     }
 
     private void launchStory() {
-        Intent intent = new Intent(this, GameNaration.class);
+        Intent intent = new Intent(this.gameActivity, GameNaration.class);
         intent.putExtra("level", curentLevel);
         startActivity(intent);
     }
