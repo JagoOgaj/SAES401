@@ -18,7 +18,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         intent = getIntent();
-        Story story = new Story(this);
     }
 
     public String getLevel() {
