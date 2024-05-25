@@ -21,18 +21,22 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.entities.Player;
+import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
+import com.example.saes401.helper.Utilities;
 import com.example.saes401.story.Story;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 
 
-public class GameChoise extends AppCompatActivity {
+public class GameChoise extends AppCompatActivity implements Utilities {
 
     private Intent intent;
-    private String currentLevel;
+    private Player player;
+    private int currentLevel;
     private TextView textLevel;
     private LinearLayout choiseBeforeLevel;
     private ImageButton imageButton1;
@@ -44,18 +48,11 @@ public class GameChoise extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choise);
-
-        // Récupération des éléments dans le xml
-        textLevel = findViewById(R.id.textLevel);
-        choiseBeforeLevel = findViewById(R.id.choiseBeforeLevel);
-        imageButton1 = findViewById(R.id.imageButton1);
-        imageButton2 = findViewById(R.id.imageButton2);
-        imageButton3 = findViewById(R.id.imageButton3);
-        buttonContinueToLevel = findViewById(R.id.buttonContinueToLevel);
-
-        // Récupération du level
         intent = getIntent();
-        currentLevel = intent.getStringExtra("currentLevel");
+        if (intent!= null){
+            initAttibuts();
+        }
+
 
         // Récupérer les noms des objets
         JSONArray objets = JsonReader.getItem(this, "niveau1");
@@ -80,8 +77,47 @@ public class GameChoise extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        setListener();
+    }
 
-        // Événements sur les boutons (click)
+    @Override
+    public void initAttibuts() {
+        textLevel = findViewById(R.id.textLevel);
+        choiseBeforeLevel = findViewById(R.id.choiseBeforeLevel);
+        imageButton1 = findViewById(R.id.imageButton1);
+        imageButton2 = findViewById(R.id.imageButton2);
+        imageButton3 = findViewById(R.id.imageButton3);
+        buttonContinueToLevel = findViewById(R.id.buttonContinueToLevel);
+        currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
+        player = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
+    }
+
+    @Override
+    public void startActivityGameChoise() {
+        //void
+    }
+
+    @Override
+    public void startActivityGameNaration() {
+        //void
+    }
+
+    @Override
+    public void statActivityStory() {
+        //void
+    }
+
+    @Override
+    public void startActivityGame() {
+        //todo recup l'objet saisie et insérer dans player avec un setInventaire si sa passe sinon refaire
+        this.intent = new Intent(this, GameActivity.class);
+        this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
+        this.intent.putExtra(GameConstant.KEY_PLAYER, this.player);
+        startActivity(this.intent);
+    }
+
+    @Override
+    public void setListener() {
         imageButton1.setOnClickListener(view -> {
             onClickButton((JSONObject) imageButton1.getTag());
             resetImageButtonSelection();
@@ -100,14 +136,25 @@ public class GameChoise extends AppCompatActivity {
             imageButton3.setSelected(true);
             selectedButton = imageButton3;
         });
-
         buttonContinueToLevel.setOnClickListener(view -> {
             if (selectedButton == null) {
                 showAlertDialog("Erreur", "Veuillez sélectionner un item.");
-            } else {
-                validation();
-            }
+            } else startActivityGame();
         });
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstance){
+        super.onRestoreInstanceState(savedInstance);
+        currentLevel = savedInstance.getInt(GameConstant.KEY_LEVEL);
+        player = (Player) savedInstance.getParcelable(GameConstant.KEY_PLAYER);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
+        outState.putSerializable(GameConstant.KEY_PLAYER, (Serializable) this.player);
     }
 
 
@@ -165,11 +212,4 @@ public class GameChoise extends AppCompatActivity {
         imageButton3.setSelected(false);
     }
 
-    private void validation() {
-        // Intent prochaine page
-        //Intent intent = new Intent(this, NextActivity.class); // Remplacez NextActivity par votre activité cible
-        //startActivity(intent);
-        //remplir le sac a dos
-
-    }
 }

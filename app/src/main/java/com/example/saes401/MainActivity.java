@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickStart() {
-        intent = new Intent(this, GameChoise.class);
-        intent.putExtra("storyLevel", "niveau1");
+        intent = new Intent(this, GameActivity.class);
+        intent.putExtra("currentLevel", 0);
         startActivity(intent);
     }
 
