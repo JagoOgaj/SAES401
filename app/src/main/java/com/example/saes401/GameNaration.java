@@ -10,12 +10,15 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.OnTextLoadedListener;
+import com.example.saes401.helper.Utilities;
 import com.example.saes401.story.Story;
 
-public class GameNaration extends AppCompatActivity {
+public class GameNaration extends AppCompatActivity implements Utilities {
     private Intent intent;
+    private int currentLevel;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -23,37 +26,48 @@ public class GameNaration extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_naration);
         intent = getIntent();
-        launchInitStory();
+        if (intent != null){
+            this.initAttibuts();
+        }
+        if (savedInstance == null && intent == null){
+            this.currentLevel = 0;
+        }
+
+        try{
+            launchNaration();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void initAttibuts() {
+        this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
+    }
+    @Override
+    public void startActivityGame() {
+        this.intent = new Intent(this, GameActivity.class);
+        this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
+        this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_NARATION);
+        startActivity(this.intent);
     }
 
-    private TextView getTextView() {
-        return findViewById(R.id.narationContainer);
-    }
-
-    private Button getButtonContinue() {
-        return findViewById(R.id.continueButton);
-    }
-
-    private void launchInitStory() {
+    @Override
+    public void setListener() {
 
     }
 
     private void launchNaration() throws Exception {
-        String naration;
-        if (intent.getStringExtra("level").equals("niveau1")) {
-            naration = JsonReader.getNaration(this, 0);
-            setVisibilityOfContinue(getTextView(), naration);
-        } else if (intent.getStringExtra("level").equals("niveau2")) {
-            naration = JsonReader.getNaration(this, 1);
-            setVisibilityOfContinue(getTextView(), naration);
-        } else if (intent.getStringExtra("level").equals("niveau3")) {
-            naration = JsonReader.getNaration(this, 2);
-            setVisibilityOfContinue(getTextView(), naration);
-        } else {
-            throw new Exception("null pointer file by intent");
+        if(this.currentLevel < 0  || this.currentLevel > 3){
+            throw new Exception("null level");
+        }
+        else {
+            setVisibilityOfContinue(
+                    getTextView(),
+                    JsonReader.getNaration(this, this.currentLevel)
+            );
         }
     }
-
     private void loadText(TextView textView, String naration, OnTextLoadedListener listener) {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -79,16 +93,32 @@ public class GameNaration extends AppCompatActivity {
         loadText(textView, naration, new OnTextLoadedListener() {
             @Override
             public void onTextLoaded() {
-                // Faire quelque chose à la fin de l'exécution de loadText()
                 getButtonContinue().setVisibility(View.VISIBLE);
-                getButtonContinue().setOnClickListener(view -> {
-                    Intent intent2 = new Intent(GameNaration.this, GameChoise.class);
-                    intent2.putExtra("curentLevel", intent.getStringExtra("level"));
-                    startActivity(intent2);
-                });
+                getButtonContinue().setOnClickListener(v -> startActivityGame());
             }
         });
-
     }
 
+    private TextView getTextView() {
+        return findViewById(R.id.narationContainer);
+    }
+
+    private Button getButtonContinue() {
+        return findViewById(R.id.continueButton);
+    }
+
+    @Override
+    public void startActivityGameChoise() {
+        //void
+    }
+
+    @Override
+    public void startActivityGameNaration() {
+        //void
+    }
+
+    @Override
+    public void statActivityStory() {
+        //void
+    }
 }
