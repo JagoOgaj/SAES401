@@ -5,35 +5,35 @@
       "effet": "Augmente les dégâts de l'utilisateur de 10 points.",
       "description": "Une épée solide en fer forgé, parfaite pour le combat rapproché.",
       "taille": "petite",
-      "image": ""
+      "image": "sword2"
     },
     "potion_guerison": {
       "nom": "Potion de guérison",
       "effet": "Restaure 50 points de vie.",
       "description": "Une potion magique qui restaure la santé de son utilisateur.",
       "taille": "petite",
-      "image": ""
+      "image": "sword"
     },
     "arc_bois": {
       "nom": "Arc en bois",
       "effet": "Permet à l'utilisateur de tirer des flèches avec précision.",
       "description": "Un arc taillé dans du bois de qualité, idéal pour les attaques à distance.",
       "taille": "moyenne",
-      "image": ""
+      "image": "shield"
     },
     "potion_force": {
       "nom": "Potion de force",
       "effet": "Augmente la force de l'utilisateur de 20% pendant 1 minute.",
       "description": "Une potion qui décuple temporairement la force de son utilisateur.",
       "taille": "petite",
-      "image": ""
+      "image": "eppeecopie2"
     },
     "bombe_magique": {
       "nom": "Bombe magique",
       "effet": "Inflige 50 points de dégâts magiques à tous les ennemis dans un rayon de 5 mètres.",
       "description": "Une bombe enchantée qui inflige des dégâts magiques à tous les ennemis à proximité.",
       "taille": "petite",
-      "image": ""
+      "image": "eppeecopie2"
     },
     "armure_plaques": {
       "nom": "Armure de plaques",

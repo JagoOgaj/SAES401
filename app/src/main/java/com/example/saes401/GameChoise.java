@@ -1,12 +1,22 @@
 package com.example.saes401;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,80 +24,152 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.story.Story;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+
 
 public class GameChoise extends AppCompatActivity {
 
     private Intent intent;
     private String currentLevel;
-    private String currentChoise;
-    private Player player;
-
+    private TextView textLevel;
+    private LinearLayout choiseBeforeLevel;
+    private ImageButton imageButton1;
+    private ImageButton imageButton2;
+    private ImageButton imageButton3;
+    private Button buttonContinueToLevel;
+    ImageButton selectedButton = null;
     @Override
-    protected void onCreate(Bundle savedInstance){
-        super.onCreate(savedInstance);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choise);
+
+        // Récupération des éléments dans le xml
+        textLevel = findViewById(R.id.textLevel);
+        choiseBeforeLevel = findViewById(R.id.choiseBeforeLevel);
+        imageButton1 = findViewById(R.id.imageButton1);
+        imageButton2 = findViewById(R.id.imageButton2);
+        imageButton3 = findViewById(R.id.imageButton3);
+        buttonContinueToLevel = findViewById(R.id.buttonContinueToLevel);
+
+        // Récupération du level
         intent = getIntent();
-        currentLevel = intent.getStringExtra("curentLevel");
-    }
+        currentLevel = intent.getStringExtra("currentLevel");
 
-    private LinearLayout getChoisePanel(){
-        return findViewById(R.id.choiseBeforeLevel);
-    }
+        // Récupérer les noms des objets
+        JSONArray objets = JsonReader.getItem(this, "niveau1");
 
-    private TextView getTextView(){
-        return findViewById(R.id.textLevel);
-    }
-
-    private Button getButtonContinue(){
-        return findViewById(R.id.buttonContinueToLevel);
-    }
-
-    private void init(){
-        try{
-            initChoisePanel();
-        }
-        catch (Exception e){
+        // Mettre à jour les ImageButton avec les images des objets
+        try {
+            if (objets != null && objets.length() > 0) {
+                JSONObject objet1 = objets.getJSONObject(0);
+                imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
+                imageButton1.setTag(objet1);
+            }
+            if (objets != null && objets.length() > 1) {
+                JSONObject objet2 = objets.getJSONObject(1);
+                imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
+                imageButton2.setTag(objet2);
+            }
+            if (objets != null && objets.length() > 2) {
+                JSONObject objet3 = objets.getJSONObject(2);
+                imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
+                imageButton3.setTag(objet3);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        initTextView();
-        initBoutonContinue();
-    }
 
-    private void initBoutonContinue() {
-        getButtonContinue().setVisibility(View.VISIBLE);
-        getButtonContinue().setOnClickListener(view -> {
-            Intent intent = new Intent(this, Story.class);
-            intent.putExtra("curentLevel", currentLevel);
+        // Événements sur les boutons (click)
+        imageButton1.setOnClickListener(view -> {
+            onClickButton((JSONObject) imageButton1.getTag());
+            resetImageButtonSelection();
+            selectedButton = imageButton1;
+            imageButton1.setSelected(true);
+        });
+        imageButton2.setOnClickListener(view -> {
+            onClickButton((JSONObject) imageButton2.getTag());
+            resetImageButtonSelection();
+            imageButton2.setSelected(true);
+            selectedButton = imageButton2;
+        });
+        imageButton3.setOnClickListener(view -> {
+            onClickButton((JSONObject) imageButton3.getTag());
+            resetImageButtonSelection();
+            imageButton3.setSelected(true);
+            selectedButton = imageButton3;
+        });
+
+        buttonContinueToLevel.setOnClickListener(view -> {
+            if (selectedButton == null) {
+                showAlertDialog("Erreur", "Veuillez sélectionner un item.");
+            } else {
+                validation();
+            }
         });
     }
 
-    private void initTextView(){
 
+    private void showAlertDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .show();
     }
-    private void initChoisePanel() throws Exception {
-        String[] choise = JsonReader.getChoise(this, currentLevel);
-        for(int i = 0; i < choise.length; i++){
-            ImageButton imageButton = new ImageButton(this);
-            String imageSrc = JsonReader.getImageObject(this, choise[i]);
+    private void onClickButton(JSONObject objet) {
+        try {
+            String objetName = objet.getString("nom");
+            String objetDescription = objet.getString("description");
+            String objetEffet = objet.getString("effet");
 
+            // Créez le texte avec les labels et les valeurs
+            String labelObjet = "Objet : ";
+            String labelDescription = "Description : ";
+            String labelEffet = "Effet : ";
 
-            int drawableId = getResources().getIdentifier(imageSrc, "drawable", getPackageName());
+            // Combinez le tout dans un SpannableString
+            SpannableString spannable = new SpannableString(
+                    labelObjet + objetName + "\n\n" +
+                            labelDescription + objetDescription + "\n\n" +
+                            labelEffet + objetEffet
+            );
 
-            if (drawableId != 0) {
+            // Appliquez les styles aux labels
+            int start = 0;
+            int end = labelObjet.length();
+            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                imageButton.setImageResource(drawableId);
-                int finalI = i;
-                imageButton.setOnClickListener(view -> {
-                    currentChoise = choise[finalI];
-                    //ajouter l'objet a l'inventaire du joueur
-                });
+            start = end + objetName.length() + 2;
+            end = start + labelDescription.length();
+            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                getChoisePanel().addView(imageButton);
-            } else {
-                throw new Exception("null pointer image");
-            }
+            start = end + objetDescription.length() + 2;
+            end = start + labelEffet.length();
+            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            // Affichez le SpannableString dans le TextView
+            textLevel.setText(spannable);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
+    private void resetImageButtonSelection() {
+        imageButton1.setSelected(false);
+        imageButton2.setSelected(false);
+        imageButton3.setSelected(false);
+    }
+
+    private void validation() {
+        // Intent prochaine page
+        //Intent intent = new Intent(this, NextActivity.class); // Remplacez NextActivity par votre activité cible
+        //startActivity(intent);
+        //remplir le sac a dos
+
+    }
 }

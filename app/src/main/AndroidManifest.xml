@@ -22,7 +22,7 @@
             android:name=".CreditsActivity"
             android:exported="false" />
         <activity
-            android:name=".DialogueStory"
+            android:name=".GameChoise"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

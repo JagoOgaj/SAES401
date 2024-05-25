@@ -8,87 +8,39 @@
     tools:context=".ParametreActivity">
 
 
-<!-- Langue -->
-<TextView
-    android:id="@+id/langueLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/langue"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
 
-<Spinner
-    android:id="@+id/langueSpinner"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@+id/langueLabel"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/langueCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        android:padding="16dp">
 
-<!-- Niveau de son -->
-<TextView
-    android:id="@+id/sonLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Niveau de son"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/langueSpinner" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-<SeekBar
-    android:id="@+id/sonSeekBar"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@+id/sonLabel"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/langueSpinner" />
+            <TextView
+                android:id="@+id/langueLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/langue"
+                 />
 
-<!-- Vibration -->
-<TextView
-    android:id="@+id/vibrationLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Vibration"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/sonSeekBar" />
-
-<Switch
-    android:id="@+id/vibrationSwitch"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@+id/vibrationLabel"
-    app:layout_constraintTop_toBottomOf="@+id/sonSeekBar" />
-
-<!-- Mode nuit -->
-<TextView
-    android:id="@+id/modeNuitLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Mode nuit"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/vibrationSwitch" />
-
-<Switch
-    android:id="@+id/modeNuitSwitch"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@+id/modeNuitLabel"
-    app:layout_constraintTop_toBottomOf="@+id/vibrationSwitch" />
-
-<!-- Notifications -->
-<TextView
-    android:id="@+id/notificationsLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Notifications"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/modeNuitSwitch" />
-
-<Switch
-    android:id="@+id/notificationsSwitch"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@+id/notificationsLabel"
-    app:layout_constraintTop_toBottomOf="@+id/modeNuitSwitch" />
+            <Spinner
+                android:id="@+id/langueSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/enregistrerButton"
