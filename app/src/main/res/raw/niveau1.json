@@ -2,7 +2,9 @@
   "objets": [
     "epee_fer",
     "potion_guerison",
-    "arc_bois"
+    "arc_bois",
+    "potion_force",
+    "bombe_magique"
   ],
   "name": "Forêt sombre",
   "enemies": [

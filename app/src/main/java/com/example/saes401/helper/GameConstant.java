@@ -12,4 +12,8 @@ public final class GameConstant {
     public static final int DEFAULT_COIN = 0;
     public static final String CATALOGUE = "catalogue.json";
     public static final String OBJETS = "objets.json";
+    public static final String NIVEAU1 = "niveau1";
+    public static final String NIVEAU2 = "niveau2";
+    public static final String NIVEAU3 = "niveau3";
+
 }

@@ -22,5 +22,6 @@
         <item>Anglais</item>
     </string-array>
     <string name="menu">Menu principal</string>
+    <string name="take">Prendre</string>
 
 </resources>

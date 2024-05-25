@@ -3,21 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/paysage">
 
     <TextView
         android:id="@+id/textLevel"
-        android:layout_width="108dp"
-        android:layout_height="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/normal_font"
         android:gravity="center"
-        android:text="TextView"
+        android:text="Veuillez choisir un item"
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/choiseBeforeLevel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.877" />
+        app:layout_constraintVertical_bias="0.146" />
 
     <LinearLayout
         android:id="@+id/choiseBeforeLevel"
@@ -27,7 +29,37 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.775" >
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/sword2"
+            android:scaleType="fitXY"
+            android:background="@drawable/assombrissementimagebutton"
+            android:contentDescription="Choix1" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/assombrissementimagebutton"
+            android:contentDescription="Choix2"
+            android:src="@drawable/sword2" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/sword2"
+            android:background="@drawable/encadrementimagebutton"
+            android:contentDescription="Choix3" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonContinueToLevel"
@@ -35,11 +67,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/normal_font"
-        android:text="Button"
-        android:visibility="invisible"
+        android:text="@string/take"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choiseBeforeLevel"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.775" />
 </androidx.constraintlayout.widget.ConstraintLayout>
