@@ -32,7 +32,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intent = getIntent();
-        if(intent != null){
+        if (intent != null) {
             this.initAttibuts();
         }
         if (savedInstanceState == null && intent == null) {
@@ -80,6 +80,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     @Override
+    public void setListener() {
+
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);
@@ -98,49 +103,48 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         outState.putSerializable(GameConstant.KEY_ENEMIE_INSTANCE, (Serializable) this.currentEnemieInstance);
     }
 
-    private void startStory(){
+    private void startStory() {
         Thread thread = new Thread(this);
         thread.start();
     }
 
-    private int getResultPlayer(){
+    private int getResultPlayer() {
         int[] dices = fight.getDicePlayer();
         int result = 0;
-        for (int i = 0; i < dices.length; i++){
+        for (int i = 0; i < dices.length; i++) {
             result += dices[i];
         }
         return result + fight.getBonusPlayer();
     }
 
-    private int getResultEnemie(){
-        int[] dices = fight.getDiceEnemie();
+    private int getResultEnemie() {
         int result = 0;
-        for (int i = 0; i < dices.length; i++){
-            result += dices[i];
+        try {
+            result = fight.getDiceEnemie();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return result + fight.getBonusEnemie();
+        return result;
     }
+
     @Override
     public void run() {
-        this.fight = new GameFight(playerInstance ,currentEnemieInstance);
-        while (playerInstance.getHP() < 0 || currentEnemieInstance.getHP() < 0){
+        this.fight = new GameFight(playerInstance, currentEnemieInstance, this);
+        while (playerInstance.getHP() < 0 || currentEnemieInstance.getHP() < 0) {
             //todo lancer l'animation des dés du joueur
             //todo lancer l'animation des dés de l'enemie
-            if(getResultEnemie() > getResultPlayer()){
+            if (getResultEnemie() > getResultPlayer()) {
                 playerInstance.setHP(playerInstance.getHP() - 1);
                 //todo modifier l'affichage du coeur
-            }
-            else if(getResultPlayer() > getResultEnemie()){
+            } else if (getResultPlayer() > getResultEnemie()) {
                 currentEnemieInstance.setHP(currentEnemieInstance.getHP() - 1);
                 //todo modifier l'affichage du coeur
-            }
-            else {
+            } else {
                 Random random = new Random();
-                if(random.nextInt(2) == 1){
+                if (random.nextInt(2) == 1) {
                     //enemie perdu
                     currentEnemieInstance.setHP(currentEnemieInstance.getHP() - 1);
-                }
-                else {
+                } else {
                     //player perdu
                     playerInstance.setHP(playerInstance.getHP() - 1);
                 }

@@ -2,6 +2,7 @@ package com.example.saes401.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
 
@@ -22,6 +23,7 @@ public class Enemie extends GameCharacter implements Parcelable {
         this.inventory = inventory;
         this.damage = damage;
     }
+
     @Override
     public int describeContents() {
         return 0;
@@ -105,7 +107,8 @@ public class Enemie extends GameCharacter implements Parcelable {
         return inventory;
     }
 
-    public Item getItem(){
+    public Item getItem() {
+        //admet que son inventaire est full
         Random random = new Random();
         return getInventory().getItem(random.nextInt(getInventory().getCurentLength()));
     }

@@ -30,19 +30,21 @@ public class JsonReader {
         }
         return naration;
     }
+
     private static int getNumberEnemies(Context context, String levelFile) throws Exception {
         int lenght = -1;
-        try{
+        try {
             String json = loadJsonFromRaw(context.getResources(), levelFile, context.getPackageName());
             JSONObject jsonObject = new JSONObject(json);
             lenght = jsonObject.getJSONArray("enemies").length() - 1;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(lenght == -1) throw new Exception("null enemies array");
+        if (lenght == -1) throw new Exception("null enemies array");
 
         return lenght;
     }
+
     private static JSONObject getEnemyAtIndex(Context context, String levelFile, int index) {
         JSONObject enemyObject = null;
         try {
@@ -62,7 +64,7 @@ public class JsonReader {
 
     public static String getEnemieImageSrc(Context context, String levelFile, int index) throws Exception {
         String imgSrc = getEnemyAtIndex(context, levelFile, index).getString("image");
-        if (imgSrc == null) throw  new Exception("null enemieImage");
+        if (imgSrc == null) throw new Exception("null enemieImage");
         else return imgSrc;
     }
 
@@ -72,45 +74,46 @@ public class JsonReader {
         else return desc;
     }
 
-    private static JSONObject getStats(Context context, String levelFile, int index){
+    private static JSONObject getStats(Context context, String levelFile, int index) {
         JSONObject stats = null;
-        try{
+        try {
             stats = getEnemyAtIndex(context, levelFile, index).getJSONObject("stats");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stats;
     }
 
-    public static int getEnemieHP(Context context, String levelFile, int index) throws Exception{
+    public static int getEnemieHP(Context context, String levelFile, int index) throws Exception {
         int hp = getStats(context, levelFile, index) == null ? -1 : getStats(context, levelFile, index).getInt("pv");
         if (hp == -1) throw new Exception("null enemieHp");
         else return hp;
     }
-    public static String getEnemieDamageStringFormat(Context context, String levelFile, int index) throws Exception{
+
+    public static String getEnemieDamageStringFormat(Context context, String levelFile, int index) throws Exception {
         String damage = getStats(context, levelFile, index) == null ? null : getStats(context, levelFile, index).getString("degats");
         if (damage == null) throw new Exception("null enemieDamage");
         else return damage;
     }
-    public static String[] getItemsOfEnemie(Context context, String levelFile, int index) throws Exception{
+
+    public static String[] getItemsOfEnemie(Context context, String levelFile, int index) throws Exception {
         JSONArray items = getStats(context, levelFile, index) == null || !getStats(context, levelFile, index).has("items") ? null
-                            : getStats(context, levelFile, index).getJSONArray("items");
+                : getStats(context, levelFile, index).getJSONArray("items");
         if (items == null) throw new Exception("null enemieItems");
         else {
             String[] itemsString = new String[items.length()];
-            for (int i=0; i < items.length(); i++){
+            for (int i = 0; i < items.length(); i++) {
                 itemsString[i] = items.getString(i);
             }
             return itemsString;
         }
     }
+
     private static JSONObject getWinOfEnemieAttribut(Context context, String levelFile, int index) {
         JSONObject winAttribut = null;
-        try{
+        try {
             winAttribut = getEnemyAtIndex(context, levelFile, index).getJSONObject("win");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return winAttribut;
@@ -118,13 +121,13 @@ public class JsonReader {
 
     public static String[] getDropOfEnemie(Context context, String levelFile, int index) throws Exception {
         JSONArray items = getWinOfEnemieAttribut(context, levelFile, index) == null ||
-                              !getWinOfEnemieAttribut(context, levelFile, index).has("dropPossible") ||
-                                getWinOfEnemieAttribut(context, levelFile, index).getJSONArray("dropPossible").length() == 0 ? null
-                                : getWinOfEnemieAttribut(context, levelFile, index).getJSONArray("dropPossible");
-        if(items == null) throw new Exception("null Drop");
+                !getWinOfEnemieAttribut(context, levelFile, index).has("dropPossible") ||
+                getWinOfEnemieAttribut(context, levelFile, index).getJSONArray("dropPossible").length() == 0 ? null
+                : getWinOfEnemieAttribut(context, levelFile, index).getJSONArray("dropPossible");
+        if (items == null) throw new Exception("null Drop");
         else {
             String[] itemsDrop = new String[items.length()];
-            for (int i = 0; i < items.length(); i++){
+            for (int i = 0; i < items.length(); i++) {
                 itemsDrop[i] = items.getString(i);
             }
             return itemsDrop;
@@ -133,8 +136,8 @@ public class JsonReader {
 
     public static String getNarationAfterWinEnemie(Context context, String levelFile, int index) throws Exception {
         String naration = getWinOfEnemieAttribut(context, levelFile, index) == null ||
-                            !getWinOfEnemieAttribut(context, levelFile, index).has("dropPossible") ? null
-                            : getWinOfEnemieAttribut(context, levelFile, index).getString("dropPossible");
+                !getWinOfEnemieAttribut(context, levelFile, index).has("dropPossible") ? null
+                : getWinOfEnemieAttribut(context, levelFile, index).getString("dropPossible");
         if (naration == null) throw new Exception("null enemieNarationAfterWin");
         else return naration;
     }

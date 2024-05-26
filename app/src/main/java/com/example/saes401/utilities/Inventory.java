@@ -8,10 +8,11 @@ public class Inventory implements Parcelable {
     private Item[] items;
     private int slots;
 
-    public Inventory(int slots){
+    public Inventory(int slots) {
         items = new Item[slots];
         this.slots = slots;
     }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(slots);
@@ -43,20 +44,53 @@ public class Inventory implements Parcelable {
         }
     };
 
-    public void setItemsInventory(Item newItem, int i){
-        items[i] = newItem;
+    public void setItemsInventory(Item newItem) throws Exception {
+        if (!canInserItem(newItem)) throw new Exception("can't insert into");
+        items[getLastIndex()] = newItem;
     }
 
-    public void setCapacityInventory(int newCapa){
+    public void setCapacityInventory(int newCapa) {
         Item[] newItems = new Item[newCapa];
-        for(int i = 0; i < getCurentLength(); i++)
+        for (int i = 0; i < getCurentLength(); i++)
             newItems[i] = items[i];
         items = newItems;
     }
 
-    public int getCurentLength(){return items.length;}
-    public Item[] getItemsInventory(){return items;}
-    public Item getItem(int i){return items[i];}
-    public boolean isEmptyInventory(){return items.length == 0;}
-    public boolean isFullInventory(){return items.length == slots;}
+    public int getCurentLength() {
+        return items.length;
+    }
+
+    public Item[] getItemsInventory() {
+        return items;
+    }
+
+    public Item getItem(int i) {
+        return items[i];
+    }
+
+    public boolean isEmptyInventory() {
+        return items.length == 0;
+    }
+
+    public boolean isFullInventory() {
+        return items.length == slots;
+    }
+
+    private boolean canInserItem(Item item) {
+        return remainingSpace() >= item.getInventorySize();
+    }
+
+    private int remainingSpace() {
+        int count = 0;
+        for (Item item : this.items)
+            if (item == null) count++;
+        return count;
+    }
+
+    private int getLastIndex() {
+        int index = -1;
+        for (int i = 0; i < this.items.length; i++)
+            if (this.items[i] == null) index = i;
+        return index;
+    }
 }
