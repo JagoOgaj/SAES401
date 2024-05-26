@@ -14,7 +14,7 @@ public class Player extends GameCharacter implements Parcelable {
     private int HP;
     private int currentItem;
 
-    public Player(int HP){
+    public Player(int HP) {
         super(HP);
         this.HP = HP;
         this.inventory = new Inventory(GameConstant.DEFAULT_INVENTORY_SLOT);
@@ -39,8 +39,8 @@ public class Player extends GameCharacter implements Parcelable {
         }
     };
 
-    public void setInventory(Item item, int i){
-        this.inventory.setItemsInventory(item, i);
+    public void setInventory(Item item) throws Exception {
+        this.inventory.setItemsInventory(item);
     }
 
     @Override
@@ -59,20 +59,19 @@ public class Player extends GameCharacter implements Parcelable {
         return inventory;
     }
 
-    public Item getItem(){
+    public boolean isFullinventory() {
+        return inventory.isFullInventory();
+    }
+
+    public Item getItem() {
         return inventory.getItem(this.currentItem);
     }
+
     public int getHP() {
         return HP;
     }
 
     public void setHP(int HP) {
         this.HP = HP;
-    }
-    public void setCurrentItem(int i) throws Exception{
-        if(i > inventory.getCurentLength() || i < inventory.getCurentLength()) throw new Exception("pointer inventory overflow");
-        else {
-            this.currentItem = i;
-        }
     }
 }

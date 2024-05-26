@@ -26,24 +26,25 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_naration);
         intent = getIntent();
-        if (intent != null){
+        if (intent != null) {
             this.initAttibuts();
         }
-        if (savedInstance == null && intent == null){
+        if (savedInstance == null && intent == null) {
             this.currentLevel = 0;
         }
 
-        try{
+        try {
             launchNaration();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void initAttibuts() {
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
     }
+
     @Override
     public void startActivityGame() {
         this.intent = new Intent(this, GameActivity.class);
@@ -58,16 +59,16 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     }
 
     private void launchNaration() throws Exception {
-        if(this.currentLevel < 0  || this.currentLevel > 3){
+        if (this.currentLevel < 0 || this.currentLevel > 3) {
             throw new Exception("null level");
-        }
-        else {
+        } else {
             setVisibilityOfContinue(
                     getTextView(),
                     JsonReader.getNaration(this, this.currentLevel)
             );
         }
     }
+
     private void loadText(TextView textView, String naration, OnTextLoadedListener listener) {
         new Handler().postDelayed(new Runnable() {
             @Override

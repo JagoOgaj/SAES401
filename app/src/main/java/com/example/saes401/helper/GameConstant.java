@@ -2,7 +2,7 @@ package com.example.saes401.helper;
 
 public final class GameConstant {
     /*
-    Application default constants
+    App default constants
     */
     public static final int DEFAULT_HP = 3;
     public static final int DEFAULT_INVENTORY_SLOT = 3;
@@ -21,5 +21,6 @@ public final class GameConstant {
     public static final String VALUE_STORY = "story";
     public static final String KEY_PREVIOUS_ACTIVITY = "previousActivity";
     public static final String FORMAT_LEVEL = "niveau%d.json";
+    public static final String REGEX_SPLITER = "d";
 
 }

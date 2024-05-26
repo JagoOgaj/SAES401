@@ -5,7 +5,10 @@
       "effet": "Augmente les dégâts de l'utilisateur de 10 points.",
       "description": "Une épée solide en fer forgé, parfaite pour le combat rapproché.",
       "taille": "petite",
-      "image": "sword2"
+      "image": "sword2",
+      "stats" : {
+        "degats": 10
+      }
     },
     "potion_guerison": {
       "nom": "Potion de guérison",

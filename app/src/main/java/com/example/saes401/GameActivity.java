@@ -26,10 +26,10 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         intent = getIntent();
-        if (intent != null){
+        if (intent != null) {
             this.initAttibuts();
         }
-        if (bundle == null && intent==null){
+        if (bundle == null && intent == null) {
             this.playerInstance = new Player(GameConstant.DEFAULT_HP);
             this.currentEnemieInstance = new Enemie(0, "", 0, 0, new Inventory(0), "");
             this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
@@ -37,18 +37,16 @@ public class GameActivity extends AppCompatActivity implements Utilities {
             this.previousActivity = "";
         }
     }
+
     @Override
     public void initAttibuts() {
-        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_CHOISE))
-        {
+        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_CHOISE)) {
             this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         }
-        if (!intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION))
-        {
+        if (!intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION)) {
             this.currentEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
         }
-        if(intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY))
-        {
+        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY)) {
             this.currentEnemieInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
             this.currentEnemieInstance = intent.getParcelableExtra(GameConstant.KEY_ENEMIE_INSTANCE);
         }
@@ -66,7 +64,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState){
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
         outState.putSerializable(GameConstant.KEY_PLAYER, (Serializable) this.playerInstance);
