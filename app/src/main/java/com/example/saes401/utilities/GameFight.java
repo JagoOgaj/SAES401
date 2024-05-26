@@ -62,7 +62,7 @@ public class GameFight {
             result += (random.nextInt(numbers[1]) + 1);
         return result;
     }
-
+//todo
     private int[] spliterFunction(String s) {
         String[] sSplit = s.split(GameConstant.REGEX_SPLITER);
         if (sSplit.length < 2) {
