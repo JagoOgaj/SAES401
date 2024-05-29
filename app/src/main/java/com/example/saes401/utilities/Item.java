@@ -5,22 +5,22 @@ import android.os.Parcelable;
 
 public class Item implements Parcelable {
     private String name;
-    private int damage;
-    private int heal;
+    private String damage;
+    private String image;
     private int inventorySize;
 
-    public Item(String name, int damage, int heal, int inventorySize) {
+    public Item(String name, String damage, String image, int inventorySize) {
         this.name = name;
         this.damage = damage;
-        this.heal = heal;
+        this.image = image;
         this.inventorySize = inventorySize;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeInt(damage);
-        dest.writeInt(heal);
+        dest.writeString(damage);
+        dest.writeString(image);
         dest.writeInt(inventorySize);
     }
 
@@ -31,8 +31,8 @@ public class Item implements Parcelable {
 
     protected Item(Parcel in) {
         name = in.readString();
-        damage = in.readInt();
-        heal = in.readInt();
+        damage = in.readString();
+        image = in.readString();
         inventorySize = in.readInt();
     }
 
@@ -52,11 +52,11 @@ public class Item implements Parcelable {
         return name;
     }
 
-    public int getDamage() {
+    public String getDamage() {
         return damage;
     }
 
-    public void setDamage(int newDamage) {
+    public void setDamage(String newDamage) {
         damage = newDamage;
     }
 
@@ -64,7 +64,7 @@ public class Item implements Parcelable {
         return inventorySize;
     }
 
-    public int getHeal() {
-        return heal;
+    public String getImage(){
+        return image;
     }
 }

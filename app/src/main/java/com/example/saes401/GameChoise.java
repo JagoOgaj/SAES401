@@ -115,6 +115,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.player);
+        this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CHOISE);
         startActivity(this.intent);
     }
 

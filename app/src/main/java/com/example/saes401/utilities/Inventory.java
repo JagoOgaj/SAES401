@@ -49,6 +49,10 @@ public class Inventory implements Parcelable {
         items[getLastIndex()] = newItem;
     }
 
+    public void addItemsEnemie(Item item){
+        items[getLastIndex()] = item;
+    }
+
     public void setCapacityInventory(int newCapa) {
         Item[] newItems = new Item[newCapa];
         for (int i = 0; i < getCurentLength(); i++)

@@ -3,9 +3,8 @@ package com.example.saes401.helper;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.example.saes401.entities.Enemie;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -31,7 +30,7 @@ public class JsonReader {
         return naration;
     }
 
-    private static int getNumberEnemies(Context context, String levelFile) throws Exception {
+    public static int getNumberEnemies(Context context, String levelFile) throws Exception {
         int lenght = -1;
         try {
             String json = loadJsonFromRaw(context.getResources(), levelFile, context.getPackageName());
@@ -90,6 +89,12 @@ public class JsonReader {
         else return hp;
     }
 
+    public static String getEnemieName(Context context, String leveFile, int index) throws Exception {
+        String name = getEnemyAtIndex(context, leveFile, index) == null ? null : getEnemyAtIndex(context, leveFile, index).getString("nom");
+        if (name == null) throw new Exception("null enemieName");
+        else return name;
+    }
+
     public static String getEnemieDamageStringFormat(Context context, String levelFile, int index) throws Exception {
         String damage = getStats(context, levelFile, index) == null ? null : getStats(context, levelFile, index).getString("degats");
         if (damage == null) throw new Exception("null enemieDamage");
@@ -119,6 +124,16 @@ public class JsonReader {
         return winAttribut;
     }
 
+    private static JSONObject getLooseOfEnemieAttribut(Context context, String levelFile, int index) {
+        JSONObject looseAttribut = null;
+        try {
+            looseAttribut = getEnemyAtIndex(context, levelFile, index).getJSONObject("loose");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return looseAttribut;
+    }
+
     public static String[] getDropOfEnemie(Context context, String levelFile, int index) throws Exception {
         JSONArray items = getWinOfEnemieAttribut(context, levelFile, index) == null ||
                 !getWinOfEnemieAttribut(context, levelFile, index).has("dropPossible") ||
@@ -136,9 +151,16 @@ public class JsonReader {
 
     public static String getNarationAfterWinEnemie(Context context, String levelFile, int index) throws Exception {
         String naration = getWinOfEnemieAttribut(context, levelFile, index) == null ||
-                !getWinOfEnemieAttribut(context, levelFile, index).has("dropPossible") ? null
-                : getWinOfEnemieAttribut(context, levelFile, index).getString("dropPossible");
+                !getWinOfEnemieAttribut(context, levelFile, index).has("naration") ? null
+                : getWinOfEnemieAttribut(context, levelFile, index).getString("naration");
         if (naration == null) throw new Exception("null enemieNarationAfterWin");
+        else return naration;
+    }
+
+    public static String getNarationAfterLooseEnemie(Context context, String levelFile, int index) throws Exception {
+        String naration = getLooseOfEnemieAttribut(context, levelFile, index) == null || !getLooseOfEnemieAttribut(context, levelFile, index).has("naration") ? null
+                : getLooseOfEnemieAttribut(context, levelFile, index).getString("naration");
+        if (naration == null) throw new Exception("null enemieNarationAfterLoose");
         else return naration;
     }
 
@@ -163,6 +185,54 @@ public class JsonReader {
             e.printStackTrace();
         }
         return choise;
+    }
+
+    private static JSONObject getObject(Context context, String nameOfObject) {
+        JSONObject object = null;
+        try {
+            object = new JSONObject(loadJsonFromRaw(context.getResources(), GameConstant.OBJETS, context.getPackageName()))
+                    .getJSONObject("objets")
+                    .getJSONObject(nameOfObject);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+    public static String getObjectName(Context context, String nameOfObject) throws JSONException {
+        String name = getObject(context, nameOfObject) == null ? null : getObject(context, nameOfObject).getString("nom");
+        if (name == null) throw new JSONException("null objectName");
+        else return name;
+    }
+
+    public static String getObjectDesc(Context context, String nameOfObject) throws JSONException {
+        String desc = getObject(context, nameOfObject) == null ? null : getObject(context, nameOfObject).getString("description");
+        if (desc == null) throw new JSONException("null objectDesc");
+        else return desc;
+    }
+
+    public static int getObjectSize(Context context, String nameOfObject) throws JSONException {
+        int size = getObjectStat(context, nameOfObject) == null ? -1 : getObjectStat(context, nameOfObject).getInt("taille");
+        if(size == -1) throw new JSONException("null objectSize");
+        else return size;
+    }
+
+    public static String getObjectDamage(Context context, String nameOfObject) throws JSONException {
+        String damage = getObjectStat(context, nameOfObject) == null ? null : getObjectStat(context, nameOfObject).getString("degats");
+        if(damage == null) throw new JSONException("null objectDamage");
+        else return damage;
+    }
+
+
+    private static JSONObject getObjectStat(Context context, String nameOfObject) {
+        JSONObject stats = null;
+        try {
+            stats = getObject(context, nameOfObject).getJSONObject("stats");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stats;
     }
 
     public static String getImageObject(Context context, String objet) {
