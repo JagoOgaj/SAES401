@@ -23,7 +23,7 @@
       },
       "stats": {
         "pv": 60,
-        "degats": 12
+        "degats": "2d6"
       }
     },
     {
@@ -43,7 +43,7 @@
       },
       "stats": {
         "pv": 70,
-        "degats": 15
+        "degats": "2d7"
       }
     },
     {
@@ -62,7 +62,7 @@
       },
       "stats": {
         "pv": 80,
-        "degats": 18
+        "degats": "2d8"
       }
     },
     {
@@ -81,7 +81,7 @@
       },
       "stats": {
         "pv": 90,
-        "degats": 20
+        "degats": "2d9"
       }
     },
     {
@@ -99,7 +99,7 @@
       },
       "stats": {
         "pv": 120,
-        "degats": 25
+        "degats": "2d10"
       }
     }
   ]
