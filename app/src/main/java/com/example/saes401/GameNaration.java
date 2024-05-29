@@ -10,15 +10,21 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.saes401.entities.Enemie;
+import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.OnTextLoadedListener;
 import com.example.saes401.helper.Utilities;
 import com.example.saes401.story.Story;
 
+import java.io.Serializable;
+
 public class GameNaration extends AppCompatActivity implements Utilities {
     private Intent intent;
     private int currentLevel;
+    private int currentIndexEnemie;
+    private Boolean isPLayerWin;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -31,8 +37,9 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         }
         if (savedInstance == null && intent == null) {
             this.currentLevel = 0;
+            this.isPLayerWin = false;
+            this.currentIndexEnemie = 0;
         }
-
         try {
             launchNaration();
         } catch (Exception e) {
@@ -43,6 +50,8 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     @Override
     public void initAttibuts() {
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
+        this.isPLayerWin = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
+        this.currentIndexEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
     }
 
     @Override
@@ -50,7 +59,30 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_NARATION);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.isPLayerWin);
+        this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
         startActivity(this.intent);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);
+        isPLayerWin = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
+        currentIndexEnemie = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
+        try {
+            launchNaration();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
+        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.isPLayerWin);
+        outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
     }
 
     @Override
@@ -62,9 +94,16 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         if (this.currentLevel < 0 || this.currentLevel > 3) {
             throw new Exception("null level");
         } else {
+            String naration;
+            if (!isPLayerWin){
+                naration = JsonReader.getNarationAfterLooseEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
+            }
+            else {
+                naration = JsonReader.getNarationAfterWinEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
+            }
             setVisibilityOfContinue(
                     getTextView(),
-                    JsonReader.getNaration(this, this.currentLevel)
+                    naration
             );
         }
     }

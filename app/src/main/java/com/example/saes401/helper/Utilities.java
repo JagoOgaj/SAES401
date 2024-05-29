@@ -1,7 +1,7 @@
 package com.example.saes401.helper;
 
 public interface Utilities {
-    public abstract void initAttibuts();
+    public abstract void initAttibuts() throws Exception;
 
     public abstract void startActivityGameChoise();
 

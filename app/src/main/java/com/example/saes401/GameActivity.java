@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.saes401.entities.Enemie;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
 import com.example.saes401.story.Story;
 import com.example.saes401.utilities.Inventory;
@@ -20,7 +21,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     private int currentLevel;
     private int currentEnemie;
     private String previousActivity;
-    private Enemie currentEnemieInstance;
+    private Boolean gameContinue;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -28,27 +29,63 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         intent = getIntent();
         if (intent != null) {
             this.initAttibuts();
+            this.initStartActivity();
         }
         if (bundle == null && intent == null) {
             this.playerInstance = new Player(GameConstant.DEFAULT_HP);
-            this.currentEnemieInstance = new Enemie(0, "", 0, 0, new Inventory(0), "");
             this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
             this.currentEnemie = 0;
             this.previousActivity = "";
         }
     }
 
+    private void initStartActivity() {
+        // Nartion -> GameChoise -> Story
+        if (this.previousActivity.contains(GameConstant.VALUE_STORY)){
+            if (!this.gameContinue) startActivityGameNaration();
+            else {
+                if(this.gameContinue && enemieLeft() && !(this.currentLevel < 3)) this.currentEnemie++;
+                else if (this.gameContinue && !enemieLeft() && this.currentLevel < 3) this.currentLevel++;
+                startActivityGameNaration();
+            }
+        }
+        else if (this.previousActivity.contains(GameConstant.VALUE_GAME_CHOISE)){
+            statActivityStory();
+        }
+        else if (this.previousActivity.contains(GameConstant.VALUE_GAME_NARATION)){
+            if (this.currentLevel > 3){
+                //todo sauvgarder la partie dans la base de données et aller dans main activity
+            }
+            else{
+               startActivityGameChoise();
+            }
+        }
+    }
+
+    private boolean enemieLeft(){
+        Boolean enemieLeft = false;
+        try {
+            enemieLeft = JsonReader.getNumberEnemies(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel)) > 0;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return enemieLeft;
+    }
+
     @Override
     public void initAttibuts() {
-        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_CHOISE)) {
+        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_CHOISE)
+                || intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_MAIN_ACTIVITY)
+                || intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY)
+        ) {
             this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         }
-        if (!intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION)) {
+        else if (!intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION)) {
             this.currentEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
         }
-        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY)) {
-            this.currentEnemieInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
-            this.currentEnemieInstance = intent.getParcelableExtra(GameConstant.KEY_ENEMIE_INSTANCE);
+        else if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY)) {
+            this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
         }
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.previousActivity = intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY);
@@ -84,6 +121,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     public void startActivityGameNaration() {
         this.intent = new Intent(this, GameNaration.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         startActivity(this.intent);
     }
 
@@ -104,6 +142,11 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     @Override
     public void setListener() {
 
+    }
+
+    private void startMainActivity(){
+        intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

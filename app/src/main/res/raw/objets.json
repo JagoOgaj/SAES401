@@ -2,12 +2,11 @@
   "objets": {
     "epee_fer": {
       "nom": "Épée en fer",
-      "effet": "Augmente les dégâts de l'utilisateur de 10 points.",
       "description": "Une épée solide en fer forgé, parfaite pour le combat rapproché.",
-      "taille": "petite",
       "image": "sword2",
       "stats" : {
-        "degats": 10
+        "degats": "+3",
+        "taille" : 1
       }
     },
     "potion_guerison": {

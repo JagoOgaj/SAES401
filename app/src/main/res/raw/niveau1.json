@@ -12,20 +12,23 @@
       "nom": "Gobelin",
       "description": "Un petit être vert et poilu avec une dentition pointue.",
       "image": "gobelin.png",
-      "loose": 0,
       "win": {
         "dropPossible": [
           "pièce_d'or",
           "clé_rouillée",
           "oreille_de_gobelin"
         ],
-        "naration": "Vous avez vaincu le gobelin !",
-        "suivantPasDeClee": 1,
-        "suivantAvecClee": 5
+        "naration": "Vous avez vaincu le gobelin !"
+      },
+      "loose" : {
+        "naration": "Vous avez perdu!"
       },
       "stats": {
         "pv": 50,
-        "degats": "1d6"
+        "degats": "1d6",
+        "items" : [
+          "items1", "item2", "item3"
+        ]
       }
     },
     {

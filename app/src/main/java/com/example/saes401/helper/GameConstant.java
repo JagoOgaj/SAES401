@@ -18,9 +18,11 @@ public final class GameConstant {
     public static final String VALUE_GAME_ACTIVITY = "gameActivity";
     public static final String VALUE_GAME_CHOISE = "gameChoise";
     public static final String VALUE_GAME_NARATION = "gameNaration";
+    public static final String VALUE_MAIN_ACTIVITY = "mainActivity";
     public static final String VALUE_STORY = "story";
     public static final String KEY_PREVIOUS_ACTIVITY = "previousActivity";
     public static final String FORMAT_LEVEL = "niveau%d.json";
     public static final String REGEX_SPLITER = "d";
+    public static final String KEY_PLAYER_WIN = "isPlayerWin";
 
 }
