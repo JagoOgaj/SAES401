@@ -204,35 +204,16 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         try {
             String objetName = objet.getString("nom");
             String objetDescription = objet.getString("description");
-            String objetEffet = objet.getString("effet");
 
             // Créez le texte avec les labels et les valeurs
             String labelObjet = "Objet : ";
             String labelDescription = "Description : ";
-            String labelEffet = "Effet : ";
+
 
             // Combinez le tout dans un SpannableString
-            SpannableString spannable = new SpannableString(
-                    labelObjet + objetName + "\n\n" +
-                            labelDescription + objetDescription + "\n\n" +
-                            labelEffet + objetEffet
-            );
+          String spannable = labelObjet + objetName + "\n\n" + labelDescription + objetDescription + "\n\n";
 
-            // Appliquez les styles aux labels
-            int start = 0;
-            int end = labelObjet.length();
-            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            start = end + objetName.length() + 2;
-            end = start + labelDescription.length();
-            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            start = end + objetDescription.length() + 2;
-            end = start + labelEffet.length();
-            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             // Affichez le SpannableString dans le TextView
             textLevel.setText(spannable);
