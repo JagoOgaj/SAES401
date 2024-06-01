@@ -6,8 +6,8 @@ public final class GameConstant {
     */
     public static final int DEFAULT_HP = 3;
     public static final int DEFAULT_INVENTORY_SLOT = 3;
-    public static final String CATALOGUE = "catalogue.json";
-    public static final String OBJETS = "objets.json";
+    public static final String CATALOGUE = "catalogue";
+    public static final String OBJETS = "objets";
     public static final String NIVEAU1 = "niveau1";
     public static final String NIVEAU2 = "niveau2";
     public static final String NIVEAU3 = "niveau3";
@@ -21,8 +21,9 @@ public final class GameConstant {
     public static final String VALUE_MAIN_ACTIVITY = "mainActivity";
     public static final String VALUE_STORY = "story";
     public static final String KEY_PREVIOUS_ACTIVITY = "previousActivity";
-    public static final String FORMAT_LEVEL = "niveau%d.json";
+    public static final String FORMAT_LEVEL = "niveau%d";
     public static final String REGEX_SPLITER = "d";
     public static final String KEY_PLAYER_WIN = "isPlayerWin";
+    public static final String KEY_START_LEVEL = "onStarLevel";
 
 }

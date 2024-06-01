@@ -30,6 +30,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private int currentEnemieIndex;
     private GameFight fight;
     private Boolean isPlayerWin;
+    private Boolean onStartLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INSTANCE, this.currentEnemieInstance);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_STORY);
         this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.isPlayerWin);
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.onStartLevel );
         startActivity(intent);
     }
 

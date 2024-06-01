@@ -1,112 +1,107 @@
 {
   "objets": [
-    "epee_fer",
-    "potion_guerison",
-    "arc_bois",
-    "potion_force",
-    "bombe_magique"
+    "bouclier_N",
+    "epee_N",
+    "lance_N",
+    "arc_N",
+    "grimoire_N",
+    "bouclier_R",
+    "epee_R",
+    "lance_R",
+    "arc_R",
+    "grimoire_R"
   ],
-  "name": "Forêt sombre",
+  "nom": "Le Règne des Ténèbres",
+  "lieu": "Les Cryptes Sombres",
   "enemies": [
     {
-      "nom": "Gobelin",
-      "description": "Un petit être vert et poilu avec une dentition pointue.",
-      "image": "gobelin.png",
+      "nom": "Skull, Guerrier des Morts",
+      "description": "Lieutenant impitoyable de Lif, revenu de l'au-delà.",
+      "image": "skull_guerrier_des_morts.png",
+      "image_sansfond": "sf_skull_guerrier_des_morts.png",
       "win": {
-        "dropPossible": [
-          "pièce_d'or",
-          "clé_rouillée",
-          "oreille_de_gobelin"
-        ],
-        "naration": "Vous avez vaincu le gobelin !"
+        "dropPossible": ["epee_N", "lance_N"],
+        "narration": "La défaite de Skull disperse les esprits vengeurs qui hantaient les lieux."
       },
-      "loose" : {
-        "naration": "Vous avez perdu!"
+      "loose": {
+        "narration": "La lame maudite de Skull vous trouve avant que vous puissiez réagir, et votre âme rejoint son armée."
       },
       "stats": {
-        "pv": 50,
-        "degats": "1d6",
-        "items" : [
-          "items1", "item2", "item3"
-        ]
+        "pv": 1,
+        "degats": "1d2",
+        "items": ["bouclier_N", "epee_N", "lance_N"]
       }
     },
     {
-      "nom": "Loup affamé",
-      "description": "Un grand loup gris aux yeux brillants de malice.",
-      "image": "loup.png",
-      "loose": 0,
+      "nom": "Skal le Nécromancien",
+      "description": "Capable de réanimer les morts et de créer une armée d'outre-tombe.",
+      "image": "skal_le_necromancien.png",
+      "image_sansfond": "sf_skal_le_necromancien.png",
       "win": {
-        "dropPossible": [
-          "viande_de_loup",
-          "potion_de_vitesse",
-          "crocs_de_loup"
-        ],
-        "naration": "Vous avez terrassé le loup affamé !",
-        "suivantPasDeClee": 2,
-        "suivantAvecClee": 5
+        "dropPossible": ["epee_R", "arc_N"],
+        "narration": "En mettant fin aux rituels de Skal, vous arrêtez la marée montante des morts."
+      },
+      "loose": {
+        "narration": "Skal murmure une incantation, et des mains mortes vous tirent sous terre."
       },
       "stats": {
-        "pv": 60,
-        "degats": "1d8"
+        "pv": 1,
+        "degats": "1d3",
+        "items": ["arc_N", "grimoire_N", "bouclier_N"]
       }
     },
     {
-      "nom": "Chauve-souris géante",
-      "description": "Une créature nocturne aux ailes immenses et aux crocs acérés.",
-      "image": "chauve-souris.png",
-      "loose": 0,
+      "nom": "Grim le Faucheur",
+      "description": "Moissonneur des âmes errantes, renforçant les rangs de Lif.",
+      "image": "grim_le_faucheur.png",
+      "image_sansfond": "sf_grim_le_faucheur.png",
       "win": {
-        "dropPossible": [
-          "pierre_précieuse",
-          "bague_ensorcelée",
-          "aile_de_chauve-souris"
-        ],
-        "naration": "Vous avez vaincu la chauve-souris géante !",
-        "suivantPasDeClee": 3,
-        "suivantAvecClee": 5
+        "dropPossible": [ "bouclier_R", "arc_R"],
+        "narration": "La chute de Grim met un terme à la récolte des âmes innocentes."
+      },
+      "loose": {
+        "narration": "Les lames de Grim vous enveloppent dans un voile de ténèbres, scellant votre destin."
       },
       "stats": {
-        "pv": 70,
-        "degats": "1d9"
+        "pv": 2,
+        "degats": "1d4",
+        "items": ["epee_R", "lance_N", "grimoire_N"]
       }
     },
     {
-      "nom": "Esprit de la forêt",
-      "description": "Une entité spectrale entourée de brume mystique.",
-      "image": "esprit.png",
-      "loose": 0,
+      "nom": "Eldrin le Magicien",
+      "description": "Spécialiste des illusions et des manipulations, travaille pour désorienter les ennemis du Roi des Morts.",
+      "image": "eldrin_le_magicien.png",
+      "image_sansfond": "sf_eldrin_le_magicien.png",
       "win": {
-        "dropPossible": [
-          "feuille_d'argent",
-          "essence_de_la_nature",
-          "essence_spirituelle"
-        ],
-        "naration": "Vous avez dispersé l'esprit de la forêt !",
-        "suivantPasDeClee": 5,
-        "suivantAvecClee": 5
+        "dropPossible": ["bouclier_N", "grimoire_R"],
+        "narration": "En déjouant les illusions d'Eldrin, vous ramenez la clarté aux Cryptes Sombres."
+      },
+      "loose": {
+        "narration": "Les illusions d'Eldrin vous submergent, vous perdant dans un labyrinthe de votre propre esprit."
       },
       "stats": {
-        "pv": 80,
-        "degats": "1d10"
+        "pv": 2,
+        "degats": "1d5",
+        "items": [ "arc_R", "bouclier_R", "lance_R"]
       }
     },
     {
-      "nom": "Gardien des bois",
-      "description": "Un colosse de bois vivant, protecteur de la forêt.",
-      "image": "gardien.png",
-      "loose": 0,
+      "nom": "Lif, Roi des Morts",
+      "description": "Maître des ténèbres et souverain de l'au-delà, tire sa puissance de la souffrance des âmes.",
+      "image": "lif_roi_des_morts.png",
+      "image_sansfond": "sf_lif_roi_des_morts.png",
       "win": {
-        "dropPossible": [
-          "éclat_de_cristal",
-          "essence_de_sagesse"
-        ],
-        "naration": "Vous avez triomphé du gardien des bois !",
-        "suivant": "Caverne souterraine"
+        "dropPossible": ["epee_R", "arc_SR"],
+        "narration": "En vainquant Lif, vous avez dissipé les ombres qui enveloppaient les cryptes."
+      },
+      "loose": {
+        "narration": "Lif vous écrase sous le poids des âmes torturées, plongeant le monde dans une obscurité éternelle."
       },
       "stats": {
-        "pv": 100,
-        "degats": "2d6"
+        "pv": 3,
+        "degats": "2d4",
+        "items": ["epee_R", "grimoire_R", "arc_R"]
       }
     }
   ]

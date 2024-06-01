@@ -25,6 +25,9 @@
             android:name=".GameChoise"
             android:exported="false" />
         <activity
+            android:name=".GameNaration"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

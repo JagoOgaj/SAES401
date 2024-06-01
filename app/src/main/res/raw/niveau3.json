@@ -1,106 +1,107 @@
 {
   "objets": [
-    "potion_de_vie_superieure",
-    "lance_des_anciens",
-    "armure_des_heroes"
+    "bouclier_SR",
+    "epee_SR",
+    "lance_SR",
+    "arc_SR",
+    "grimoire_SR",
+    "bouclier_SSR",
+    "epee_SSR",
+    "lance_SSR",
+    "arc_SSR",
+    "grimoire_SSR"
   ],
-  "name": "Donjon du chaos",
+  "nom": "Les Conjurateurs Maudits",
+  "lieu": "Les Ruines Ensorcelées",
   "enemies": [
     {
-      "nom": "Spectre des abysses",
-      "description": "Un esprit tourmenté, emprisonné dans les profondeurs du donjon.",
-      "image": "spectre.png",
-      "loose": 0,
+      "nom": "Zarek le Sorcier",
+      "description": "Sorcier paria, maître des arcanes interdits, il offre ses services pour renverser l'ordre naturel.",
+      "image": "zarek_le_sorcier.png",
+      "image_sansfond": "sf_zarek_le_sorcier.png",
       "win": {
-        "dropPossible": [
-          "essence_spectrale",
-          "éclat_de_ténèbres",
-          "larme_de_l'esprit"
-        ],
-        "naration": "Le spectre des abysses est dispersé dans l'obscurité !",
-        "suivantPasDeClee": 1,
-        "suivantAvecClee": 5
+        "dropPossible": ["bouclier_SR", "epee_SR"],
+        "narration": "Avec la défaite de Zarek, les ombres qui enveloppaient les ruines se dissipent lentement."
+      },
+      "loose": {
+        "narration": "La magie sombre de Zarek vous engloutit, vous laissant sans espoir face à ses pouvoirs anciens."
       },
       "stats": {
-        "pv": 80,
-        "degats": 15
+        "pv": 3,
+        "degats": "1d6",
+        "items": ["bouclier_SR", "epee_SR", "lance_SR"]
       }
     },
     {
-      "nom": "Garde-corps déchu",
-      "description": "Un guerrier jadis loyal, corrompu par les ténèbres du donjon.",
-      "image": "garde.png",
-      "loose": 0,
+      "nom": "Helga l'Enchanteresse",
+      "description": "Utilise sa magie noire pour corrompre et contrôler, essentielle pour les plans de Zarek.",
+      "image": "helga_l_enchanteresse.png",
+      "image_sansfond": "sf_helga_l_enchanteresse.png",
       "win": {
-        "dropPossible": [
-          "armure_brisée",
-          "potion_de_corruption",
-          "épée_perdue"
-        ],
-        "naration": "Le garde-corps déchu ne résiste pas à votre détermination !",
-        "suivantPasDeClee": 2,
-        "suivantAvecClee": 5
+        "dropPossible": ["lance_SR", "arc_SR"],
+        "narration": "En brisant le sortilège de Helga, vous libérez les esprits qu'elle avait ensorcelés."
+      },
+      "loose": {
+        "narration": "Le charme de Helga vous submerge, vous liant à sa volonté."
       },
       "stats": {
-        "pv": 90,
-        "degats": 18
+        "pv": 4,
+        "degats": "2d4",
+        "items": ["arc_SR", "grimoire_SR", "bouclier_SSR"]
       }
     },
     {
-      "nom": "Golem des ombres",
-      "description": "Une créature de pure obscurité, façonnée par les magies interdites.",
-      "image": "golem.png",
-      "loose": 0,
+      "nom": "Baldur l'Ancien",
+      "description": "Gardien des connaissances anciennes et des sorts maléfiques, renforce les capacités magiques du groupe.",
+      "image": "baldur_l_ancien.png",
+      "image_sansfond": "sf_baldur_l_ancien.png",
       "win": {
-        "dropPossible": [
-          "essence_ténébreuse",
-          "pierre_de_l'ombre",
-          "cœur_du_golem"
-        ],
-        "naration": "Le golem des ombres s'effondre dans les ténèbres !",
-        "suivantPasDeClee": 3,
-        "suivantAvecClee": 5
+        "dropPossible": ["grimoire_SR", "bouclier_SSR"],
+        "narration": "Baldur, dépossédé de ses runes maléfiques, s'effondre, rendant ses pouvoirs à la terre."
+      },
+      "loose": {
+        "narration": "Les incantations de Baldur vous enveloppent dans un réseau de douleur et de désespoir."
       },
       "stats": {
-        "pv": 100,
-        "degats": 20
+        "pv": 5,
+        "degats": "2d5",
+        "items": ["epee_SSR", "lance_SSR", "arc_SR"]
       }
     },
     {
-      "nom": "Mage noir",
-      "description": "Un sorcier corrompu, manipulant les énergies sombres du donjon.",
-      "image": "mage_noir.png",
-      "loose": 0,
+      "nom": "Lyria la Sirène",
+      "description": "Utilise son chant pour hypnotiser et entraîner ses victimes dans les profondeurs pour les noyer.",
+      "image": "lyria_la_sirene.png",
+      "image_sansfond": "sf_lyria_la_sirene.png",
       "win": {
-        "dropPossible": [
-          "livre_maudit",
-          "essence_du_chaos"
-        ],
-        "naration": "Le mage noir est vaincu, laissant derrière lui un air chargé de malédiction !",
-        "suivantPasDeClee": 5,
-        "suivantAvecClee": 5
+        "dropPossible": ["epee_SSR", "lance_SSR"],
+        "narration": "Le silence retombe sur les ruines alors que Lyria, vaincue, retourne aux profondeurs d'où elle venait."
+      },
+      "loose": {
+        "narration": "Le chant mélodieux de Lyria vous attire irrésistiblement vers une fin aquatique."
       },
       "stats": {
-        "pv": 110,
-        "degats": 22
+        "pv": 5,
+        "degats": "3d4",
+        "items": ["grimoire_SSR", "bouclier_SSR", "epee_SSR"]
       }
     },
     {
-      "nom": "Seigneur des ténèbres",
-      "description": "Le maître absolu du donjon, détenteur du pouvoir ultime des ténèbres.",
-      "image": "seigneur_tenebres.png",
-      "loose": 0,
+      "nom": "Aldrok, le Chevalier Gobelin",
+      "description": "Assassin d'élite, exécute les ordres de Zarek avec une précision mortelle.",
+      "image": "aldrok_le_chevalier_gobelin.png",
+      "image_sansfond": "sf_aldrok_le_chevalier_gobelin.png",
       "win": {
-        "dropPossible": [
-          "éclat_de_lune_noire",
-          "essence_de_destruction"
-        ],
-        "naration": "Vous avez triomphé du seigneur des ténèbres, rétablissant la lumière dans le donjon !",
-        "suivant": "Fin du jeu"
+        "dropPossible": ["arc_SSR", "grimoire_SSR"],
+        "narration": "Aldrok, privé de sa mission, tombe enfin, son dernier coup manqué."
+      },
+      "loose": {
+        "narration": "Rapide et mortel, Aldrok vous frappe là où vous vous y attendez le moins, mettant fin à votre quête."
       },
       "stats": {
-        "pv": 150,
-        "degats": 30
+        "pv": 6,
+        "degats": "2d6",
+        "items": ["lance_SSR", "arc_SSR", "grimoire_SSR"]
       }
     }
   ]

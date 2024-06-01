@@ -1,105 +1,107 @@
 {
   "objets": [
-    "potion_force",
-    "bombe_magique",
-    "armure_plaques"
+    "bouclier_R",
+    "epee_R",
+    "lance_R",
+    "arc_R",
+    "grimoire_R",
+    "bouclier_SR",
+    "epee_SR",
+    "lance_SR",
+    "arc_SR",
+    "grimoire_SR"
   ],
-  "name": "Caverne souterraine",
+  "nom": "La Horde Sauvage",
+  "lieu": "La Forêt de Griffe-Noire",
   "enemies": [
     {
-      "nom": "Gobelin des profondeurs",
-      "description": "Un gobelin adapté à la vie souterraine, armé d'une lame rouillée.",
-      "image": "gobelin_souterrain.png",
-      "loose": 0,
+      "nom": "Morda, Roi des Bêtes",
+      "description": "Roi impitoyable des créatures sauvages, il utilise bêtes et monstres comme agents de chaos.",
+      "image": "morda_roi_des_betes.png",
+      "image_sansfond": "sf_morda_roi_des_betes.png",
       "win": {
-        "dropPossible": [
-          "pièce_d'or",
-          "clé_de_la_caverne",
-          "oreille_de_gobelin_des_profondeurs"
-        ],
-        "naration": "Le gobelin des profondeurs gît vaincu à vos pieds !",
-        "suivantPasDeClee": 1,
-        "suivantAvecClee": 5
+        "dropPossible": ["bouclier_R", "epee_R"],
+        "narration": "La défaite de Morda apaise les esprits des bêtes féroces, ramenant le calme dans la forêt."
+      },
+      "loose": {
+        "narration": "Morda déchaîne ses bêtes sur vous, et vous êtes submergé par une marée de griffes et de crocs."
       },
       "stats": {
-        "pv": 60,
-        "degats": "2d6"
+        "pv": 2,
+        "degats": "1d4",
+        "items": ["bouclier_R", "epee_R", "lance_R"]
       }
     },
     {
-      "nom": "Chauve-souris vampirique",
-      "description": "Une chauve-souris de taille inhabituelle, assoiffée de sang.",
-      "image": "chauve-souris_vampirique.png",
-      "loose": 0,
+      "nom": "Gromm la Bête",
+      "description": "Puissante créature bestiale servant de général à Morda, semant la terreur.",
+      "image": "gromm_la_bete.png",
+      "image_sansfond": "sf_gromm_la_bete.png",
       "win": {
-        "dropPossible": [
-          "essence_vitale",
-          "potion_d'invisibilité",
-          "crocs_de_chauve-souris_vampirique"
-        ],
-        "naration": "La chauve-souris vampirique est vaincue !",
-        "suivantPasDeClee": 2,
-        "suivantAvecClee": 5
+        "dropPossible": ["lance_R", "arc_R"],
+        "narration": "Gromm tombe sous vos coups, et ses hurlements résonnent à travers la forêt."
+      },
+      "loose": {
+        "narration": "La rage de Gromm est inépuisable, et vous êtes rapidement submergé par sa fureur bestiale."
       },
       "stats": {
-        "pv": 70,
-        "degats": "2d7"
+        "pv": 3,
+        "degats": "1d6",
+        "items": ["arc_R", "grimoire_R", "bouclier_SR"]
       }
     },
     {
-      "nom": "Gardien des ombres",
-      "description": "Un être fait de ténèbres, protégeant les secrets de la caverne.",
-      "image": "gardien_ombre.png",
-      "loose": 0,
+      "nom": "Garnar le Cornu",
+      "description": "Combattant féroce qui utilise sa force brute pour écraser les opposants.",
+      "image": "garnar_le_cornu.png",
+      "image_sansfond": "sf_garnar_le_cornu.png",
       "win": {
-        "dropPossible": [
-          "éclat_d'obscurité",
-          "essence_de_mystère"
-        ],
-        "naration": "Le gardien des ombres est dissipé par votre bravoure !",
-        "suivantPasDeClee": 3,
-        "suivantAvecClee": 5
+        "dropPossible": ["grimoire_R", "bouclier_SR"],
+        "narration": "Garnar s'effondre, son dernier rugissement étouffé par la victoire."
+      },
+      "loose": {
+        "narration": "La puissance brute de Garnar est insurmontable, et vous êtes renversé par son assaut dévastateur."
       },
       "stats": {
-        "pv": 80,
-        "degats": "2d8"
+        "pv": 3,
+        "degats": "2d3",
+        "items": ["epee_SR", "lance_SR", "arc_R"]
       }
     },
     {
-      "nom": "Esprit tourmenteur",
-      "description": "Un esprit malveillant, alimenté par les tourments de la caverne.",
-      "image": "esprit_tourmenteur.png",
-      "loose": 0,
+      "nom": "Thorne le Berserker",
+      "description": "Guerrier féroce qui utilise sa rage inégalée pour pulvériser les lignes ennemies.",
+      "image": "thorne_le_berserker.png",
+      "image_sansfond": "sf_thorne_le_berserker.png",
       "win": {
-        "dropPossible": [
-          "larme_de_l'esprit",
-          "essence_de_désespoir"
-        ],
-        "naration": "L'esprit tourmenteur est apaisé par votre courage !",
-        "suivantPasDeClee": 5,
-        "suivantAvecClee": 5
+        "dropPossible": ["epee_SR", "lance_SR"],
+        "narration": "Thorne est vaincu, sa fureur s'éteignant avec son dernier souffle."
+      },
+      "loose": {
+        "narration": "Vous ne parvenez pas à contenir la fureur de Thorne, qui balaye tout sur son passage."
       },
       "stats": {
-        "pv": 90,
-        "degats": "2d9"
+        "pv": 4,
+        "degats": "2d4",
+        "items": ["grimoire_SR", "bouclier_SR", "epee_SR"]
       }
     },
     {
-      "nom": "Maître des ténèbres",
-      "description": "Un sorcier puissant, cherchant à contrôler les énergies souterraines.",
-      "image": "maitre_tenebres.png",
-      "loose": 0,
+      "nom": "Gorath le Guerrier",
+      "description": "Commandant des forces militaires de Morda, expert en tactiques de siège.",
+      "image": "gorath_le_guerrier.png",
+      "image_sansfond": "sf_gorath_le_guerrier.png",
       "win": {
-        "dropPossible": [
-          "cristal_d'ombre",
-          "essence_de_puissance"
-        ],
-        "naration": "Vous avez triomphé du maître des ténèbres !",
-        "suivant": "Niveau final"
+        "dropPossible": ["arc_SR", "grimoire_SSR"],
+        "narration": "Avec la chute de Gorath, le commandement des troupes ennemies s'effondre."
+      },
+      "loose": {
+        "narration": "La stratégie de Gorath vous surpasse, et vous êtes rapidement submergé par les forces ennemies."
       },
       "stats": {
-        "pv": 120,
-        "degats": "2d10"
+        "pv": 4,
+        "degats": "2d5",
+        "items": [ "lance_SR", "arc_SR", "grimoire_SR"]
       }
     }
   ]

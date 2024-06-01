@@ -56,7 +56,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         }
 
         // Récupérer les noms des objets
-        JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, 0));
+        JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
 
         // Mettre à jour les ImageButton avec les images des objets
         try {
@@ -123,7 +123,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         boolean result = true;
         JSONObject itemJson = (JSONObject) selectedButton.getTag();
         //todo mettre des infos cohérente dans le json
-        Item item = new Item("", 0, 0, 0);
+        Item item = new Item("", "", "", 0);
         if (player.isFullinventory()) result = false;
         try {
             player.setInventory(item);
