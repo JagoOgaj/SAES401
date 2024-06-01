@@ -1,185 +1,104 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/paysage">
-    <!-- Parametre Button -->
-    <FrameLayout
-        android:id="@+id/parametreFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageButton
-            android:id="@+id/parametreButton"
-            android:layout_width="145dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/parametre"
-            android:scaleType="fitXY"
-            android:src="@drawable/button_selector" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/parametre"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/ninja" />
-
-
-    </FrameLayout>
-
-    <!-- Credits Button -->
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <ImageView
+        android:id="@+id/imageViewForest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/accueilportrait"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
     <TextView
-        android:id="@+id/titre"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="276dp"
         android:text="@string/title"
-        android:textColor="#FFFFFF"
-        android:textSize="48sp"
+        android:textColor="#A3E34C"
+        android:textSize="54sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:fontFamily="@font/ninja" />
+        app:layout_constraintVertical_bias="0.094" />
 
-    <TextView
-        android:id="@+id/titre2"
+    <Button
+        android:id="@+id/parametreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="344dp"
-        android:text="@string/title2"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/normal_font"
+        android:padding="10dp"
+        android:text="@string/parametre"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:backgroundTint="#A3E34C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/creditsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/normal_font"
+        android:padding="10dp"
+        android:text="@string/credits"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:backgroundTint="#A3E34C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.003"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/normal_font"
+        android:padding="10dp"
+        android:text="@string/start_game"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:backgroundTint="#A3E34C"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:fontFamily="@font/ninja" />
+        app:layout_constraintVertical_bias="0.449" />
 
-    <FrameLayout
-        android:id="@+id/creditsFrame"
+    <Button
+        android:id="@+id/continueButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/normal_font"
+        android:padding="10dp"
+        android:text="@string/continue_game"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:backgroundTint="#A3E34C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageButton
-            android:id="@+id/creditsButton"
-            android:layout_width="145dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/credits"
-            android:scaleType="fitXY"
-            android:src="@drawable/button_selector" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/credits"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/ninja" />
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <!-- Start Button -->
-        <FrameLayout
-            android:id="@+id/startFrame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/startButton"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/start_game"
-                android:scaleType="fitXY"
-                android:src="@drawable/button_selector" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/normal_font"
-                android:text="@string/start_game"
-                android:textColor="#FFFFFF" />
-        </FrameLayout>
-
-        <!-- Continue Button -->
-        <FrameLayout
-            android:id="@+id/continueFrame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/continueButton"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/continue_game"
-                android:scaleType="fitXY"
-                android:src="@drawable/button_selector" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/continue_game"
-                android:textColor="#FFFFFF"
-                android:fontFamily="@font/ninja" />
-
-        </FrameLayout>
-
-        <!-- Previous Game Button -->
-        <FrameLayout
-            android:id="@+id/previousGameFrame"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/previousButton"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/previous"
-                android:scaleType="fitXY"
-                android:src="@drawable/button_selector" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/previous"
-                android:textColor="#FFFFFF"
-                android:fontFamily="@font/ninja" />
-
-        </FrameLayout>
-
-    </LinearLayout>
-
+        app:layout_constraintVertical_bias="0.628" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

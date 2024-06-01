@@ -3,7 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+    <ImageView
+        android:id="@+id/imageViewForest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+    android:src="@drawable/foretportrait"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
 
     <Button
         android:id="@+id/continueButton"
@@ -11,11 +19,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
         android:layout_marginBottom="188dp"
-        android:backgroundTint="@android:color/holo_green_dark"
         android:fontFamily="@font/normal_font"
         android:padding="10dp"
         android:text="CONTINUE"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:backgroundTint="#A3E34C"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,8 +35,11 @@
     <TextView
         android:id="@+id/narationContainer"
         android:layout_width="299dp"
-        android:layout_height="119dp"
+        android:layout_height="409dp"
         android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
