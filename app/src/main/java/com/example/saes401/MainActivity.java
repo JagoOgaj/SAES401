@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_MAIN_ACTIVITY);
         intent.putExtra(GameConstant.KEY_PLAYER, new Player(GameConstant.DEFAULT_HP));
         intent.putExtra(GameConstant.KEY_START_LEVEL, true);
+        intent.putExtra(GameConstant.KEY_PLAYER_WIN, true);
         startActivity(intent);
     }
 

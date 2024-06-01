@@ -11,23 +11,21 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.saes401.entities.Enemie;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.OnTextLoadedListener;
 import com.example.saes401.helper.Utilities;
-import com.example.saes401.story.Story;
-
-import java.io.Serializable;
 
 public class GameNaration extends AppCompatActivity implements Utilities {
     private Intent intent;
     private int currentLevel;
     private int currentIndexEnemie;
-    private Boolean isPLayerWin;
-    private Boolean onStartLevel;
+    private Boolean gameContinue;
+    private Boolean levelStart;
     private String naration;
+    private Player playerInstance;
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -39,7 +37,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         }
         if (savedInstance == null && intent == null) {
             this.currentLevel = 0;
-            this.isPLayerWin = false;
+            this.gameContinue = false;
             this.currentIndexEnemie = 0;
         }
         try {
@@ -52,9 +50,10 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     @Override
     public void initAttibuts() {
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
-        this.isPLayerWin = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
+        this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
         this.currentIndexEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
-        this.onStartLevel = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL,false);
+        this.levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
+        this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
     }
 
     @Override
@@ -62,9 +61,10 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_NARATION);
-        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.isPLayerWin);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
-        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.onStartLevel );
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
+        this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
         startActivity(this.intent);
     }
 
@@ -72,8 +72,9 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);
-        isPLayerWin = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
+        gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
         currentIndexEnemie = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
+        playerInstance = savedInstanceState.getParcelable(GameConstant.KEY_PLAYER);
         try {
             launchNaration();
         } catch (Exception e) {
@@ -85,8 +86,9 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
-        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.isPLayerWin);
+        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
+        outState.putParcelable(GameConstant.KEY_PLAYER, this.playerInstance);
     }
 
     @Override
@@ -100,13 +102,11 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         } else {
 
 
-            if(onStartLevel){
-                naration = JsonReader.getNaration(this, this.currentLevel-1);
-            }
-            else if (!isPLayerWin){
+            if (levelStart) {
+                naration = JsonReader.getNaration(this, this.currentLevel - 1);
+            } else if (!gameContinue) {
                 naration = JsonReader.getNarationAfterLooseEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
-            }
-            else {
+            } else {
                 naration = JsonReader.getNarationAfterWinEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
             }
             setVisibilityOfContinue(
@@ -126,7 +126,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
                     if (finalK == naration.length() - 1 && listener != null) {
                         listener.onTextLoaded();
                     }
-                }, 100 * k);
+                }, 100L * k);
             }
         }, 2000);
     }

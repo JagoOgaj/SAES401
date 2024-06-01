@@ -193,8 +193,7 @@ public class JsonReader {
             object = new JSONObject(loadJsonFromRaw(context.getResources(), GameConstant.OBJETS, context.getPackageName()))
                     .getJSONObject("objets")
                     .getJSONObject(nameOfObject);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return object;
@@ -214,13 +213,13 @@ public class JsonReader {
 
     public static int getObjectSize(Context context, String nameOfObject) throws JSONException {
         int size = getObjectStat(context, nameOfObject) == null ? -1 : getObjectStat(context, nameOfObject).getInt("taille");
-        if(size == -1) throw new JSONException("null objectSize");
+        if (size == -1) throw new JSONException("null objectSize");
         else return size;
     }
 
     public static String getObjectDamage(Context context, String nameOfObject) throws JSONException {
         String damage = getObjectStat(context, nameOfObject) == null ? null : getObjectStat(context, nameOfObject).getString("degats");
-        if(damage == null) throw new JSONException("null objectDamage");
+        if (damage == null) throw new JSONException("null objectDamage");
         else return damage;
     }
 
@@ -285,7 +284,7 @@ public class JsonReader {
 
             // Charger le JSON complet des objets
             json = loadJsonFromRaw(res, "objets", context.getPackageName());
-            JSONObject allObjets = new JSONObject(json).getJSONObject("objets");
+            JSONObject allObjets = new JSONObject(json);
 
             // Récupérer les objets complets
             JSONArray result = new JSONArray();

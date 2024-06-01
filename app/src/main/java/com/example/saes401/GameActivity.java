@@ -2,27 +2,24 @@ package com.example.saes401;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.saes401.entities.Enemie;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
 import com.example.saes401.story.Story;
-import com.example.saes401.utilities.Inventory;
-
-import java.io.Serializable;
 
 public class GameActivity extends AppCompatActivity implements Utilities {
     private Intent intent;
     private Player playerInstance;
     private int currentLevel;
-    private int currentEnemie;
+    private int currentEnemieInstance;
     private String previousActivity;
     private Boolean gameContinue;
-    private Boolean onStartLevel;
+    private Boolean levelStart;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -32,136 +29,107 @@ public class GameActivity extends AppCompatActivity implements Utilities {
             this.initAttibuts();
             this.initStartActivity();
         }
-        if (bundle == null && intent == null) {
-            this.playerInstance = new Player(GameConstant.DEFAULT_HP);
-            this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
-            this.currentEnemie = 0;
-            this.previousActivity = "";
-        }
     }
 
     private void initStartActivity() {
         // Nartion -> GameChoise -> Story
-        if(this.previousActivity.contains(GameConstant.VALUE_MAIN_ACTIVITY)) {
+        if (this.previousActivity.contains(GameConstant.VALUE_MAIN_ACTIVITY)) {
             startActivityGameNaration();
-        }
-        else if (this.previousActivity.contains(GameConstant.VALUE_STORY)){
-            if (!this.gameContinue){
-                this.currentEnemie = -1;
+        } else if (this.previousActivity.contains(GameConstant.VALUE_STORY)) {
+            if (!this.gameContinue) {
+                this.currentEnemieInstance = -1;
                 startActivityGameNaration();
-            }
-            else {
-                if(this.gameContinue && enemieLeft() && !(this.currentLevel < 3)) {
-                    this.currentEnemie++;
-                    this.onStartLevel = false;
+            } else {
+                if (enemieLeft() && !(this.currentLevel < 3)) {
+                    this.currentEnemieInstance++;
+                    this.levelStart = false;
 
-                }
-                else if (this.gameContinue && !enemieLeft() && this.currentLevel < 3) {
+                } else if (!enemieLeft() && this.currentLevel < 3) {
                     this.currentLevel++;
-                    this.onStartLevel = true;
+                    this.levelStart = true;
                 }
                 startActivityGameNaration();
             }
-        }
-        else if (this.previousActivity.contains(GameConstant.VALUE_GAME_CHOISE)){
+        } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_CHOISE)) {
             statActivityStory();
-        }
-        else if (this.previousActivity.contains(GameConstant.VALUE_GAME_NARATION)){
-            if (this.currentLevel > 3){
+        } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_NARATION)) {
+            if (this.currentLevel > 3 || !this.gameContinue) {
                 //todo sauvgarder la partie dans la base de données et aller dans main activity
-            }
-            else if(!this.gameContinue) {
                 startMainActivity();
-            }
-            else {
-               startActivityGameChoise();
-            }
+            } else startActivityGameChoise();
+
         }
     }
 
-    private boolean enemieLeft(){
-        Boolean enemieLeft = false;
+    private boolean enemieLeft() {
+        boolean enemieLeft = false;
         try {
             enemieLeft = JsonReader.getNumberEnemies(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel)) > 0;
-        }
-        catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.d("GameActivity", "enemieLeftError: " + e.getMessage());
         }
         return enemieLeft;
     }
 
     @Override
     public void initAttibuts() {
-        if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_CHOISE)
-                || intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_MAIN_ACTIVITY)
-                || intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY)
-        ) {
-            this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
-        }
-         if (!intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION) &&
-        !intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_MAIN_ACTIVITY)) {
-            this.currentEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
-        }
-         if (intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY) ||
-                intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION)  ){
-            this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
-
-
-        }
-         if(intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_GAME_NARATION)
-                || intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_MAIN_ACTIVITY)
-                || intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY).contains(GameConstant.VALUE_STORY)){
-            this.onStartLevel = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
-
-        }
+        this.currentEnemieInstance = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
+        this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
+        this.levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
+        this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.previousActivity = intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY);
-
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);
-        playerInstance = (Player) savedInstanceState.getSerializable(GameConstant.KEY_PLAYER);
-        currentEnemie = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
+        playerInstance = savedInstanceState.getParcelable(GameConstant.KEY_PLAYER);
+        currentEnemieInstance = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
         previousActivity = savedInstanceState.getString(GameConstant.KEY_PREVIOUS_ACTIVITY);
+        gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
+        levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
-        //outState.putSerializable(GameConstant.KEY_PLAYER, (Serializable) this.playerInstance);
-        outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemie);
+        outState.putParcelable(GameConstant.KEY_PLAYER, this.playerInstance);
+        outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieInstance);
         outState.putString(GameConstant.KEY_PREVIOUS_ACTIVITY, this.previousActivity);
+        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
     }
 
     @Override
     public void startActivityGameChoise() {
         this.intent = new Intent(this, GameChoise.class);
-        this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
-        this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
+        putExtra();
         startActivity(this.intent);
     }
 
     @Override
     public void startActivityGameNaration() {
         this.intent = new Intent(this, GameNaration.class);
-        this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
-        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
-        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.onStartLevel );
+        putExtra();
         startActivity(this.intent);
     }
 
     @Override
     public void statActivityStory() {
         this.intent = new Intent(this, Story.class);
+        putExtra();
+        startActivity(this.intent);
+    }
+
+    private void putExtra(){
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
-        this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemie);
-        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.onStartLevel );
-        startActivity(this.intent);
+        this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieInstance);
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
     }
 
     @Override
@@ -174,7 +142,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
 
     }
 
-    private void startMainActivity(){
+    private void startMainActivity() {
         intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
