@@ -3,6 +3,7 @@ package com.example.saes401;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,7 +26,8 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private int currentLevel;
     private int currentIndexEnemie;
     private Boolean isPLayerWin;
-
+    private Boolean onStartLevel;
+    private String naration;
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -52,6 +54,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.isPLayerWin = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
         this.currentIndexEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
+        this.onStartLevel = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL,false);
     }
 
     @Override
@@ -61,6 +64,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_NARATION);
         this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.isPLayerWin);
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.onStartLevel );
         startActivity(this.intent);
     }
 
@@ -94,8 +98,12 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         if (this.currentLevel < 0 || this.currentLevel > 3) {
             throw new Exception("null level");
         } else {
-            String naration;
-            if (!isPLayerWin){
+
+
+            if(onStartLevel){
+                naration = JsonReader.getNaration(this, this.currentLevel-1);
+            }
+            else if (!isPLayerWin){
                 naration = JsonReader.getNarationAfterLooseEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
             }
             else {
@@ -109,32 +117,26 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     }
 
     private void loadText(TextView textView, String naration, OnTextLoadedListener listener) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                final Handler handler = new Handler();
-                for (int k = 0; k < naration.length(); k++) {
-                    final int finalK = k;
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.append(String.valueOf(naration.charAt(finalK)));
-                            if (finalK == naration.length() - 1 && listener != null) {
-                                listener.onTextLoaded();
-                            }
-                        }
-                    }, 100 * k);
-                }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            final Handler handler = new Handler(Looper.getMainLooper());
+            for (int k = 0; k < naration.length(); k++) {
+                final int finalK = k;
+                handler.postDelayed(() -> {
+                    textView.append(String.valueOf(naration.charAt(finalK)));
+                    if (finalK == naration.length() - 1 && listener != null) {
+                        listener.onTextLoaded();
+                    }
+                }, 100 * k);
             }
         }, 2000);
     }
 
     private void setVisibilityOfContinue(TextView textView, String naration) {
-        loadText(textView, naration, new OnTextLoadedListener() {
-            @Override
-            public void onTextLoaded() {
-                getButtonContinue().setVisibility(View.VISIBLE);
-                getButtonContinue().setOnClickListener(v -> startActivityGame());
+        loadText(textView, naration, () -> {
+            Button continueButton = getButtonContinue();
+            if (continueButton != null) {
+                continueButton.setVisibility(View.VISIBLE);
+                continueButton.setOnClickListener(v -> startActivityGame());
             }
         });
     }

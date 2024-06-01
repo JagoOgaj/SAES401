@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/paysage">
+    >
 
     <TextView
         android:id="@+id/textLevel"
@@ -15,11 +15,10 @@
         android:text="Veuillez choisir un item"
         android:textColor="@android:color/white"
         android:textSize="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/choiseBeforeLevel"
+        app:layout_constraintBottom_toTopOf="@+id/buttonContinueToLevel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.146" />
+        app:layout_constraintTop_toBottomOf="@+id/choiseBeforeLevel" />
 
     <LinearLayout
         android:id="@+id/choiseBeforeLevel"
@@ -30,16 +29,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.775" >
+        app:layout_constraintVertical_bias="0.275" >
 
         <ImageButton
             android:id="@+id/imageButton1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/sword2"
             android:scaleType="fitXY"
-            android:background="@drawable/assombrissementimagebutton"
+            android:background="@drawable/encadrementimagebutton"
             android:contentDescription="Choix1" />
 
         <ImageButton
@@ -47,16 +45,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/assombrissementimagebutton"
+            android:scaleType="fitXY"
+            android:background="@drawable/encadrementimagebutton"
             android:contentDescription="Choix2"
-            android:src="@drawable/sword2" />
+             />
 
         <ImageButton
             android:id="@+id/imageButton3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/sword2"
+            android:scaleType="fitXY"
             android:background="@drawable/encadrementimagebutton"
             android:contentDescription="Choix3" />
     </LinearLayout>
