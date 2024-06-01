@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,19 +22,16 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
-import com.example.saes401.story.Story;
 import com.example.saes401.utilities.Item;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-
 
 public class GameChoise extends AppCompatActivity implements Utilities {
 
     private Intent intent;
-    private Player player;
+    private Player playerInstance;
     private int currentLevel;
     private TextView textLevel;
     private LinearLayout choiseBeforeLevel;
@@ -45,6 +40,9 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private ImageButton imageButton3;
     private Button buttonContinueToLevel;
     ImageButton selectedButton = null;
+    private int currentEnemieIndex;
+    private boolean levelStart;
+    private boolean gameContinue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +88,10 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         imageButton3 = findViewById(R.id.imageButton3);
         buttonContinueToLevel = findViewById(R.id.buttonContinueToLevel);
         currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
-        player = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
+        playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
+        currentEnemieIndex = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
+        levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
+        gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
     }
 
     @Override
@@ -110,12 +111,17 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        if (!addItemToPlayer())
-            return; //todo recup l'objet saisie et insérer dans player avec un setInventaire si sa passe sinon refaire
+        if (!addItemToPlayer()){
+            showAlertDialog("Impossible", "Impossible");
+            //todo recup l'objet saisie et insérer dans player avec un setInventaire si sa passe sinon refaire
+        }
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
-        this.intent.putExtra(GameConstant.KEY_PLAYER, this.player);
+        this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CHOISE);
+        this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         startActivity(this.intent);
     }
 
@@ -124,9 +130,9 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         JSONObject itemJson = (JSONObject) selectedButton.getTag();
         //todo mettre des infos cohérente dans le json
         Item item = new Item("", "", "", 0);
-        if (player.isFullinventory()) result = false;
+        if (playerInstance.isFullinventory()) result = false;
         try {
-            player.setInventory(item);
+            playerInstance.setInventory(item);
         } catch (Exception e) {
             e.printStackTrace();
             result = false;
@@ -169,14 +175,20 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     protected void onRestoreInstanceState(Bundle savedInstance) {
         super.onRestoreInstanceState(savedInstance);
         currentLevel = savedInstance.getInt(GameConstant.KEY_LEVEL);
-        player = (Player) savedInstance.getParcelable(GameConstant.KEY_PLAYER);
+        playerInstance = savedInstance.getParcelable(GameConstant.KEY_PLAYER);
+        levelStart = savedInstance.getBoolean(GameConstant.KEY_START_LEVEL);
+        gameContinue = savedInstance.getBoolean(GameConstant.KEY_PLAYER_WIN);
+        currentEnemieIndex = savedInstance.getInt(GameConstant.KEY_ENEMIE_INDEX);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
-        outState.putSerializable(GameConstant.KEY_PLAYER, (Serializable) this.player);
+        outState.putParcelable(GameConstant.KEY_PLAYER, this.playerInstance);
+        outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
+        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
     }
 
 

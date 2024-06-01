@@ -67,7 +67,7 @@ public class GameFight {
         if (split[0].equals("+")) {
             resultEnemie += (int) split[1];
         }
-        else if (split[0].equals("*")) {
+        else if (split[0].equals("x")) {
             resultEnemie *= (int) split[1];
         }
         return resultEnemie;

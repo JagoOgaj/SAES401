@@ -19,7 +19,6 @@ import com.example.saes401.utilities.GameFight;
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
 
-import java.io.Serializable;
 import java.util.Random;
 
 public class Story extends AppCompatActivity implements Utilities, Runnable {
@@ -28,9 +27,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private Player playerInstance;
     private Enemie currentEnemieInstance;
     private int currentEnemieIndex;
-    private GameFight fight;
-    private Boolean isPlayerWin;
-    private Boolean onStartLevel;
+    private GameFight fightInstance;
+    private boolean gameContinue;
+    private boolean levelStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +37,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         intent = getIntent();
         if (intent != null) {
             this.initAttibuts();
-        }
-        if (savedInstanceState == null && intent == null) {
-            currentLevel = 0;
-            playerInstance = new Player(GameConstant.DEFAULT_HP);
-            currentEnemieInstance = new Enemie(0, "", 0, 0, new Inventory(0), "");
-            currentEnemieIndex = 0;
         }
         this.startStory();
         setContentView(R.layout.gameplay);
@@ -54,11 +47,12 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.currentEnemieIndex = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
+        this.levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
+        this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
         try {
             initEnemie();
             addItemOfEnemie();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -107,10 +101,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
-        this.intent.putExtra(GameConstant.KEY_ENEMIE_INSTANCE, this.currentEnemieInstance);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_STORY);
-        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.isPlayerWin);
-        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.onStartLevel );
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
         startActivity(intent);
     }
 
@@ -123,10 +116,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);
-        playerInstance = (Player) savedInstanceState.getSerializable(GameConstant.KEY_PLAYER);
+        playerInstance = savedInstanceState.getParcelable(GameConstant.KEY_PLAYER);
         currentEnemieIndex = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
         currentEnemieInstance = (Enemie) savedInstanceState.getSerializable(GameConstant.KEY_ENEMIE_INSTANCE);
-        isPlayerWin = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
+        gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
+        levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
         startStory();
     }
 
@@ -135,9 +129,10 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         super.onSaveInstanceState(outState);
         outState.putInt(GameConstant.KEY_LEVEL, this.currentLevel);
         outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
-        outState.putSerializable(GameConstant.KEY_PLAYER, (Serializable) this.playerInstance);
-        outState.putSerializable(GameConstant.KEY_ENEMIE_INSTANCE, (Serializable) this.currentEnemieInstance);
-        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.isPlayerWin);
+        outState.putParcelable(GameConstant.KEY_PLAYER, this.playerInstance);
+        outState.putParcelable(GameConstant.KEY_ENEMIE_INSTANCE, this.currentEnemieInstance);
+        outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
     }
 
     private void startStory() {
@@ -147,15 +142,14 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
 
     private int getResultPlayer() {
         int resultPlayer = 0;
-        int[] dices = fight.getDicePlayer();
+        int[] dices = fightInstance.getDicePlayer();
         int result = 0;
         for (int i = 0; i < dices.length; i++) {
             result += dices[i];
         }
         try {
-           resultPlayer = fight.getResultPlayer(result);
-        }
-        catch (Exception e) {
+            resultPlayer = fightInstance.getResultPlayer(result);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resultPlayer;
@@ -164,7 +158,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private int getResultEnemie() {
         int result = 0;
         try {
-            result = fight.getResultEnemie(fight.getDiceEnemie());
+            result = fightInstance.getResultEnemie(fightInstance.getDiceEnemie());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,7 +167,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
 
     @Override
     public void run() {
-        this.fight = new GameFight(playerInstance, currentEnemieInstance, this);
+        this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
         while (playerInstance.getHP() == 0 || currentEnemieInstance.getHP() == 0) {
             //todo lancer l'animation des dés du joueur
             //todo lancer l'animation des dés de l'enemie
@@ -195,7 +189,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 //todo modifier l'affichage du coeur
             }
         }
-        this.isPlayerWin = playerInstance.getHP() == 0;
+        this.gameContinue = playerInstance.getHP() == 0;
         startActivityGame();
     }
 
