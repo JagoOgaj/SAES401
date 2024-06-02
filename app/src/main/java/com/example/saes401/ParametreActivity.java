@@ -1,107 +1,73 @@
 package com.example.saes401;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.SeekBar;
+import android.widget.Switch;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import java.util.Locale;
 
 public class ParametreActivity extends AppCompatActivity {
-    private Spinner langueSpinner;
-    private Button enregistrerButton;
-
-
-    private String selectedLanguage;
-    private Intent intent;
-
+    private Switch soundSwitch; // Déclaration du Switch pour activer/désactiver le son
+    private SeekBar volumeSeekBar; // Déclaration de la SeekBar pour ajuster le volume
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parametre);
-        langueSpinner = findViewById(R.id.langueSpinner);
-        enregistrerButton = findViewById(R.id.enregistrerButton);
-        findViewById(R.id.menuprincipaleButton).setOnClickListener(view -> onClickMenu());
+        setContentView(R.layout.activity_parametre); // Charge le layout de l'interface utilisateur
 
 
-        // Créer un ArrayAdapter en utilisant le tableau de chaînes et un layout par défaut du spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.langues_array, android.R.layout.simple_spinner_item);
+        volumeSeekBar = findViewById(R.id.volumeSeekBar); // Initialisation de la SeekBar à partir du layout
 
-        // Spécifier le layout à utiliser lorsque la liste des choix apparaît
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        loadSettings(); // Charge les paramètres actuels à partir des SharedPreferences
 
-        // Appliquer l'adaptateur au spinner
-        langueSpinner.setAdapter(adapter);
-
-        langueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedLanguage = (String) parent.getItemAtPosition(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //  Appelée lorsqu'aucun élément n'est sélectionné.
-            }
+        // Écouteur pour le changement d'état du Switch
+        soundSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            saveSoundEnabled(isChecked); // Sauvegarde le nouvel état du son activé/désactivé
         });
 
-        enregistrerButton.setOnClickListener(new View.OnClickListener() {
+        // Écouteur pour les changements sur la SeekBar
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
-                setLocale(selectedLanguage);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                saveVolume(progress / 100f); // Sauvegarde le nouveau volume calculé en pourcentage
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Méthode appelée lorsque l'utilisateur commence à déplacer le curseur de la SeekBar
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Méthode appelée lorsque l'utilisateur arrête de déplacer le curseur de la SeekBar
             }
         });
     }
 
-    private void onClickMenu() {
-
-        intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    // Méthode pour sauvegarder l'état du son activé/désactivé
+    private void saveSoundEnabled(boolean isEnabled) {
+        SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE); // Obtient les SharedPreferences
+        SharedPreferences.Editor editor = prefs.edit(); // Crée un éditeur pour les SharedPreferences
+        editor.putBoolean("SoundEnabled", isEnabled); // Met à jour la valeur de "SoundEnabled"
+        editor.apply(); // Applique les modifications
     }
 
-    public void setLocale(String lang) {
-        if ("French".equalsIgnoreCase(lang) || "Français".equalsIgnoreCase(lang)) {
-            lang = "fr";
-        } else if ("English".equalsIgnoreCase(lang) || "Anglais".equalsIgnoreCase(lang)) {
-            lang = "en";
-        }
-
-
-        updateLocale(lang);
+    // Méthode pour sauvegarder le volume
+    private void saveVolume(float volume) {
+        SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE); // Obtient les SharedPreferences
+        SharedPreferences.Editor editor = prefs.edit(); // Crée un éditeur pour les SharedPreferences
+        editor.putFloat("Volume", volume); // Met à jour la valeur de "Volume"
+        editor.apply(); // Applique les modifications
     }
 
-    public void updateLocale(String lang) {
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocale(locale);
-            Context context = createConfigurationContext(config);
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        } else {
-            config.locale = locale;
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        }
+    // Méthode pour charger les paramètres de son
+    private void loadSettings() {
+        SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE); // Obtient les SharedPreferences
+        boolean soundEnabled = prefs.getBoolean("SoundEnabled", true); // Lit la valeur de "SoundEnabled", défaut à true
+        float volume = prefs.getFloat("Volume", 0.5f); // Lit la valeur de "Volume", défaut à 0.5
 
-        finish();
-        startActivity(getIntent());
+        soundSwitch.setChecked(soundEnabled); // Définit l'état du Switch selon la valeur chargée
+        volumeSeekBar.setProgress((int) (volume * 100)); // Définit la position de la SeekBar selon la valeur chargée
     }
-
-
 }
