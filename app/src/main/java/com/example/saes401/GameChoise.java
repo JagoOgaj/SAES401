@@ -126,22 +126,22 @@ public class GameChoise extends AppCompatActivity implements Utilities {
             onClickButton((JSONObject) imageButton1.getTag());
             resetImageButtonSelection();
             selectedButton = imageButton1;
-            imageButton1.setSelected(true);
+            imageButton1.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             setContinueButon();
         });
         imageButton2.setOnClickListener(view -> {
             onClickButton((JSONObject) imageButton2.getTag());
             resetImageButtonSelection();
-            imageButton2.setSelected(true);
             selectedButton = imageButton2;
+            imageButton2.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             setContinueButon();
         });
         imageButton3.setOnClickListener(view -> {
             onClickButton((JSONObject) imageButton3.getTag());
             resetImageButtonSelection();
-            imageButton3.setSelected(true);
             selectedButton = imageButton3;
-            setContinueButon();
+            imageButton3.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
+           setContinueButon();
         });
         buttonContinueToLevel.setVisibility(View.INVISIBLE);
     }
@@ -209,6 +209,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
                 JSONObject objet1 = objets.getJSONObject(0);
                 imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
                 imageButton1.setTag(objet1);
+
             }
             if (objets != null && objets.length() > 1) {
                 JSONObject objet2 = objets.getJSONObject(1);
@@ -230,13 +231,28 @@ public class GameChoise extends AppCompatActivity implements Utilities {
             String objetName = objet.getString("nom");
             String objetDescription = objet.getString("description");
 
+
             // Créez le texte avec les labels et les valeurs
             String labelObjet = "Objet : ";
             String labelDescription = "Description : ";
 
-
             // Combinez le tout dans un SpannableString
-          String spannable = labelObjet + objetName + "\n\n" + labelDescription + objetDescription + "\n\n";
+            SpannableString spannable = new SpannableString(
+                    labelObjet + objetName + "\n\n" +
+                            labelDescription + objetDescription + "\n\n"
+            );
+
+            // Appliquez les styles aux labels
+            int start = 0;
+            int end = labelObjet.length();
+            spannable.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            start = end + objetName.length() + 2;
+            end = start + labelDescription.length();
+            spannable.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 
             // Affichez le SpannableString dans le TextView
             textLevel.setText(spannable);
@@ -249,6 +265,9 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         imageButton1.setSelected(false);
         imageButton2.setSelected(false);
         imageButton3.setSelected(false);
+        imageButton1.clearColorFilter();
+        imageButton2.clearColorFilter();
+        imageButton3.clearColorFilter();
     }
 
     private TextView getTextViewWarning(){
