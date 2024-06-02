@@ -4,6 +4,8 @@ package com.example.saes401.utilities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Random;
+
 public class Inventory implements Parcelable {
     private Item[] items;
     private int slots;
@@ -49,7 +51,7 @@ public class Inventory implements Parcelable {
         items[getLastIndex()] = newItem;
     }
 
-    public void addItemsEnemie(Item item){
+    public void addItemsEnemie(Item item) throws Exception {
         items[getLastIndex()] = item;
     }
 
@@ -60,16 +62,17 @@ public class Inventory implements Parcelable {
         items = newItems;
     }
 
+    public void addItemRandomPlayer(Item item){
+        Random random = new Random();
+        this.items[random.nextInt(this.items.length)] = item;
+    }
+
     public int getCapacityInventory() {
         return this.slots;
     }
 
     public int getCurentLength() throws Exception{
-        int index = -1;
-        for (int i = 0; i< this.items.length; i++){
-            if (this.items[i] != null) return i;
-        }
-        return -1;
+        return getLastIndex();
     }
 
     public Item[] getItemsInventory() {
@@ -84,19 +87,19 @@ public class Inventory implements Parcelable {
         return items.length == 0;
     }
 
-    public boolean isFullInventory() {
+    public boolean isFullInventory() throws Exception {
         return getLastIndex() == slots;
     }
 
-    private boolean canInserItem() {
+    private boolean canInserItem() throws Exception {
         return getLastIndex() <= items.length - 1;
     }
 
 
-    private int getLastIndex() {
+    private int getLastIndex() throws Exception{
         int index = -1;
         for (int i = 0; i < this.items.length; i++)
             if (this.items[i] == null) return i;
-        return -1;
+        return this.items.length;
     }
 }

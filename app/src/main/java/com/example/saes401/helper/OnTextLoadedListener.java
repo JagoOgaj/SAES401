@@ -1,5 +1,5 @@
 package com.example.saes401.helper;
 
 public interface OnTextLoadedListener {
-    void onTextLoaded();
+    void onTextLoaded() throws Exception;
 }

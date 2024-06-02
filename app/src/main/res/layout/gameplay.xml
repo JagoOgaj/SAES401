@@ -9,31 +9,31 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="404dp"
-        android:layout_height="97dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="377dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="32dp"
         android:rotation="180"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.735"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bar" />
 
     <ImageView
         android:id="@+id/enemieImage"
-        android:layout_width="47dp"
-        android:layout_height="50dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintEnd_toEndOf="@+id/imageView5"
-        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintHorizontal_bias="0.913"
         app:layout_constraintStart_toStartOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.382" />
+        app:layout_constraintVertical_bias="0.291" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="396dp"
-        android:layout_height="99dp"
+        android:layout_width="399dp"
+        android:layout_height="107dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,44 +43,15 @@
 
     <TextView
         android:id="@+id/enemieName"
-        android:layout_width="225dp"
-        android:layout_height="34dp"
+        android:layout_width="182dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="48dp"
         android:text="TextView"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintEnd_toStartOf="@+id/enemieImage"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.428" />
-
-    <LinearLayout
-        android:id="@+id/test"
-        android:layout_width="88dp"
-        android:layout_height="15dp"
-        android:layout_marginTop="180dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/choiseLoot"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/gameplay"></LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/testss"
-        android:layout_width="100dp"
-        android:layout_height="14dp"
-        android:layout_marginBottom="176dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/gameplay"
-        app:layout_constraintEnd_toEndOf="@+id/imageView5"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enemieName"
-        app:layout_constraintVertical_bias="0.391">
-
-    </LinearLayout>
+        app:layout_constraintHorizontal_bias="0.647"
+        app:layout_constraintStart_toStartOf="@+id/imageView5" />
 
     <LinearLayout
         android:id="@+id/gameplay"
@@ -111,15 +82,15 @@
 
     <LinearLayout
         android:id="@+id/choiseLoot"
-        android:layout_width="261dp"
-        android:layout_height="46dp"
-        android:layout_marginEnd="40dp"
+        android:layout_width="285dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="36dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.559" />
+        app:layout_constraintVertical_bias="0.589" />
 
     <LinearLayout
         android:id="@+id/heartContainer1"
@@ -130,10 +101,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/choiseLoot"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
-        app:layout_constraintStart_toEndOf="@+id/test"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultText"
-        app:layout_constraintVertical_bias="0.631"></LinearLayout>
+        app:layout_constraintVertical_bias="1.0"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/heartContainer2"
@@ -143,11 +114,11 @@
         android:gravity="left"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/gameplay"
-        app:layout_constraintEnd_toStartOf="@+id/testss"
-        app:layout_constraintHorizontal_bias="0.149"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.224"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enemieName"
-        app:layout_constraintVertical_bias="0.472"></LinearLayout>
+        app:layout_constraintVertical_bias="0.82"></LinearLayout>
 
     <ImageView
         android:id="@+id/playerImage"
@@ -159,5 +130,17 @@
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.565" />
+
+    <LinearLayout
+        android:id="@+id/enemieItems"
+        android:layout_width="224dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="52dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        app:layout_constraintStart_toStartOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="0.269"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
