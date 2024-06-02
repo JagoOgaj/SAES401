@@ -53,29 +53,10 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         if (intent != null) {
             initAttibuts();
         }
-
-        // Récupérer les noms des objets
-        JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
-
-        // Mettre à jour les ImageButton avec les images des objets
         try {
-            if (objets != null && objets.length() > 0) {
-                JSONObject objet1 = objets.getJSONObject(0);
-                imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
-                imageButton1.setTag(objet1);
-            }
-            if (objets != null && objets.length() > 1) {
-                JSONObject objet2 = objets.getJSONObject(1);
-                imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
-                imageButton2.setTag(objet2);
-            }
-            if (objets != null && objets.length() > 2) {
-                JSONObject objet3 = objets.getJSONObject(2);
-                imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
-                imageButton3.setTag(objet3);
-            }
+            initFront();
         } catch (Exception e) {
-            e.printStackTrace();
+           Log.d("error -> initFront", e.getMessage());
         }
         setListener();
     }
@@ -112,42 +93,31 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        boolean canAddItem;
-        try {
-            canAddItem = addItemToPlayer();
-            if(!canAddItem){
-                showAlertDialog("Impossible", "Impossible");
-                //todo recup l'objet saisie et insérer dans player avec un setInventaire si sa passe sinon refaire
-            }
-            else {
-                this.intent = new Intent(this, GameActivity.class);
-                this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
-                this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
-                this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CHOISE);
-                this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
-                this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
-                this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
-                startActivity(this.intent);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            canAddItem = false;
-        }
+        this.intent = new Intent(this, GameActivity.class);
+        this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
+        this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
+        this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CHOISE);
+        this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
+        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        startActivity(this.intent);
     }
 
-    private boolean addItemToPlayer() throws JSONException {
+
+    private boolean addItemToPlayer() throws Exception {
         boolean result = true;
-        JSONObject itemJson = (JSONObject) selectedButton.getTag();
-        //todo mettre des infos cohérente dans le json
-        Item item = new Item(itemJson.getString("nom"), itemJson.getString("degat"), itemJson.getString("image"), itemJson.getString("description"));
-        if (playerInstance.isFullinventory()) result = false;
+        Item item = getItem((JSONObject) selectedButton.getTag());
+        if (playerInstance.isFullinventory()) return false;
         try {
             playerInstance.setInventory(item);
         } catch (Exception e) {
             e.printStackTrace();
-            result = false;
         }
         return result;
+    }
+
+    private Item getItem(JSONObject itemJson) throws JSONException {
+        return new Item(itemJson.getString("nom"), itemJson.getString("degat"), itemJson.getString("image"), itemJson.getString("description"));
     }
 
     @Override
@@ -178,7 +148,20 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     private void setContinueButon() {
         buttonContinueToLevel.setVisibility(View.VISIBLE);
-        buttonContinueToLevel.setOnClickListener(v -> startActivityGame());
+        buttonContinueToLevel.setOnClickListener(v -> {
+            try {
+                if (getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE)){
+                    currentEnemieIndex = JsonReader.getIndexBoss(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
+                }
+                if(!addItemToPlayer()) {
+                    this.playerInstance.setInentoryRandom(getItem( (JSONObject) selectedButton.getTag()));
+                }
+            }
+            catch (Exception e){
+                Log.d("error -> addItemPlayer", e.getMessage());
+            }
+            startActivityGame();
+        });
     }
 
     @Override
@@ -202,12 +185,44 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     }
 
 
-    private void showAlertDialog(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
+    private void showAlertDialog(TextView textView, String message) {
+        textView.setText(message);
+        textView.setTextColor(Color.RED);
+    }
+
+    private void initFrontWarning() throws Exception {
+        if (playerInstance.isFullinventory()){
+            showAlertDialog(getTextViewWarning(), "L'insertion d'un nouveau item remplacera un item aquis de maniere aleatoire");
+        }
+    }
+
+    private void initFront() throws Exception {
+        initItems();
+        initFrontWarning();
+
+    }
+
+    private void initItems(){
+        JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
+        try {
+            if (objets != null && objets.length() > 0) {
+                JSONObject objet1 = objets.getJSONObject(0);
+                imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
+                imageButton1.setTag(objet1);
+            }
+            if (objets != null && objets.length() > 1) {
+                JSONObject objet2 = objets.getJSONObject(1);
+                imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
+                imageButton2.setTag(objet2);
+            }
+            if (objets != null && objets.length() > 2) {
+                JSONObject objet3 = objets.getJSONObject(2);
+                imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
+                imageButton3.setTag(objet3);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void onClickButton(JSONObject objet) {
@@ -223,8 +238,6 @@ public class GameChoise extends AppCompatActivity implements Utilities {
             // Combinez le tout dans un SpannableString
           String spannable = labelObjet + objetName + "\n\n" + labelDescription + objetDescription + "\n\n";
 
-
-
             // Affichez le SpannableString dans le TextView
             textLevel.setText(spannable);
         } catch (Exception e) {
@@ -236,6 +249,10 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         imageButton1.setSelected(false);
         imageButton2.setSelected(false);
         imageButton3.setSelected(false);
+    }
+
+    private TextView getTextViewWarning(){
+        return findViewById(R.id.textWarning);
     }
 
 }

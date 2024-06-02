@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
@@ -25,6 +29,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private Boolean levelStart;
     private String naration;
     private Player playerInstance;
+    private volatile boolean clickScreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -42,6 +47,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         }
         try {
             launchNaration();
+            setListener();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,6 +99,26 @@ public class GameNaration extends AppCompatActivity implements Utilities {
 
     @Override
     public void setListener() {
+        ConstraintLayout rootLayout = findViewById(R.id.rootLayout);
+        rootLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    stopLoadingText();
+                    try {
+                        loadFullNaration(getTextView(), naration, getButtonContinue());
+                    } catch (Exception e) {
+                        Log.d("Error -> InitContinueButton", e.getMessage());
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void loadFullNaration(TextView textView, String naration, Button button) throws Exception {
+        textView.setText(naration);
+        initContinueButton(button);
 
     }
 
@@ -109,36 +135,39 @@ public class GameNaration extends AppCompatActivity implements Utilities {
             } else {
                 naration = JsonReader.getNarationAfterWinEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
             }
-            setVisibilityOfContinue(
-                    getTextView(),
-                    naration
-            );
+            setVisibilityOfContinue(getTextView());
         }
     }
 
-    private void loadText(TextView textView, String naration, OnTextLoadedListener listener) {
+    private void loadText(TextView textView, OnTextLoadedListener listener) {
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             final Handler handler = new Handler(Looper.getMainLooper());
             for (int k = 0; k < naration.length(); k++) {
                 final int finalK = k;
                 handler.postDelayed(() -> {
+                    if (clickScreen) return ;
                     textView.append(String.valueOf(naration.charAt(finalK)));
                     if (finalK == naration.length() - 1 && listener != null) {
-                        listener.onTextLoaded();
+                        try {
+                            listener.onTextLoaded();
+                        } catch (Exception e) {
+                            Log.d("Error -> InitContinueButton", e.getMessage());
+                        }
                     }
                 }, 100L * k);
             }
         }, 2000);
     }
 
-    private void setVisibilityOfContinue(TextView textView, String naration) {
-        loadText(textView, naration, () -> {
-            Button continueButton = getButtonContinue();
-            if (continueButton != null) {
-                continueButton.setVisibility(View.VISIBLE);
-                continueButton.setOnClickListener(v -> startActivityGame());
-            }
+    private void setVisibilityOfContinue(TextView textView) {
+        loadText(textView, () -> {
+            initContinueButton(getButtonContinue());
         });
+    }
+
+    private void initContinueButton(Button btn) throws Exception{
+        btn.setVisibility(View.VISIBLE);
+        btn.setOnClickListener(v -> startActivityGame());
     }
 
     private TextView getTextView() {
@@ -162,5 +191,9 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     @Override
     public void statActivityStory() {
         //void
+    }
+
+    private void stopLoadingText() {
+        clickScreen = true;
     }
 }

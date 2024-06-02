@@ -118,5 +118,11 @@
     "description": "Multiplie par 25 le score",
     "degat": "x25",
     "image": "grimoire_ssr"
+  },
+  "clee_maudite": {
+    "nom": "cle maudite",
+    "description" : "Cle maudite ayant des proprieter de teleportation a usage unique",
+    "degat": "",
+    "image": ""
   }
 }

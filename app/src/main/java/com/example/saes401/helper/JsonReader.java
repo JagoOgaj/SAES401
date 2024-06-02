@@ -165,14 +165,12 @@ public class JsonReader {
         else return naration;
     }
 
-    public static int getIndexBoss(Context context, String levelFile, int index) throws Exception {
-        int indexBoss = getWinOfEnemieAttribut(context, levelFile, index) == null ||
-                !getWinOfEnemieAttribut(context, levelFile, index).has("suivantAvecClee") ? -1
-                : getWinOfEnemieAttribut(context, levelFile, index).getInt("suivantAvecClee");
+    public static int getIndexBoss(Context context, String levelFile) throws Exception {
+        int indexBoss = getNumberEnemies(context, levelFile) == -1 ? -1
+                : getNumberEnemies(context, levelFile) -1;
         if (indexBoss == -1) throw new Exception("null indexForBoss");
         else return indexBoss;
     }
-
     public static String[] getChoise(Context context, String levelFile) {
         String[] choise = null;
         try {

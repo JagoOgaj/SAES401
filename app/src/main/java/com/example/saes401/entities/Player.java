@@ -43,6 +43,10 @@ public class Player extends GameCharacter implements Parcelable {
         this.inventory.setItemsInventory(item);
     }
 
+    public void setInentoryRandom(Item item){
+        this.inventory.addItemRandomPlayer(item);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -59,7 +63,7 @@ public class Player extends GameCharacter implements Parcelable {
         return inventory;
     }
 
-    public boolean isFullinventory() {
+    public boolean isFullinventory() throws Exception {
         return inventory.isFullInventory();
     }
 

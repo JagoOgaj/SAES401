@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     @Override
     public void startActivityGame() {
         intent = new Intent(this, GameActivity.class);
-        intent.putExtra(GameConstant.KEY_LEVEL, 3);
+        intent.putExtra(GameConstant.KEY_LEVEL, 1);
         intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_MAIN_ACTIVITY);
         intent.putExtra(GameConstant.KEY_PLAYER, new Player(GameConstant.DEFAULT_HP));
         intent.putExtra(GameConstant.KEY_START_LEVEL, true);

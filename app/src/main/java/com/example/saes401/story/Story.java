@@ -20,6 +20,7 @@ import com.example.saes401.utilities.GameFight;
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Story extends AppCompatActivity implements Utilities, Runnable {
@@ -62,7 +63,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void initEnemie() throws Exception {
         int hp = JsonReader.getEnemieHP(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
         String name = JsonReader.getEnemieName(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
-        Inventory inventory =  new Inventory(JsonReader.getItemsOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex).length);
+        Inventory inventory = new Inventory(JsonReader.getItemsOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex).length);
         String damage = JsonReader.getEnemieDamageStringFormat(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
         String image = JsonReader.getEnemieImageSrc(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
         this.currentEnemieInstance = new Enemie(
@@ -176,63 +177,85 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     @Override
     public void run() {
         try {
-            initFront();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        initFront();
+                    } catch (Exception e) {
+                       Log.d("error -> InitFront", Objects.requireNonNull(e.getMessage()));
+                    }
+                }
+            });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
         while (true) {
-            if(playerInstance.getHPplayer() == 0 || currentEnemieInstance.getHPEnemie() == 0) break;
+            if (playerInstance.getHPplayer() == 0 || currentEnemieInstance.getHPEnemie() == 0)
+                break;
             try {
-                thread.sleep(6000);
+                Thread.sleep(6000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            //todo lancer l'animation des dés du joueur
-            //todo lancer l'animation des dés de l'enemie
-            if (getResultEnemie() > getResultPlayer()) {
-                playerInstance.setHP(playerInstance.getHPplayer() - 1);
-                //todo modifier l'affichage du coeur
-            } else if (getResultPlayer() > getResultEnemie()) {
-                currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
-                //todo modifier l'affichage du coeur
-            } else {
-                Random random = new Random();
-                if (random.nextInt(2) == 1) {
-                    //enemie perdu
-                    currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
-                } else {
-                    //player perdu
-                    playerInstance.setHP(playerInstance.getHPplayer() - 1);
+
+            final int resultEnemie = getResultEnemie();
+            final int resultPlayer = getResultPlayer();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (resultEnemie > resultPlayer) {
+                        playerInstance.setHP(playerInstance.getHPplayer() - 1);
+                        // Mettre à jour l'affichage du cœur pour le joueur
+                    } else if (resultPlayer > resultEnemie) {
+                        currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
+                        // Mettre à jour l'affichage du cœur pour l'ennemi
+                    } else {
+                        Random random = new Random();
+                        if (random.nextInt(2) == 1) {
+                            currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
+                        } else {
+                            playerInstance.setHP(playerInstance.getHPplayer() - 1);
+                        }
+                        // Mettre à jour l'affichage du cœur pour les deux
+                    }
                 }
-                //todo modifier l'affichage du coeur
-            }
+            });
         }
         this.gameContinue = playerInstance.getHPplayer() == 0;
-        startActivityGame();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startActivityGame();
+            }
+        });
     }
+
 
     private void initFront() throws Exception {
         initFrontPlayer();
         initFrontEnemie();
     }
 
-    private void initFrontEnemie() {
-       initFrontHeart(getLinearHeartContainerEnemie(), currentEnemieInstance.getHPEnemie());
-       initAvatar(getEnemieImageView(), getResources().getIdentifier(currentEnemieInstance.getImageSrc(), "drawable", getPackageName()), true);
-       initNameEnemie(getTextViewEnemyName(), currentEnemieInstance.getName());
+    private void initFrontEnemie() throws Exception {
+        initFrontHeart(getLinearHeartContainerEnemie(), currentEnemieInstance.getHPEnemie());
+        initAvatar(getEnemieImageView(), getResources().getIdentifier(currentEnemieInstance.getImageSrc(), "drawable", getPackageName()), true);
+        initNameEnemie(getTextViewEnemyName(), currentEnemieInstance.getName());
+        initLinearItems(getLinearItemsEnemie(), currentEnemieInstance.getInventory());
     }
 
     private void initFrontPlayer() throws Exception {
         initFrontHeart(getLinearHeartContainerPlayer(), playerInstance.getHPplayer());
         initAvatar(getPlayerImageView(), R.drawable.sf_gorath_le_guerrier, false);
-        initChoiseLoot(getViewChoiseLoot(), playerInstance.getInventory());
+        initLinearItems(getViewChoiseLoot(), playerInstance.getInventory());
     }
 
 
-    private void initFrontHeart(LinearLayout layout, int hp){
+    private void initFrontHeart(LinearLayout layout, int hp) {
         layout.removeAllViews();
-        for (int i=0; i < hp; i++){
+        for (int i = 0; i < hp; i++) {
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.coueurtest);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -244,20 +267,31 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         }
     }
 
-    private void initChoiseLoot(LinearLayout layout, Inventory inventory) throws Exception {
+    private void initLinearItems(LinearLayout layout, Inventory inventory) throws Exception {
         layout.removeAllViews();
-        for (int i = 0; i < inventory.getCurentLength() + 1; i++){
+        for (int i = 0; i < inventory.getCurentLength(); i++) {
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(getResources().getIdentifier(inventory.getItem(i).getImage(), "drawable", getPackageName()));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    GameConstant.WIDTH_HEIGHT_ITEMS, // Largeur en pixels
+                    GameConstant.WIDTH_HEIGHT_ITEMS // Hauteur en pixels
+            );
+            layoutParams.setMargins(
+                    GameConstant.MARGIN_ITEM,
+                    GameConstant.MARGIN_ITEM,
+                    GameConstant.MARGIN_ITEM,
+                    GameConstant.MARGIN_ITEM
+            );
+            imageView.setLayoutParams(layoutParams);
             layout.addView(imageView);
         }
     }
 
-    private void initNameEnemie(TextView textView, String name){
+    private void initNameEnemie(TextView textView, String name) {
         textView.setText(name);
     }
 
-    private void initAvatar(ImageView imageView, int resID, boolean needRotation){
+    private void initAvatar(ImageView imageView, int resID, boolean needRotation) {
         imageView.setImageResource(resID);
         if (needRotation) imageView.setScaleX(-1);
     }
@@ -266,11 +300,13 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return findViewById(R.id.enemieImage);
     }
 
+    private LinearLayout getLinearItemsEnemie() {
+        return findViewById(R.id.enemieItems);
+    }
 
     private ImageView getPlayerImageView() {
         return findViewById(R.id.playerImage);
     }
-
 
     private LinearLayout getViewGameplay() {
         return findViewById(R.id.gameplay);
@@ -292,7 +328,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return findViewById(R.id.heartContainer1);
     }
 
-    private TextView getTextViewEnemyName(){
+    private TextView getTextViewEnemyName() {
         return findViewById(R.id.enemieName);
     }
 
