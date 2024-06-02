@@ -50,12 +50,12 @@ public class Player extends GameCharacter implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeInt(getHP());
+        dest.writeInt(getHPplayer());
         dest.writeInt(HP);
         dest.writeParcelable(inventory, flags);
     }
 
-    private Inventory getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 
@@ -67,11 +67,14 @@ public class Player extends GameCharacter implements Parcelable {
         return inventory.getItem(this.currentItem);
     }
 
-    public int getHP() {
+    public int getHPplayer() {
         return HP;
     }
 
     public void setHP(int HP) {
         this.HP = HP;
+    }
+    public void setCurrentItem(int currentItem) {
+        this.currentItem = currentItem;
     }
 }

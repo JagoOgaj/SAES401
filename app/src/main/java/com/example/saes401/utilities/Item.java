@@ -7,13 +7,13 @@ public class Item implements Parcelable {
     private String name;
     private String damage;
     private String image;
-    private int inventorySize;
+    private String desc;
 
-    public Item(String name, String damage, String image, int inventorySize) {
+    public Item(String name, String damage, String image, String desc) {
         this.name = name;
         this.damage = damage;
         this.image = image;
-        this.inventorySize = inventorySize;
+        this.desc = desc;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Item implements Parcelable {
         dest.writeString(name);
         dest.writeString(damage);
         dest.writeString(image);
-        dest.writeInt(inventorySize);
+        dest.writeString(desc);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Item implements Parcelable {
         name = in.readString();
         damage = in.readString();
         image = in.readString();
-        inventorySize = in.readInt();
+        desc = in.readString();
     }
 
     public static final Parcelable.Creator<Item> CREATOR = new Creator<Item>() {
@@ -60,11 +60,10 @@ public class Item implements Parcelable {
         damage = newDamage;
     }
 
-    public int getInventorySize() {
-        return inventorySize;
-    }
-
     public String getImage(){
         return image;
+    }
+    public String getDesc(){
+        return desc;
     }
 }

@@ -15,13 +15,17 @@ public class Enemie extends GameCharacter implements Parcelable {
     private int index;
     private Inventory inventory;
     private String damage;
+    private String imageSrc;
 
-    public Enemie(int HP, String name, int currentLevelFile, int index, Inventory inventory, String damage) {
+    public Enemie(int HP, String name, int currentLevelFile, int index, Inventory inventory, String damage, String imageSrc) {
         super(HP, name);
+        this.name = name;
+        this.HP = HP;
         this.currentLevelFile = currentLevelFile;
         this.index = index;
         this.inventory = inventory;
         this.damage = damage;
+        this.imageSrc = imageSrc;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class Enemie extends GameCharacter implements Parcelable {
         dest.writeInt(currentLevelFile);
         dest.writeInt(index);
         dest.writeParcelable(inventory, flags);
+        dest.writeString(imageSrc);
     }
 
     public static final Parcelable.Creator<Enemie> CREATOR = new Parcelable.Creator<Enemie>() {
@@ -57,14 +62,13 @@ public class Enemie extends GameCharacter implements Parcelable {
         currentLevelFile = in.readInt();
         index = in.readInt();
         inventory = in.readParcelable(Inventory.class.getClassLoader());
+        imageSrc = in.readString();
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
     public void setHP(int HP) {
         this.HP = HP;
     }
@@ -85,13 +89,11 @@ public class Enemie extends GameCharacter implements Parcelable {
         this.damage = damage;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
-    public int getHP() {
+    public int getHPEnemie() {
         return HP;
     }
 
@@ -110,10 +112,13 @@ public class Enemie extends GameCharacter implements Parcelable {
     public Item getItem() {
         //admet que son inventaire est full
         Random random = new Random();
-        return getInventory().getItem(random.nextInt(getInventory().getCurentLength()));
+        return getInventory().getItem(random.nextInt(getInventory().getCapacityInventory()));
     }
 
     public String getDamage() {
         return damage;
+    }
+    public String getImageSrc() {
+        return imageSrc;
     }
 }

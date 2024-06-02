@@ -25,6 +25,7 @@ import com.example.saes401.helper.Utilities;
 import com.example.saes401.utilities.Item;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -111,25 +112,34 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        if (!addItemToPlayer()){
-            showAlertDialog("Impossible", "Impossible");
-            //todo recup l'objet saisie et insérer dans player avec un setInventaire si sa passe sinon refaire
+        boolean canAddItem;
+        try {
+            canAddItem = addItemToPlayer();
+            if(!canAddItem){
+                showAlertDialog("Impossible", "Impossible");
+                //todo recup l'objet saisie et insérer dans player avec un setInventaire si sa passe sinon refaire
+            }
+            else {
+                this.intent = new Intent(this, GameActivity.class);
+                this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
+                this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
+                this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CHOISE);
+                this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
+                this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
+                this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+                startActivity(this.intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            canAddItem = false;
         }
-        this.intent = new Intent(this, GameActivity.class);
-        this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
-        this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
-        this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CHOISE);
-        this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
-        this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
-        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
-        startActivity(this.intent);
     }
 
-    private boolean addItemToPlayer() {
+    private boolean addItemToPlayer() throws JSONException {
         boolean result = true;
         JSONObject itemJson = (JSONObject) selectedButton.getTag();
         //todo mettre des infos cohérente dans le json
-        Item item = new Item("", "", "", 0);
+        Item item = new Item(itemJson.getString("nom"), itemJson.getString("degat"), itemJson.getString("image"), itemJson.getString("description"));
         if (playerInstance.isFullinventory()) result = false;
         try {
             playerInstance.setInventory(item);

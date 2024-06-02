@@ -45,7 +45,7 @@ public class Inventory implements Parcelable {
     };
 
     public void setItemsInventory(Item newItem) throws Exception {
-        if (!canInserItem(newItem)) throw new Exception("can't insert into");
+        if (!canInserItem()) throw new Exception("can't insert into");
         items[getLastIndex()] = newItem;
     }
 
@@ -55,13 +55,21 @@ public class Inventory implements Parcelable {
 
     public void setCapacityInventory(int newCapa) {
         Item[] newItems = new Item[newCapa];
-        for (int i = 0; i < getCurentLength(); i++)
+        for (int i = 0; i < this.items.length; i++)
             newItems[i] = items[i];
         items = newItems;
     }
 
-    public int getCurentLength() {
-        return items.length;
+    public int getCapacityInventory() {
+        return this.slots;
+    }
+
+    public int getCurentLength() throws Exception{
+        int index = -1;
+        for (int i = 0; i< this.items.length; i++){
+            if (this.items[i] != null) return i;
+        }
+        return -1;
     }
 
     public Item[] getItemsInventory() {
@@ -77,24 +85,18 @@ public class Inventory implements Parcelable {
     }
 
     public boolean isFullInventory() {
-        return items.length == slots;
+        return getLastIndex() == slots;
     }
 
-    private boolean canInserItem(Item item) {
-        return remainingSpace() >= item.getInventorySize();
+    private boolean canInserItem() {
+        return getLastIndex() <= items.length - 1;
     }
 
-    private int remainingSpace() {
-        int count = 0;
-        for (Item item : this.items)
-            if (item == null) count++;
-        return count;
-    }
 
     private int getLastIndex() {
         int index = -1;
         for (int i = 0; i < this.items.length; i++)
-            if (this.items[i] == null) index = i;
-        return index;
+            if (this.items[i] == null) return i;
+        return -1;
     }
 }

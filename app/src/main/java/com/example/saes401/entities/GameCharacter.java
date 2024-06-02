@@ -13,7 +13,7 @@ public abstract class GameCharacter {
         this.HP = HP;
     }
 
-    public int getHP() {
+    public int getHPEnemie() {
         return HP;
     }
 
