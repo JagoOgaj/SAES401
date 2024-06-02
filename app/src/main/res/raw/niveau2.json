@@ -17,8 +17,8 @@
     {
       "nom": "Morda, Roi des Bêtes",
       "description": "Roi impitoyable des créatures sauvages, il utilise bêtes et monstres comme agents de chaos.",
-      "image": "morda_roi_des_betes.png",
-      "image_sansfond": "sf_morda_roi_des_betes.png",
+      "image": "morda_roi_des_betes",
+      "image_sansfond": "sf_morda_roi_des_betes",
       "win": {
         "dropPossible": ["bouclier_R", "epee_R"],
         "narration": "La défaite de Morda apaise les esprits des bêtes féroces, ramenant le calme dans la forêt."
@@ -35,8 +35,8 @@
     {
       "nom": "Gromm la Bête",
       "description": "Puissante créature bestiale servant de général à Morda, semant la terreur.",
-      "image": "gromm_la_bete.png",
-      "image_sansfond": "sf_gromm_la_bete.png",
+      "image": "gromm_la_bete",
+      "image_sansfond": "sf_gromm_la_bete",
       "win": {
         "dropPossible": ["lance_R", "arc_R"],
         "narration": "Gromm tombe sous vos coups, et ses hurlements résonnent à travers la forêt."
@@ -53,8 +53,8 @@
     {
       "nom": "Garnar le Cornu",
       "description": "Combattant féroce qui utilise sa force brute pour écraser les opposants.",
-      "image": "garnar_le_cornu.png",
-      "image_sansfond": "sf_garnar_le_cornu.png",
+      "image": "garnar_le_cornu",
+      "image_sansfond": "sf_garnar_le_cornu",
       "win": {
         "dropPossible": ["grimoire_R", "bouclier_SR"],
         "narration": "Garnar s'effondre, son dernier rugissement étouffé par la victoire."
@@ -71,8 +71,8 @@
     {
       "nom": "Thorne le Berserker",
       "description": "Guerrier féroce qui utilise sa rage inégalée pour pulvériser les lignes ennemies.",
-      "image": "thorne_le_berserker.png",
-      "image_sansfond": "sf_thorne_le_berserker.png",
+      "image": "thorne_le_berserker",
+      "image_sansfond": "sf_thorne_le_berserker",
       "win": {
         "dropPossible": ["epee_SR", "lance_SR"],
         "narration": "Thorne est vaincu, sa fureur s'éteignant avec son dernier souffle."
@@ -89,8 +89,8 @@
     {
       "nom": "Gorath le Guerrier",
       "description": "Commandant des forces militaires de Morda, expert en tactiques de siège.",
-      "image": "gorath_le_guerrier.png",
-      "image_sansfond": "sf_gorath_le_guerrier.png",
+      "image": "gorath_le_guerrier",
+      "image_sansfond": "sf_gorath_le_guerrier",
       "win": {
         "dropPossible": ["arc_SR", "grimoire_SSR"],
         "narration": "Avec la chute de Gorath, le commandement des troupes ennemies s'effondre."

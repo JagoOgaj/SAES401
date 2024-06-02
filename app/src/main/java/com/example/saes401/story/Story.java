@@ -2,6 +2,7 @@ package com.example.saes401.story;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private GameFight fightInstance;
     private boolean gameContinue;
     private boolean levelStart;
+    private Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,8 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         if (intent != null) {
             this.initAttibuts();
         }
-        this.startStory();
         setContentView(R.layout.gameplay);
+        this.startStory();
     }
 
     @Override
@@ -58,13 +60,19 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     private void initEnemie() throws Exception {
+        int hp = JsonReader.getEnemieHP(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
+        String name = JsonReader.getEnemieName(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
+        Inventory inventory =  new Inventory(JsonReader.getItemsOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex).length);
+        String damage = JsonReader.getEnemieDamageStringFormat(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
+        String image = JsonReader.getEnemieImageSrc(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
         this.currentEnemieInstance = new Enemie(
-                JsonReader.getEnemieHP(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex),
-                JsonReader.getEnemieName(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex),
+                hp,
+                name,
                 this.currentLevel,
                 this.currentEnemieIndex,
-                new Inventory(JsonReader.getItemsOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex).length),
-                JsonReader.getEnemieDamageStringFormat(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex)
+                inventory,
+                damage,
+                image
         );
     }
 
@@ -75,7 +83,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     JsonReader.getObjectName(this, item),
                     JsonReader.getObjectDamage(this, item),
                     JsonReader.getImageObject(this, item),
-                    JsonReader.getObjectSize(this, item)
+                    JsonReader.getObjectDesc(this, item)
             ));
         }
     }
@@ -136,7 +144,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     private void startStory() {
-        Thread thread = new Thread(this);
+        thread = new Thread(this);
         thread.start();
     }
 
@@ -167,34 +175,93 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
 
     @Override
     public void run() {
+        try {
+            initFront();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
-        while (playerInstance.getHP() == 0 || currentEnemieInstance.getHP() == 0) {
+        while (true) {
+            if(playerInstance.getHPplayer() == 0 || currentEnemieInstance.getHPEnemie() == 0) break;
+            try {
+                thread.sleep(6000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             //todo lancer l'animation des dés du joueur
             //todo lancer l'animation des dés de l'enemie
             if (getResultEnemie() > getResultPlayer()) {
-                playerInstance.setHP(playerInstance.getHP() - 1);
+                playerInstance.setHP(playerInstance.getHPplayer() - 1);
                 //todo modifier l'affichage du coeur
             } else if (getResultPlayer() > getResultEnemie()) {
-                currentEnemieInstance.setHP(currentEnemieInstance.getHP() - 1);
+                currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
                 //todo modifier l'affichage du coeur
             } else {
                 Random random = new Random();
                 if (random.nextInt(2) == 1) {
                     //enemie perdu
-                    currentEnemieInstance.setHP(currentEnemieInstance.getHP() - 1);
+                    currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
                 } else {
                     //player perdu
-                    playerInstance.setHP(playerInstance.getHP() - 1);
+                    playerInstance.setHP(playerInstance.getHPplayer() - 1);
                 }
                 //todo modifier l'affichage du coeur
             }
         }
-        this.gameContinue = playerInstance.getHP() == 0;
+        this.gameContinue = playerInstance.getHPplayer() == 0;
         startActivityGame();
     }
 
+    private void initFront() throws Exception {
+        initFrontPlayer();
+        initFrontEnemie();
+    }
 
-    //Get
+    private void initFrontEnemie() {
+       initFrontHeart(getLinearHeartContainerEnemie(), currentEnemieInstance.getHPEnemie());
+       initAvatar(getEnemieImageView(), getResources().getIdentifier(currentEnemieInstance.getImageSrc(), "drawable", getPackageName()), true);
+       initNameEnemie(getTextViewEnemyName(), currentEnemieInstance.getName());
+    }
+
+    private void initFrontPlayer() throws Exception {
+        initFrontHeart(getLinearHeartContainerPlayer(), playerInstance.getHPplayer());
+        initAvatar(getPlayerImageView(), R.drawable.sf_gorath_le_guerrier, false);
+        initChoiseLoot(getViewChoiseLoot(), playerInstance.getInventory());
+    }
+
+
+    private void initFrontHeart(LinearLayout layout, int hp){
+        layout.removeAllViews();
+        for (int i=0; i < hp; i++){
+            ImageView imageView = new ImageView(this);
+            imageView.setImageResource(R.drawable.coueurtest);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            imageView.setLayoutParams(layoutParams);
+            layout.addView(imageView);
+        }
+    }
+
+    private void initChoiseLoot(LinearLayout layout, Inventory inventory) throws Exception {
+        layout.removeAllViews();
+        for (int i = 0; i < inventory.getCurentLength() + 1; i++){
+            ImageView imageView = new ImageView(this);
+            imageView.setImageResource(getResources().getIdentifier(inventory.getItem(i).getImage(), "drawable", getPackageName()));
+            layout.addView(imageView);
+        }
+    }
+
+    private void initNameEnemie(TextView textView, String name){
+        textView.setText(name);
+    }
+
+    private void initAvatar(ImageView imageView, int resID, boolean needRotation){
+        imageView.setImageResource(resID);
+        if (needRotation) imageView.setScaleX(-1);
+    }
+
     private ImageView getEnemieImageView() {
         return findViewById(R.id.enemieImage);
     }
@@ -204,21 +271,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return findViewById(R.id.playerImage);
     }
 
-    private LinearLayout getViewHeartContainerEnemie() {
-        return findViewById(R.id.heartContainer2);
-    }
-
-    private LinearLayout geViewtHeartContainerPlayer() {
-        return findViewById(R.id.heartContainer1);
-    }
-
-    private LinearLayout getViewLootContainerEnemie() {
-        return findViewById(R.id.lootContainer2);
-    }
-
-    private LinearLayout geViewtLootContainerPLayer() {
-        return findViewById(R.id.lootContainer1);
-    }
 
     private LinearLayout getViewGameplay() {
         return findViewById(R.id.gameplay);
@@ -232,12 +284,16 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return findViewById(R.id.choiseLoot);
     }
 
-    private LinearLayout getViewAtoutEnemie() {
-        return findViewById(R.id.atoutContainer2);
+    private LinearLayout getLinearHeartContainerEnemie() {
+        return findViewById(R.id.heartContainer2);
     }
 
-    private LinearLayout getViewAtoutPlayer() {
-        return findViewById(R.id.atoutContainer1);
+    private LinearLayout getLinearHeartContainerPlayer() {
+        return findViewById(R.id.heartContainer1);
+    }
+
+    private TextView getTextViewEnemyName(){
+        return findViewById(R.id.enemieName);
     }
 
 }

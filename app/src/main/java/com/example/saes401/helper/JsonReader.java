@@ -51,6 +51,7 @@ public class JsonReader {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray enemiesArray = jsonObject.getJSONArray("enemies");
 
+
             // Vérifiez si l'indice est valide
             if (index >= 0 && index < enemiesArray.length()) {
                 enemyObject = enemiesArray.getJSONObject(index);
@@ -62,7 +63,7 @@ public class JsonReader {
     }
 
     public static String getEnemieImageSrc(Context context, String levelFile, int index) throws Exception {
-        String imgSrc = getEnemyAtIndex(context, levelFile, index).getString("image");
+        String imgSrc = getEnemyAtIndex(context, levelFile, index).getString("image_sansfond");
         if (imgSrc == null) throw new Exception("null enemieImage");
         else return imgSrc;
     }
@@ -191,7 +192,6 @@ public class JsonReader {
         JSONObject object = null;
         try {
             object = new JSONObject(loadJsonFromRaw(context.getResources(), GameConstant.OBJETS, context.getPackageName()))
-                    .getJSONObject("objets")
                     .getJSONObject(nameOfObject);
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,27 +211,10 @@ public class JsonReader {
         else return desc;
     }
 
-    public static int getObjectSize(Context context, String nameOfObject) throws JSONException {
-        int size = getObjectStat(context, nameOfObject) == null ? -1 : getObjectStat(context, nameOfObject).getInt("taille");
-        if (size == -1) throw new JSONException("null objectSize");
-        else return size;
-    }
-
     public static String getObjectDamage(Context context, String nameOfObject) throws JSONException {
-        String damage = getObjectStat(context, nameOfObject) == null ? null : getObjectStat(context, nameOfObject).getString("degats");
+        String damage = getObject(context, nameOfObject) == null ? null : getObject(context, nameOfObject).getString("degat");
         if (damage == null) throw new JSONException("null objectDamage");
         else return damage;
-    }
-
-
-    private static JSONObject getObjectStat(Context context, String nameOfObject) {
-        JSONObject stats = null;
-        try {
-            stats = getObject(context, nameOfObject).getJSONObject("stats");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return stats;
     }
 
     public static String getImageObject(Context context, String objet) {
@@ -239,7 +222,6 @@ public class JsonReader {
         try {
             String json = loadJsonFromRaw(context.getResources(), GameConstant.OBJETS, context.getPackageName());
             imageSrc = new JSONObject(json).
-                    getJSONObject("objets").
                     getJSONObject(objet).getString("image");
 
         } catch (Exception e) {
