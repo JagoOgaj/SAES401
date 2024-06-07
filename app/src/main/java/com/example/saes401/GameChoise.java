@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
@@ -43,6 +44,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private int currentEnemieIndex;
     private boolean levelStart;
     private boolean gameContinue;
+    private DataModel dataModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         currentEnemieIndex = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
         levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
         gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
+        this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
     }
 
     @Override
@@ -99,6 +102,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
         this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
         this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        this.intent.putExtra(GameConstant.KEY_DATA_MODEL, this.dataModel);
         startActivity(this.intent);
     }
 
@@ -171,6 +175,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         levelStart = savedInstance.getBoolean(GameConstant.KEY_START_LEVEL);
         gameContinue = savedInstance.getBoolean(GameConstant.KEY_PLAYER_WIN);
         currentEnemieIndex = savedInstance.getInt(GameConstant.KEY_ENEMIE_INDEX);
+        dataModel = savedInstance.getParcelable(GameConstant.KEY_DATA_MODEL);
     }
 
     @Override
@@ -181,6 +186,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
         outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
+        outState.putParcelable(GameConstant.KEY_DATA_MODEL, this.dataModel);
     }
 
 

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.GameActivity;
 import com.example.saes401.R;
+import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Enemie;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
@@ -46,6 +47,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private int indexItemChoose = -1;
     private Map<ImageView, View.OnClickListener> savedOnClickListeners = new HashMap<>();
     private final Object lock = new Object();
+    private DataModel dataModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         this.currentEnemieIndex = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
         this.levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
         this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
+        this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
         try {
             initEnemie();
             addItemOfEnemie();
@@ -131,6 +134,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_STORY);
         this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
+        this.intent.putExtra(GameConstant.KEY_DATA_MODEL, this.dataModel);
         startActivity(intent);
     }
 
@@ -149,6 +153,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         currentEnemieInstance = (Enemie) savedInstanceState.getSerializable(GameConstant.KEY_ENEMIE_INSTANCE);
         gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
         levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
+        dataModel = savedInstanceState.getParcelable(GameConstant.KEY_DATA_MODEL);
         startStory();
     }
 
@@ -161,6 +166,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         outState.putParcelable(GameConstant.KEY_ENEMIE_INSTANCE, this.currentEnemieInstance);
         outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
+        outState.putParcelable(GameConstant.KEY_DATA_MODEL, this.dataModel);
     }
 
     private void startStory() {
@@ -244,8 +250,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             int[] finalNumberDicesEnemie = numberDicesEnemie;
             runOnUiThread(() -> updateDiceResult(finalNumberDicesEnemie, finalResultEnemie, false));
             waitForDelay();
+            this.dataModel.addDamageToEnemy(resultPlayer);
+            this.dataModel.addDamageToPlayer(resultEnemie);
             if (resultEnemie > resultPlayer) {
                 playerInstance.setHP(playerInstance.getHPplayer() - 1);
+                this.dataModel.addHeartLost(1);
                 runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), true));
             } else if (resultPlayer > resultEnemie) {
                 currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
@@ -256,6 +265,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
                     runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
                 } else {
+                    this.dataModel.addHeartLost(1);
                     playerInstance.setHP(playerInstance.getHPplayer() - 1);
                     runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), true));
                 }

@@ -15,6 +15,7 @@ public final class GameConstant {
     public static final String KEY_PLAYER = "playerInstance";
     public static final String KEY_ENEMIE_INDEX = "currentEnemie";
     public static final String KEY_ENEMIE_INSTANCE = "currentEnemieIntance";
+    public static final String KEY_DATA_MODEL = "dataModel";
     public static final String VALUE_GAME_ACTIVITY = "gameActivity";
     public static final String VALUE_GAME_CHOISE = "gameChoise";
     public static final String VALUE_GAME_NARATION = "gameNaration";
