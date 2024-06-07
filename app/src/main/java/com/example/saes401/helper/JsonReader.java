@@ -152,15 +152,15 @@ public class JsonReader {
 
     public static String getNarationAfterWinEnemie(Context context, String levelFile, int index) throws Exception {
         String naration = getWinOfEnemieAttribut(context, levelFile, index) == null ||
-                !getWinOfEnemieAttribut(context, levelFile, index).has("naration") ? null
-                : getWinOfEnemieAttribut(context, levelFile, index).getString("naration");
+                !getWinOfEnemieAttribut(context, levelFile, index).has("narration") ? null
+                : getWinOfEnemieAttribut(context, levelFile, index).getString("narration");
         if (naration == null) throw new Exception("null enemieNarationAfterWin");
         else return naration;
     }
 
     public static String getNarationAfterLooseEnemie(Context context, String levelFile, int index) throws Exception {
-        String naration = getLooseOfEnemieAttribut(context, levelFile, index) == null || !getLooseOfEnemieAttribut(context, levelFile, index).has("naration") ? null
-                : getLooseOfEnemieAttribut(context, levelFile, index).getString("naration");
+        String naration = getLooseOfEnemieAttribut(context, levelFile, index) == null || !getLooseOfEnemieAttribut(context, levelFile, index).has("narration") ? null
+                : getLooseOfEnemieAttribut(context, levelFile, index).getString("narration");
         if (naration == null) throw new Exception("null enemieNarationAfterLoose");
         else return naration;
     }

@@ -87,6 +87,11 @@ public class Inventory implements Parcelable {
         return items.length == 0;
     }
 
+    public int getIndexOfItem(Item item){
+        for (int i = 0; i < items.length; i++)
+            if (items[i].equals(item)) return i;
+        return -1;
+    }
     public boolean isFullInventory() throws Exception {
         return getLastIndex() == slots;
     }
