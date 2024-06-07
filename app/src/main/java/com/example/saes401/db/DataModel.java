@@ -23,8 +23,7 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
     private String lastScore;
     private Boolean isWin;
 
-    public DataModel(DatabaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
+    public DataModel() {
     }
     // Parcelable
 
@@ -74,7 +73,7 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
         dest.writeInt(heartLost);
         dest.writeString(lastScore);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            dest.writeBoolean(isWin);
+            dest.writeBoolean(isWin != null ? isWin : false); // Ensure isWin is not null
         }
     }
 
@@ -238,5 +237,9 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         db.insert("playerGame", null, values);
         db.close();
+    }
+
+    public void setDatabaseHelper(DatabaseHelper databaseHelper) {
+        this.databaseHelper = databaseHelper;
     }
 }
