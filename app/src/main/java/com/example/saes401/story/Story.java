@@ -1,8 +1,12 @@
 package com.example.saes401.story;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +24,9 @@ import com.example.saes401.utilities.GameFight;
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -33,6 +40,12 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private boolean gameContinue;
     private boolean levelStart;
     private Thread thread;
+    private Map<String, ImageView> heartMap = new HashMap<String, ImageView>();
+    private ArrayList<ImageView> imageViewsPLayer = new ArrayList<ImageView>();
+    private ArrayList<ImageView> imageViewsEnemie = new ArrayList<ImageView>();
+    private int indexItemChoose = -1;
+    private Map<ImageView, View.OnClickListener> savedOnClickListeners = new HashMap<>();
+    private final Object lock = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +55,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             this.initAttibuts();
         }
         setContentView(R.layout.gameplay);
+        try {
+            initFront();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         this.startStory();
     }
 
@@ -118,8 +136,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
 
     @Override
     public void setListener() {
-
+        setListenerImageView();
     }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -149,9 +168,8 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         thread.start();
     }
 
-    private int getResultPlayer() {
+    private int getResultPlayer(int[] dices) {
         int resultPlayer = 0;
-        int[] dices = fightInstance.getDicePlayer();
         int result = 0;
         for (int i = 0; i < dices.length; i++) {
             result += dices[i];
@@ -164,110 +182,213 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return resultPlayer;
     }
 
-    private int getResultEnemie() {
+    private int getResultEnemie(int[] dices, boolean isBoss, Item itemEnemie) {
         int result = 0;
         try {
-            result = fightInstance.getResultEnemie(fightInstance.getDiceEnemie());
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (isBoss) { //Multiplie ou ajoute touts les bonus pour chaque dès
+                for (int i = 0; i < dices.length; i++) {
+                    result += fightInstance.getResultEnemie(dices[i], itemEnemie);
+                }
+            } else { //Multiplie ou ajoute aux résultat des dès
+                for (int i = 0; i < dices.length; i++) {
+                    result += (dices[i]);
+                }
+                result = fightInstance.getResultEnemie(result, itemEnemie);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
         return result;
     }
 
     @Override
     public void run() {
-        try {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        initFront();
-                    } catch (Exception e) {
-                       Log.d("error -> InitFront", Objects.requireNonNull(e.getMessage()));
-                    }
-                }
-            });
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
         while (true) {
-            if (playerInstance.getHPplayer() == 0 || currentEnemieInstance.getHPEnemie() == 0)
-                break;
+            synchronized (lock) {
+                try {
+                    runOnUiThread(() -> {
+                        getInformationTextView().setText("Selectionnez un item");
+                    });
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    Log.d("error -> InitFront", Objects.requireNonNull(e.getMessage()));
+                }
+            }
+            runOnUiThread(() -> {
+                getInformationTextView().setText("");
+            });
+            int[] dicesResultPlayer = fightInstance.getDicePlayer();
+            runOnUiThread(() -> animateDiceRoll(dicesResultPlayer, true, -1));
+            waitForDelay();
+            int resultPlayer = getResultPlayer(dicesResultPlayer);
+            runOnUiThread(() -> updateDiceResult(dicesResultPlayer, resultPlayer, true));
+            waitForDelay();
+            int[] numberDicesEnemie = new int[0];
+            Item itemEnemie = currentEnemieInstance.getItem();
             try {
-                Thread.sleep(6000);
-            } catch (InterruptedException e) {
+                numberDicesEnemie = fightInstance.getDiceEnemie();
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
-            final int resultEnemie = getResultEnemie();
-            final int resultPlayer = getResultPlayer();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (resultEnemie > resultPlayer) {
-                        playerInstance.setHP(playerInstance.getHPplayer() - 1);
-                        // Mettre à jour l'affichage du cœur pour le joueur
-                    } else if (resultPlayer > resultEnemie) {
-                        currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
-                        // Mettre à jour l'affichage du cœur pour l'ennemi
-                    } else {
-                        Random random = new Random();
-                        if (random.nextInt(2) == 1) {
-                            currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
-                        } else {
-                            playerInstance.setHP(playerInstance.getHPplayer() - 1);
-                        }
-                        // Mettre à jour l'affichage du cœur pour les deux
-                    }
-                }
-            });
-        }
-        this.gameContinue = playerInstance.getHPplayer() == 0;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                startActivityGame();
+            int[] finalNumberDicesEnemie1 = numberDicesEnemie;
+            runOnUiThread(() -> animateDiceRoll(finalNumberDicesEnemie1, false, currentEnemieInstance.getInventory().getIndexOfItem(itemEnemie)));
+            waitForDelay();
+            int resultEnemie = 0;
+            try {
+                resultEnemie = getResultEnemie(numberDicesEnemie, this.currentEnemieIndex == JsonReader.getNumberEnemies(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel)), itemEnemie);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+            int finalResultEnemie = resultEnemie;
+            int[] finalNumberDicesEnemie = numberDicesEnemie;
+            runOnUiThread(() -> updateDiceResult(finalNumberDicesEnemie, finalResultEnemie, false));
+            waitForDelay();
+            if (resultEnemie > resultPlayer) {
+                playerInstance.setHP(playerInstance.getHPplayer() - 1);
+                runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), true));
+            } else if (resultPlayer > resultEnemie) {
+                currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
+                runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
+            } else {
+                Random random = new Random();
+                if (random.nextInt(2) == 1) {
+                    currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
+                    runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
+                } else {
+                    playerInstance.setHP(playerInstance.getHPplayer() - 1);
+                    runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), true));
+                }
+                runOnUiThread(() -> {
+                    setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), false);
+                    setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), false);
+                });
+            }
+            if (playerInstance.getHPplayer() <= 0 || currentEnemieInstance.getHPEnemie() == 0) {
+                runOnUiThread(() -> {
+                    getViewGameplay().removeAllViews();
+                    getTextViewGamePLay().setText("");
+                    getTextScoreEnemie().setText("");
+                    getTextScorePlayer().setText("");
+                    getInformationTextView().setText("");
+                    String text = playerInstance.getHPplayer() == 0 ? "Vous avez perdu" : "Vous avez gagnez";
+                    getTextViewGamePLay().setText(text);
+                });
+                waitForDelay();
+                break;
+            } else {
+                restoreClickListeners();
+            }
+        }
+        runOnUiThread(() -> {
+            setListenerButtonTakeItem(true);
         });
+        this.gameContinue = playerInstance.getHPplayer() > 0;
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                Log.d("error -> InitFront", Objects.requireNonNull(e.getMessage()));
+            }
+        }
+        startActivityGame();
     }
 
 
     private void initFront() throws Exception {
+        setTextGameplay(-1);
+        setScoreText(getTextScoreEnemie(), 0);
+        setScoreText(getTextScorePlayer(), 0);
+        setCurrentLevelFront();
+        setVisibilityButtonTake(false);
         initFrontPlayer();
         initFrontEnemie();
+        setListener();
+    }
+
+    private void setCurrentLevelFront() {
+        getCurrentLevelTextView().setText(
+                String.format(
+                        GameConstant.FORMAT_CURRENT_LEVEL,
+                        this.currentLevel,
+                        this.currentEnemieIndex
+                ));
+    }
+
+    private void setTextGameplay(int result) {
+        if (result == -1) getTextViewGamePLay().setText("");
+        else getTextViewGamePLay().setText(String.valueOf(result));
+    }
+
+    private void setScoreText(TextView textView, int result) {
+        textView.setText(
+                String.format(
+                        GameConstant.FORMAT_SCORE,
+                        result
+                )
+        );
+    }
+
+    private void setVisibilityButtonTake(boolean b) {
+        if (b) getButtonTakeItem().setVisibility(View.VISIBLE);
+        else getButtonTakeItem().setVisibility(View.INVISIBLE);
     }
 
     private void initFrontEnemie() throws Exception {
-        initFrontHeart(getLinearHeartContainerEnemie(), currentEnemieInstance.getHPEnemie());
+        initFrontHeart(getLinearHeartContainerEnemie(), currentEnemieInstance.getHPEnemie(), GameConstant.FORMAT_HEART_ENEMIE);
         initAvatar(getEnemieImageView(), getResources().getIdentifier(currentEnemieInstance.getImageSrc(), "drawable", getPackageName()), true);
         initNameEnemie(getTextViewEnemyName(), currentEnemieInstance.getName());
-        initLinearItems(getLinearItemsEnemie(), currentEnemieInstance.getInventory());
+        initLinearItems(getLinearItemsEnemie(), currentEnemieInstance.getInventory(), false);
     }
 
     private void initFrontPlayer() throws Exception {
-        initFrontHeart(getLinearHeartContainerPlayer(), playerInstance.getHPplayer());
+        initFrontHeart(getLinearHeartContainerPlayer(), playerInstance.getHPplayer(), GameConstant.FORMAT_HEART_PLAYER);
         initAvatar(getPlayerImageView(), R.drawable.sf_gorath_le_guerrier, false);
-        initLinearItems(getViewChoiseLoot(), playerInstance.getInventory());
+        initLinearItems(getViewChoiseLoot(), playerInstance.getInventory(), true);
     }
 
 
-    private void initFrontHeart(LinearLayout layout, int hp) {
+    private void initFrontHeart(LinearLayout layout, int hp, String prefix) {
         layout.removeAllViews();
         for (int i = 0; i < hp; i++) {
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.coueurtest);
+            String id = String.format(prefix, i);
+            imageView.setTag(id);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             imageView.setLayoutParams(layoutParams);
             layout.addView(imageView);
+            heartMap.put(id, imageView);
         }
     }
 
-    private void initLinearItems(LinearLayout layout, Inventory inventory) throws Exception {
+    public void setVisibilityOfHeart(int index, String prefix) {
+        try {
+            heartMap.get(String.format(prefix, index)).setVisibility(ImageView.INVISIBLE);
+        } catch (Exception e) {
+            Log.d("error -> setVisibilityOfHeart", Objects.requireNonNull(e.getMessage()));
+        }
+    }
+
+    public void setFrontHeart(String prefix, int index, boolean needSleep) {
+        getViewGameplay().removeAllViews();
+        getTextViewGamePLay().setText("");
+        getTextScoreEnemie().setText("");
+        getTextScorePlayer().setText("");
+        if (needSleep) {
+            try {
+                setVisibilityOfHeart(index, prefix);
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        } else setVisibilityOfHeart(index, prefix);
+    }
+
+    private void initLinearItems(LinearLayout layout, Inventory inventory, boolean isPlayer) throws Exception {
         layout.removeAllViews();
         for (int i = 0; i < inventory.getCurentLength(); i++) {
             ImageView imageView = new ImageView(this);
@@ -283,8 +404,72 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     GameConstant.MARGIN_ITEM
             );
             imageView.setLayoutParams(layoutParams);
+            if (isPlayer) {
+                imageView.setTag(inventory.getItem(i));
+                imageViewsPLayer.add(imageView);
+            } else imageViewsEnemie.add(imageView);
             layout.addView(imageView);
         }
+    }
+
+    private void waitForDelay() {
+        synchronized (lock) {
+            try {
+                lock.wait(GameConstant.DELAY_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void animateDiceRoll(int[] resultDices, boolean isPlayer, int itemEnemie) {
+        getTextViewGamePLay().setText("");
+        getViewGameplay().removeAllViews();
+        if (!isPlayer) {
+            imageViewsEnemie.get(itemEnemie).setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
+            getTextViewGamePLay().setText(currentEnemieInstance.getInventory().getItem(itemEnemie).getDesc());
+            getInformationTextView().setText(currentEnemieInstance.getName() + " joue");
+        }
+        for (int i = 0; i < resultDices.length; i++) {
+            ImageView imageView = initImageView(R.drawable.animation_dice_test, true);
+            AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();
+            getViewGameplay().addView(imageView);
+            anim.start();
+        }
+    }
+
+    private void updateDiceResult(int[] dicesResult, int result, boolean isPlayer) {
+        getTextViewGamePLay().setText("");
+        getTextScoreEnemie().setText("");
+        clearColorFilterImageView(imageViewsEnemie);
+        int[] drawable = {
+                R.drawable.dicetest1,
+                R.drawable.dicetest2,
+                R.drawable.dicetest3,
+                R.drawable.dicetest4,
+                R.drawable.dicetest5,
+                R.drawable.dicetest6
+        };
+        getViewGameplay().removeAllViews();
+        for (int i = 0; i < dicesResult.length; i++) {
+            ImageView imageView = initImageView(drawable[dicesResult[i] - 1], false);
+            getViewGameplay().addView(imageView);
+        }
+        setTextGameplay(result);
+        TextView textView = isPlayer ? getTextScorePlayer() : getTextScoreEnemie();
+        setScoreText(textView, result);
+    }
+
+    private ImageView initImageView(int res, boolean isAnimation) {
+        ImageView imageView = new ImageView(this);
+        if (isAnimation) imageView.setBackgroundResource(res);
+        else imageView.setImageResource(res);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                GameConstant.WIDTH_HEIGHT_ITEMS, // Largeur en pixels
+                GameConstant.WIDTH_HEIGHT_ITEMS // Hauteur en pixels
+        );
+        imageView.setLayoutParams(layoutParams);
+        return imageView;
     }
 
     private void initNameEnemie(TextView textView, String name) {
@@ -313,7 +498,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     private TextView getTextViewGamePLay() {
-        return findViewById(R.id.resultText);
+        return findViewById(R.id.resultTextGamplay);
     }
 
     public final LinearLayout getViewChoiseLoot() {
@@ -328,8 +513,88 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return findViewById(R.id.heartContainer1);
     }
 
+    private TextView getTextScoreEnemie() {
+        return findViewById(R.id.scoreEnemie);
+    }
+
+    private TextView getTextScorePlayer() {
+        return findViewById(R.id.scorePlayer);
+    }
+
     private TextView getTextViewEnemyName() {
         return findViewById(R.id.enemieName);
+    }
+
+    private Button getButtonTakeItem() {
+        return findViewById(R.id.takeItem);
+    }
+
+    private TextView getCurrentLevelTextView() {
+        return findViewById(R.id.currentLevel);
+    }
+
+    private TextView getInformationTextView() {
+        return findViewById(R.id.infoTextView);
+    }
+
+    private void setListenerImageView() {
+        for (ImageView imageView : imageViewsPLayer) {
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clearColorFilterImageView(imageViewsPLayer);
+                    Item item = (Item) imageView.getTag();
+                    indexItemChoose = playerInstance.getInventory().getIndexOfItem(item);
+                    imageView.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
+                    getTextViewGamePLay().setText(String.valueOf(playerInstance.getInventory().getItem(indexItemChoose).getDesc()));
+                    setVisibilityButtonTake(true);
+                    setListenerButtonTakeItem(false);
+                }
+            };
+            savedOnClickListeners.put(imageView, listener);
+            imageView.setOnClickListener(listener);
+        }
+    }
+
+    private void removeClickListeners() {
+        for (ImageView imageView : imageViewsPLayer) {
+            imageView.setOnClickListener(null);
+        }
+    }
+
+    private void restoreClickListeners() {
+        for (Map.Entry<ImageView, View.OnClickListener> entry : savedOnClickListeners.entrySet()) {
+            entry.getKey().setOnClickListener(entry.getValue());
+        }
+    }
+
+    private void clearColorFilterImageView(ArrayList<ImageView> imageViews) {
+        for (ImageView imageView : imageViews) {
+            imageView.clearColorFilter();
+        }
+    }
+
+    private void setListenerButtonTakeItem(boolean isEnd) {
+        if (!isEnd) {
+            getButtonTakeItem().setOnClickListener(view -> {
+                removeClickListeners();
+                clearColorFilterImageView(imageViewsPLayer);
+                getTextViewGamePLay().setText("");
+                playerInstance.setCurrentItem(indexItemChoose);
+                setVisibilityButtonTake(false);
+                synchronized (lock) {
+                    lock.notify();
+                }
+            });
+        } else {
+            getButtonTakeItem().setText("Continuer");
+            getButtonTakeItem().setVisibility(View.VISIBLE);
+            getButtonTakeItem().setOnClickListener(view -> {
+                synchronized (lock) {
+                    lock.notify();
+                }
+            });
+        }
     }
 
 }

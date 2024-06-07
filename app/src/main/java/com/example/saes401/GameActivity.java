@@ -36,20 +36,19 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         if (this.previousActivity.contains(GameConstant.VALUE_MAIN_ACTIVITY)) {
             startActivityGameNaration();
         } else if (this.previousActivity.contains(GameConstant.VALUE_STORY)) {
-            if (!this.gameContinue) {
-                this.currentEnemieInstance = -1;
-                startActivityGameNaration();
-            } else {
-                if (enemieLeft() && !(this.currentLevel < 3)) {
-                    this.currentEnemieInstance++;
-                    this.levelStart = false;
-
-                } else if (!enemieLeft() && this.currentLevel < 3) {
-                    this.currentLevel++;
-                    this.levelStart = true;
-                }
-                startActivityGameNaration();
+            if (this.currentLevel > 3){
+                startMainActivity();
             }
+            else if (!noEnemieLeft(this.currentEnemieInstance)) {
+                this.currentEnemieInstance++;
+                this.levelStart = false;
+
+            } else if (noEnemieLeft(this.currentEnemieInstance)) {
+                this.currentLevel++;
+                this.currentEnemieInstance = 0;
+                this.levelStart = true;
+            }
+            startActivityGameNaration();
         } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_CHOISE)) {
             statActivityStory();
         } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_NARATION)) {
@@ -61,10 +60,10 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         }
     }
 
-    private boolean enemieLeft() {
+    private boolean noEnemieLeft(int index) {
         boolean enemieLeft = false;
         try {
-            enemieLeft = JsonReader.getNumberEnemies(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel)) > 0;
+            enemieLeft = JsonReader.getNumberEnemies(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel)) == index;
         } catch (Exception e) {
             Log.d("GameActivity", "enemieLeftError: " + e.getMessage());
         }

@@ -7,6 +7,8 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameFight {
@@ -30,15 +32,11 @@ public class GameFight {
         return dices;
     }
 
-    private int interpreter(String s) throws Exception {
-        int result = 0;
-        for (int i = 0; i < s.length(); i += 3) {
-            result += getResult(spliterFunction(s));
-        }
-        return result;
+    private int[] interpreter(String s) throws Exception {
+        return getResult(spliterFunction(s));
     }
 
-    public int getDiceEnemie() throws Exception {
+    public int[] getDiceEnemie() throws Exception {
         return interpreter(
                 JsonReader.getEnemieDamageStringFormat(
                         context,
@@ -55,28 +53,23 @@ public class GameFight {
         if (split[0].equals("+")) {
             resultPlayer += (int) split[1];
         }
-        else if (split[0].equals("*")) {
+        else if (split[0].equals("x")) {
             resultPlayer *= (int) split[1];
         }
         return resultPlayer;
     }
 
-    public int getResultEnemie(int result) throws Exception {
+    public int getResultEnemie(int result, Item item) throws Exception {
         int resultEnemie = result;
-        Object[] split = splitOperationObjectDamage(enemie.getItem().getDamage());
-        if (split[0].equals("+")) {
-            resultEnemie += (int) split[1];
-        }
-        else if (split[0].equals("x")) {
-            resultEnemie *= (int) split[1];
-        }
-        return resultEnemie;
+        Object[] split = splitOperationObjectDamage(item.getDamage());
+        return resultEnemie = split[0].equals("+") ? resultEnemie + (int) split[1] : resultEnemie * (int) split[1];
     }
 
-    private int getResult(int[] numbers) {
-        int result = 0;
+
+    private int[] getResult(int[] numbers) {
+        int[] result = new int[numbers[0]];
         for (int i = 0; i < numbers[0]; i++)
-            result += (random.nextInt(numbers[1]) + 1);
+            result[i] = (random.nextInt(numbers[1]) + 1);
         return result;
     }
 

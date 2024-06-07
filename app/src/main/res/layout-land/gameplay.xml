@@ -73,7 +73,7 @@
         app:layout_constraintVertical_bias="0.519" />
 
     <TextView
-        android:id="@+id/resultText"
+        android:id="@+id/resultTextGamplay"
         android:layout_width="95dp"
         android:layout_height="36dp"
         android:gravity="center"
@@ -109,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultText"
+        app:layout_constraintTop_toBottomOf="@+id/resultTextGamplay"
         app:layout_constraintVertical_bias="1.0"></LinearLayout>
 
     <LinearLayout

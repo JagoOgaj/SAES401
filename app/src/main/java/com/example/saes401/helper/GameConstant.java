@@ -22,11 +22,15 @@ public final class GameConstant {
     public static final String VALUE_STORY = "story";
     public static final String KEY_PREVIOUS_ACTIVITY = "previousActivity";
     public static final String FORMAT_LEVEL = "niveau%d";
+    public static final String FORMAT_SCORE = "score : %d";
+    public static final String FORMAT_CURRENT_LEVEL = "%d - %d";
+    public static final String FORMAT_HEART_ENEMIE = "heart_enemie_%d";
+    public static final String FORMAT_HEART_PLAYER = "heart_player_%d";
     public static final String REGEX_SPLITER = "d";
     public static final String KEY_PLAYER_WIN = "isPlayerWin";
     public static final String KEY_START_LEVEL = "onStarLevel";
     public static final int WIDTH_HEIGHT_ITEMS = 130;
     public static final int MARGIN_ITEM = 40;
+    public static final int DELAY_TIME = 3000;
     public static final String CLEE_MAUDITE = "cle maudite";
-
 }

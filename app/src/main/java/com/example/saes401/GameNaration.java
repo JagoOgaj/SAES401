@@ -126,14 +126,12 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         if (this.currentLevel < 0 || this.currentLevel > 3) {
             throw new Exception("null level");
         } else {
-
-
             if (levelStart) {
                 naration = JsonReader.getNaration(this, this.currentLevel - 1);
             } else if (!gameContinue) {
-                naration = JsonReader.getNarationAfterLooseEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
+                naration = JsonReader.getNarationAfterLooseEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie - 1);
             } else {
-                naration = JsonReader.getNarationAfterWinEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie);
+                naration = JsonReader.getNarationAfterWinEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentIndexEnemie - 1);
             }
             setVisibilityOfContinue(getTextView());
         }

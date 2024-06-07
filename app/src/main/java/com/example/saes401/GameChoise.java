@@ -1,6 +1,5 @@
 package com.example.saes401;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -68,7 +67,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         imageButton1 = findViewById(R.id.imageButton1);
         imageButton2 = findViewById(R.id.imageButton2);
         imageButton3 = findViewById(R.id.imageButton3);
-        buttonContinueToLevel = findViewById(R.id.buttonContinueToLevel);
+        buttonContinueToLevel = findViewById(R.id.takeItem);
         currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         currentEnemieIndex = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
