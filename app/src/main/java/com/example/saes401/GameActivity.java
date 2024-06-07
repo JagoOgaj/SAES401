@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.db.DataModel;
+import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
@@ -63,6 +64,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     }
 
     private void setDataToDB() {
+        this.dataModel.setDatabaseHelper(new DatabaseHelper(this));
         //add last data
         this.dataModel.addEnd();
         this.dataModel.addLastScore(String.format(GameConstant.FORMAT_SCORE, this.currentLevel, this.currentEnemieInstance));

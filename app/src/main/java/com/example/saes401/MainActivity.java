@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         intent.putExtra(GameConstant.KEY_PLAYER, new Player(GameConstant.DEFAULT_HP));
         intent.putExtra(GameConstant.KEY_START_LEVEL, true);
         intent.putExtra(GameConstant.KEY_PLAYER_WIN, true);
-        intent.putExtra(GameConstant.KEY_DATA_MODEL, initDataModel());
+        DataModel dataModel = initDataModel();
+        intent.putExtra(GameConstant.KEY_DATA_MODEL, dataModel);
         startActivity(intent);
     }
 
@@ -88,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     }
 
     private DataModel initDataModel() {
-        DataModel dataModel = new DataModel(new DatabaseHelper(this));
+        //don't insert in database
+        DataModel dataModel = new DataModel();
         dataModel.addStart();
         return dataModel;
     }
