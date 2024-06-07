@@ -15,6 +15,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
@@ -29,6 +30,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private Boolean levelStart;
     private String naration;
     private Player playerInstance;
+    private DataModel dataModel;
     private volatile boolean clickScreen = false;
 
     @Override
@@ -60,6 +62,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         this.currentIndexEnemie = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
         this.levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
         this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
+        this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
     }
 
     @Override
@@ -71,6 +74,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
         this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
+        this.intent.putExtra(GameConstant.KEY_DATA_MODEL, this.dataModel);
         startActivity(this.intent);
     }
 
@@ -81,6 +85,8 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
         currentIndexEnemie = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
         playerInstance = savedInstanceState.getParcelable(GameConstant.KEY_PLAYER);
+        levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
+        this.dataModel = savedInstanceState.getParcelable(GameConstant.KEY_DATA_MODEL);
         try {
             launchNaration();
         } catch (Exception e) {
@@ -95,6 +101,8 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentIndexEnemie);
         outState.putParcelable(GameConstant.KEY_PLAYER, this.playerInstance);
+        outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
+        outState.putParcelable(GameConstant.KEY_DATA_MODEL, this.dataModel);
     }
 
     @Override

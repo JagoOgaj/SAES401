@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.saes401.db.DataModel;
+import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.Utilities;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         intent.putExtra(GameConstant.KEY_PLAYER, new Player(GameConstant.DEFAULT_HP));
         intent.putExtra(GameConstant.KEY_START_LEVEL, true);
         intent.putExtra(GameConstant.KEY_PLAYER_WIN, true);
+        intent.putExtra(GameConstant.KEY_DATA_MODEL, initDataModel());
         startActivity(intent);
     }
 
@@ -83,4 +86,11 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         findViewById(R.id.continueButton).setOnClickListener(view -> onClickContinue());
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
     }
+
+    private DataModel initDataModel() {
+        DataModel dataModel = new DataModel(new DatabaseHelper(this));
+        dataModel.addStart();
+        return dataModel;
+    }
+
 }

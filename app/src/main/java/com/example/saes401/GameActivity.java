@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
@@ -20,6 +21,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     private String previousActivity;
     private Boolean gameContinue;
     private Boolean levelStart;
+    private DataModel dataModel;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -53,11 +55,25 @@ public class GameActivity extends AppCompatActivity implements Utilities {
             statActivityStory();
         } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_NARATION)) {
             if (this.currentLevel > 3 || !this.gameContinue) {
-                //todo sauvgarder la partie dans la base de données et aller dans main activity
+                setDataToDB();
                 startMainActivity();
             } else startActivityGameChoise();
 
         }
+    }
+
+    private void setDataToDB() {
+        //add last data
+        this.dataModel.addEnd();
+        this.dataModel.addLastScore(String.format(GameConstant.FORMAT_SCORE, this.currentLevel, this.currentEnemieInstance));
+        this.dataModel.addWin(this.currentLevel >= 3 && noEnemieLeft(this.currentEnemieInstance));
+        //put data to db
+        this.dataModel.putTime();
+        this.dataModel.putHeartLost();
+        this.dataModel.putLastScore();
+        this.dataModel.putMaxDamageToEnemy();
+        this.dataModel.putMaxDamageToPlayer();
+        this.dataModel.putWin();
     }
 
     private boolean noEnemieLeft(int index) {
@@ -78,6 +94,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.previousActivity = intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY);
+        this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
     }
 
     @Override
@@ -89,6 +106,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         previousActivity = savedInstanceState.getString(GameConstant.KEY_PREVIOUS_ACTIVITY);
         gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
         levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
+        this.dataModel = savedInstanceState.getParcelable(GameConstant.KEY_DATA_MODEL);
     }
 
     @Override
@@ -100,6 +118,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         outState.putString(GameConstant.KEY_PREVIOUS_ACTIVITY, this.previousActivity);
         outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         outState.putBoolean(GameConstant.KEY_START_LEVEL, this.levelStart);
+        outState.putParcelable(GameConstant.KEY_DATA_MODEL, this.dataModel);
     }
 
     @Override
@@ -129,6 +148,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieInstance);
         this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
         this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
+        this.intent.putExtra(GameConstant.KEY_DATA_MODEL, this.dataModel);
     }
 
     @Override
