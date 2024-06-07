@@ -1,9 +1,7 @@
 package com.example.saes401.helper;
 
 public final class GameConstant {
-    /*
-    App default constants
-    */
+
     public static final int DEFAULT_HP = 3;
     public static final int DEFAULT_INVENTORY_SLOT = 3;
     public static final String CATALOGUE = "catalogue";
@@ -34,4 +32,8 @@ public final class GameConstant {
     public static final int MARGIN_ITEM = 40;
     public static final int DELAY_TIME = 3000;
     public static final String CLEE_MAUDITE = "cle maudite";
+    public static final String VOLUME = "SavedVolume";
+    public static final String LANGUE = "SavedLanguage";
+
+
 }

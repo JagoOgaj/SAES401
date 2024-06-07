@@ -22,9 +22,9 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.288"
+        app:layout_constraintVertical_bias="0.101"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="29dp">
+        tools:layout_editor_absoluteX="16dp">
 
         <TextView
             android:id="@+id/volume"
@@ -41,9 +41,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:progressTint="#A3E34C"
             android:progressBackgroundTint="#FFFFFF"
-        android:thumbTint="#A3E34C" />
+            android:progressTint="#A3E34C"
+            android:thumbTint="#A3E34C" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,7 +52,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.446"
+        app:layout_constraintVertical_bias="0.392"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp">
 
@@ -71,9 +71,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textColor="#A3E34C"
             android:entries="@array/langues_array"
-            android:fontFamily="@font/dpcomic" />
+            android:fontFamily="@font/dpcomic"
+            android:textColor="#A3E34C" />
     </LinearLayout>
 
     <Button
