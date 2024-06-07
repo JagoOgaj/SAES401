@@ -16,12 +16,16 @@
     <string name="inventory">Inventaire</string>
     <string name="parametre">Paramètre</string>
     <string name="save">Enregistrer</string>
-    <string name="langue">Langage</string>
+    <string name="langue">Langue :  </string>
     <string-array name="langues_array">
         <item>Français</item>
         <item>Anglais</item>
     </string-array>
     <string name="menu">Menu principal</string>
     <string name="take">Prendre</string>
-
+    <string name="volume">Volume :  </string>
+    <string name = "saveSetting">Paramètres sauvegardés</string>
+    <string name="credits_text">
+        "Ce jeu a été créé par ALIOUI Scander, OKI Samy et CHAOUCH Zakaria. Un grand merci à tous ceux qui ont contribué à ce projet et à tous les joueurs qui nous ont soutenus tout au long de cette aventure. Nous espérons que vous avez apprécié jouer autant que nous avons pris plaisir à créer ce jeu. Restez à l\'écoute pour nos futures créations!"
+    </string>
 </resources>

@@ -15,11 +15,16 @@
     <string name="inventory">Inventory</string>
     <string name="parametre">Parameter</string>
     <string name="save">Save</string>
-    <string name="langue">Language</string>
+    <string name="langue">Language :  </string>
     <string-array name="langues_array">
         <item>French</item>
         <item>English</item>
     </string-array>
     <string name="menu">Main menu</string>
     <string name="take">Take</string>
+    <string name="volume">Volume :  </string>
+    <string name = "saveSetting">Saved parameters</string>
+    <string name="credits_text">
+        "This game was created by ALIOUI Scander, OKI Samy and CHAOUCH Zakaria. A huge thank you to everyone who contributed to this project and to all the players who have supported us throughout this adventure. We hope you enjoyed playing as much as we enjoyed creating this game. Stay tuned for our future creations!"
+    </string>
 </resources>
