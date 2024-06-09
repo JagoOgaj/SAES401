@@ -167,7 +167,7 @@ public class JsonReader {
 
     public static int getIndexBoss(Context context, String levelFile) throws Exception {
         int indexBoss = getNumberEnemies(context, levelFile) == -1 ? -1
-                : getNumberEnemies(context, levelFile) -1;
+                : getNumberEnemies(context, levelFile);
         if (indexBoss == -1) throw new Exception("null indexForBoss");
         else return indexBoss;
     }
