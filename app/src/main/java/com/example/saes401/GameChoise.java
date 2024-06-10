@@ -22,12 +22,12 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.soud.GameSound;
 import com.example.saes401.utilities.Item;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 public class GameChoise extends AppCompatActivity implements Utilities {
 
@@ -40,7 +40,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private ImageButton imageButton2;
     private ImageButton imageButton3;
     private Button buttonContinueToLevel;
-    ImageButton selectedButton = null;
+    private ImageButton selectedButton = null;
     private int currentEnemieIndex;
     private boolean levelStart;
     private boolean gameContinue;
@@ -57,7 +57,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         try {
             initFront();
         } catch (Exception e) {
-           Log.d("error -> initFront", e.getMessage());
+            Log.d("error -> initFront", e.getMessage());
         }
         setListener();
     }
@@ -95,6 +95,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
+        GameSound.playClickSound(this);
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
@@ -105,7 +106,6 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         this.intent.putExtra(GameConstant.KEY_DATA_MODEL, this.dataModel);
         startActivity(this.intent);
     }
-
 
     private boolean addItemToPlayer() throws Exception {
         boolean result = true;
@@ -126,41 +126,42 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     @Override
     public void setListener() {
         imageButton1.setOnClickListener(view -> {
-            onClickButton((JSONObject) imageButton1.getTag());
-            resetImageButtonSelection();
-            selectedButton = imageButton1;
-            imageButton1.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
-            setContinueButon();
+            handleItemClick(view, imageButton1);
         });
         imageButton2.setOnClickListener(view -> {
-            onClickButton((JSONObject) imageButton2.getTag());
-            resetImageButtonSelection();
-            selectedButton = imageButton2;
-            imageButton2.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
-            setContinueButon();
+            handleItemClick(view, imageButton2);
         });
         imageButton3.setOnClickListener(view -> {
-            onClickButton((JSONObject) imageButton3.getTag());
-            resetImageButtonSelection();
-            selectedButton = imageButton3;
-            imageButton3.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
-           setContinueButon();
+            handleItemClick(view, imageButton3);
+        });
+        buttonContinueToLevel.setOnClickListener(view -> {
+            GameSound.playClickSound(this);
+            setContinueButon();
         });
         buttonContinueToLevel.setVisibility(View.INVISIBLE);
+    }
+
+    private void handleItemClick(View view, ImageButton button) {
+        GameSound.playClickSound(this);
+        onClickButton((JSONObject) button.getTag());
+        resetImageButtonSelection();
+        selectedButton = button;
+        button.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
+        setContinueButon();
     }
 
     private void setContinueButon() {
         buttonContinueToLevel.setVisibility(View.VISIBLE);
         buttonContinueToLevel.setOnClickListener(v -> {
+            GameSound.playClickSound(this);
             try {
-                if (getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE)){
+                if (getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE)) {
                     currentEnemieIndex = JsonReader.getIndexBoss(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
                 }
-                if(!addItemToPlayer()) {
-                    this.playerInstance.setInentoryRandom(getItem( (JSONObject) selectedButton.getTag()));
+                if (!addItemToPlayer()) {
+                    this.playerInstance.setInentoryRandom(getItem((JSONObject) selectedButton.getTag()));
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 Log.d("error -> addItemPlayer", e.getMessage());
             }
             startActivityGame();
@@ -189,14 +190,13 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         outState.putParcelable(GameConstant.KEY_DATA_MODEL, this.dataModel);
     }
 
-
     private void showAlertDialog(TextView textView, String message) {
         textView.setText(message);
         textView.setTextColor(Color.RED);
     }
 
     private void initFrontWarning() throws Exception {
-        if (playerInstance.isFullinventory()){
+        if (playerInstance.isFullinventory()) {
             showAlertDialog(getTextViewWarning(), "L'insertion d'un nouveau item remplacera un item aquis de maniere aleatoire");
         }
     }
@@ -204,17 +204,15 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private void initFront() throws Exception {
         initItems();
         initFrontWarning();
-
     }
 
-    private void initItems(){
+    private void initItems() {
         JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
         try {
             if (objets != null && objets.length() > 0) {
                 JSONObject objet1 = objets.getJSONObject(0);
                 imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
                 imageButton1.setTag(objet1);
-
             }
             if (objets != null && objets.length() > 1) {
                 JSONObject objet2 = objets.getJSONObject(1);
@@ -235,7 +233,6 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         try {
             String objetName = objet.getString("nom");
             String objetDescription = objet.getString("description");
-
 
             // Créez le texte avec les labels et les valeurs
             String labelObjet = "Objet : ";
@@ -258,7 +255,6 @@ public class GameChoise extends AppCompatActivity implements Utilities {
             spannable.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-
             // Affichez le SpannableString dans le TextView
             textLevel.setText(spannable);
         } catch (Exception e) {
@@ -275,8 +271,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         imageButton3.clearColorFilter();
     }
 
-    private TextView getTextViewWarning(){
+    private TextView getTextViewWarning() {
         return findViewById(R.id.textWarning);
     }
-
 }

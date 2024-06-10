@@ -3,6 +3,7 @@ package com.example.saes401.story;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.soud.GameSound;
 import com.example.saes401.utilities.GameFight;
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
@@ -210,6 +212,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     @Override
     public void run() {
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
+        MediaPlayer mp = GameSound.launchFightSound(this);
         while (true) {
             synchronized (lock) {
                 try {
@@ -301,9 +304,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 Log.d("error -> InitFront", Objects.requireNonNull(e.getMessage()));
             }
         }
+        GameSound.stopFightSound(this, mp);
         startActivityGame();
     }
-
 
     private void initFront() throws Exception {
         setTextGameplay(-1);
@@ -356,7 +359,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         initAvatar(getPlayerImageView(), R.drawable.sf_gorath_le_guerrier, false);
         initLinearItems(getViewChoiseLoot(), playerInstance.getInventory(), true);
     }
-
 
     private void initFrontHeart(LinearLayout layout, int hp, String prefix) {
         layout.removeAllViews();
@@ -552,6 +554,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                     clearColorFilterImageView(imageViewsPLayer);
                     Item item = (Item) imageView.getTag();
                     indexItemChoose = playerInstance.getInventory().getIndexOfItem(item);
@@ -587,6 +590,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void setListenerButtonTakeItem(boolean isEnd) {
         if (!isEnd) {
             getButtonTakeItem().setOnClickListener(view -> {
+                GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                 removeClickListeners();
                 clearColorFilterImageView(imageViewsPLayer);
                 getTextViewGamePLay().setText("");
@@ -600,6 +604,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             getButtonTakeItem().setText("Continuer");
             getButtonTakeItem().setVisibility(View.VISIBLE);
             getButtonTakeItem().setOnClickListener(view -> {
+                GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                 synchronized (lock) {
                     lock.notify();
                 }
@@ -608,3 +613,4 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
 }
+

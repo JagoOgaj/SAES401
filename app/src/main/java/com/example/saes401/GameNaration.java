@@ -1,6 +1,7 @@
 package com.example.saes401;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,7 @@ import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.OnTextLoadedListener;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.soud.GameSound;
 
 public class GameNaration extends AppCompatActivity implements Utilities {
     private Intent intent;
@@ -32,6 +33,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private Player playerInstance;
     private DataModel dataModel;
     private volatile boolean clickScreen = false;
+    private static MediaPlayer narrationMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -53,6 +55,23 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (narrationMediaPlayer == null) {
+            narrationMediaPlayer = GameSound.narrationSound(this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+    }
+
+    private void stopNarrationSound() {
+        if (narrationMediaPlayer != null) {
+            GameSound.stopNarrationSound(narrationMediaPlayer);
+            narrationMediaPlayer = null;
+        }
     }
 
     @Override
@@ -67,6 +86,8 @@ public class GameNaration extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
+        GameSound.playClickSound(this);
+        stopNarrationSound();
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_NARATION);
@@ -108,26 +129,23 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     @Override
     public void setListener() {
         ConstraintLayout rootLayout = findViewById(R.id.rootLayout);
-        rootLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    stopLoadingText();
-                    try {
-                        loadFullNaration(getTextView(), naration, getButtonContinue());
-                    } catch (Exception e) {
-                        Log.d("Error -> InitContinueButton", e.getMessage());
-                    }
+        rootLayout.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                GameSound.playClickSound(this);
+                stopLoadingText();
+                try {
+                    loadFullNaration(getTextView(), naration, getButtonContinue());
+                } catch (Exception e) {
+                    Log.d("Error -> InitContinueButton", e.getMessage());
                 }
-                return false;
             }
+            return false;
         });
     }
 
     private void loadFullNaration(TextView textView, String naration, Button button) throws Exception {
         textView.setText(naration);
         initContinueButton(button);
-
     }
 
     private void launchNaration() throws Exception {
@@ -151,7 +169,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
             for (int k = 0; k < naration.length(); k++) {
                 final int finalK = k;
                 handler.postDelayed(() -> {
-                    if (clickScreen) return ;
+                    if (clickScreen) return;
                     textView.append(String.valueOf(naration.charAt(finalK)));
                     if (finalK == naration.length() - 1 && listener != null) {
                         try {
@@ -171,9 +189,12 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         });
     }
 
-    private void initContinueButton(Button btn) throws Exception{
+    private void initContinueButton(Button btn) throws Exception {
         btn.setVisibility(View.VISIBLE);
-        btn.setOnClickListener(v -> startActivityGame());
+        btn.setOnClickListener(v -> {
+            GameSound.playClickSound(this);
+            startActivityGame();
+        });
     }
 
     private TextView getTextView() {
@@ -203,3 +224,5 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         clickScreen = true;
     }
 }
+
+

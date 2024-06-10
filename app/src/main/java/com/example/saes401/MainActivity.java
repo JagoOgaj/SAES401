@@ -3,25 +3,22 @@ package com.example.saes401;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.db.DataModel;
-import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.Settings;
 import com.example.saes401.helper.Utilities;
-
+import com.example.saes401.soud.GameSound;
 
 public class MainActivity extends AppCompatActivity implements Utilities {
     private Intent intent;
-    String selectedLanguage;
+    private static MediaPlayer homeScreenMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,42 +28,75 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         setContentView(R.layout.activity_main);
         this.setListener();
 
+        if (homeScreenMediaPlayer == null) {
+            homeScreenMediaPlayer = GameSound.homeScreenSound(this);
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (homeScreenMediaPlayer != null && !homeScreenMediaPlayer.isPlaying()) {
+            homeScreenMediaPlayer.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+    }
+
+    private void stopHomeScreenSound() {
+        if (homeScreenMediaPlayer != null) {
+            GameSound.stopHomeScreenSound(homeScreenMediaPlayer);
+            homeScreenMediaPlayer = null;
+        }
+    }
 
     private void onClickCredits() {
+        GameSound.playClickSound(this);
+        stopHomeScreenSound();
         intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 
     private void onClickStart() {
+        GameSound.playClickSound(this);
+        stopHomeScreenSound();
         startActivityGame();
     }
 
     private void onClickContinue() {
+        GameSound.playClickSound(this);
+        stopHomeScreenSound();
+        // Implementation for continue action
     }
 
-    private void onClickSettings() {startParametre();}
-
+    private void onClickSettings() {
+        GameSound.playClickSound(this);
+        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+        startParametre();
+    }
 
     @Override
     public void initAttibuts() {
-
+        // Initialize attributes if necessary
     }
 
     @Override
     public void startActivityGameChoise() {
-        //void
+        // Not used
     }
 
     @Override
     public void startActivityGameNaration() {
-        //void
+        // Not used
     }
 
     @Override
     public void statActivityStory() {
-        //void
+        // Not used
     }
 
     @Override
@@ -81,11 +111,12 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         intent.putExtra(GameConstant.KEY_DATA_MODEL, dataModel);
         startActivity(intent);
     }
+
     public void startParametre() {
         intent = new Intent(this, ParametreActivity.class);
         startActivity(intent);
-
     }
+
     @Override
     public void setListener() {
         findViewById(R.id.creditsButton).setOnClickListener(view -> onClickCredits());
@@ -94,13 +125,12 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
     }
 
-
     private DataModel initDataModel() {
-        //don't insert in database
         DataModel dataModel = new DataModel();
         dataModel.addStart();
         return dataModel;
     }
+
     private void loadParametre() {
         // Charger la langue
         String language = Settings.loadLanguage(this);
@@ -110,8 +140,5 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         int volume = Settings.loadVolume(this);
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-
-
     }
-
 }
