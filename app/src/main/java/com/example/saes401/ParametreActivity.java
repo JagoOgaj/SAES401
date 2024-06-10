@@ -2,8 +2,6 @@ package com.example.saes401;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.helper.Settings;
+import com.example.saes401.soud.GameSound;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -29,7 +27,6 @@ public class ParametreActivity extends AppCompatActivity {
     String selectedLanguage;
     int volume;
     private AudioManager audioManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +42,8 @@ public class ParametreActivity extends AppCompatActivity {
         setupSpinner();
         setupSeekBar();
         setupButtons();
-
     }
+
     private void setupSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.langues_array, R.layout.spinner_vert);
@@ -58,13 +55,12 @@ public class ParametreActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Ce code est exécuté lorsque l'utilisateur sélectionne une langue dans le Spinner
-                selectedLanguage=parent.getItemAtPosition(position).toString();
-                if(Objects.equals(selectedLanguage, "French") || Objects.equals(selectedLanguage, "Français")){
-                    selectedLanguage="fr";
-       }
-        else if (Objects.equals(selectedLanguage, "English") || Objects.equals(selectedLanguage, "Anglais")){
-                    selectedLanguage="en";
-        }
+                selectedLanguage = parent.getItemAtPosition(position).toString();
+                if (Objects.equals(selectedLanguage, "French") || Objects.equals(selectedLanguage, "Français")) {
+                    selectedLanguage = "fr";
+                } else if (Objects.equals(selectedLanguage, "English") || Objects.equals(selectedLanguage, "Anglais")) {
+                    selectedLanguage = "en";
+                }
             }
 
             @Override
@@ -73,6 +69,7 @@ public class ParametreActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setupSeekBar() {
         //objet audio
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -91,7 +88,7 @@ public class ParametreActivity extends AppCompatActivity {
                     // Applique le volume sélectionné au flux de musique
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, AudioManager.FLAG_SHOW_UI);
                     // FLAG_SHOW_UI permet d'afficher un indicateur visuel de changement de volume sur l'écran
-                    volume =progress;
+                    volume = progress;
                 }
             }
 
@@ -106,25 +103,24 @@ public class ParametreActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setupButtons() {
-
         sauvegardeButton.setOnClickListener(v -> {
-
-                Settings.saveSettings(this,volume,selectedLanguage);
+            GameSound.playClickSound(v.getContext()); // Ajout du son de clic
+            Settings.saveSettings(this, volume, selectedLanguage);
             String message = "Saved parameters";
-            if(selectedLanguage == "fr"){
-                    message = "Paramètres sauvegardés";
-                }
+            if (selectedLanguage.equals("fr")) {
+                message = "Paramètres sauvegardés";
+            }
 
             Toast.makeText(ParametreActivity.this, message, Toast.LENGTH_SHORT).show();
-                 Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+            finish(); // Retourne à l'activité précédente (MainActivity)
         });
 
         mainButton.setOnClickListener(v -> {
+            GameSound.playClickSound(v.getContext()); // Ajout du son de clic
             // Code pour retourner au menu principal
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            finish(); // Retourne à l'activité précédente (MainActivity)
         });
     }
 
@@ -138,6 +134,9 @@ public class ParametreActivity extends AppCompatActivity {
         Locale locale = new Locale(langue);
         return locale.getDisplayName(locale);
     }
+}
+
+
 //    private void save(int volume, String langue) {
 //        SharedPreferences sharedPreferences = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -182,5 +181,3 @@ public class ParametreActivity extends AppCompatActivity {
 //        }
 //    }
 
-
-}
