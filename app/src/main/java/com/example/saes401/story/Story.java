@@ -50,6 +50,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private Map<ImageView, View.OnClickListener> savedOnClickListeners = new HashMap<>();
     private final Object lock = new Object();
     private DataModel dataModel;
+    private Random random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +142,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     @Override
+    public void startActivityPlayerChoise() {
+
+    }
+
+    @Override
     public void setListener() {
         setListenerImageView();
     }
@@ -176,14 +182,14 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         thread.start();
     }
 
-    private int getResultPlayer(int[] dices) {
+    private int getResultPlayer(int[] dices, boolean useItem) {
         int resultPlayer = 0;
         int result = 0;
         for (int i = 0; i < dices.length; i++) {
             result += dices[i];
         }
         try {
-            resultPlayer = fightInstance.getResultPlayer(result);
+            resultPlayer = fightInstance.getResultPlayer(result, useItem);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -214,6 +220,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
         MediaPlayer mp = GameSound.launchFightSound(this);
         while (true) {
+            runOnUiThread(() -> setVisibilityButtonTake(true));
             synchronized (lock) {
                 try {
                     runOnUiThread(() -> {
@@ -227,21 +234,42 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             runOnUiThread(() -> {
                 getInformationTextView().setText("");
             });
-            int[] dicesResultPlayer = fightInstance.getDicePlayer();
-            runOnUiThread(() -> animateDiceRoll(dicesResultPlayer, true, -1));
+            int[] dicesResultPlayer = new int[0];
+            try {
+                dicesResultPlayer = fightInstance.getDicePlayer();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            int[] finalDicesResultPlayer = dicesResultPlayer;
+            runOnUiThread(() -> animateDiceRoll(finalDicesResultPlayer, true, -1));
             waitForDelay();
-            int resultPlayer = getResultPlayer(dicesResultPlayer);
-            runOnUiThread(() -> updateDiceResult(dicesResultPlayer, resultPlayer, true));
+            int resultPlayer = getResultPlayer(dicesResultPlayer, indexItemChoose != -1);
+            int[] finalDicesResultPlayer1 = dicesResultPlayer;
+            runOnUiThread(() -> {
+                try {
+                    initLinearItems(getViewChoiseLoot(), playerInstance.getInventory(), true);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            runOnUiThread(() -> updateDiceResult(finalDicesResultPlayer1, resultPlayer, true));
             waitForDelay();
             int[] numberDicesEnemie = new int[0];
-            Item itemEnemie = currentEnemieInstance.getItem();
+            random = new Random();
+            boolean souldGetItem = random.nextBoolean();
+            Item itemEnemie;
+            if (true) {
+                itemEnemie = currentEnemieInstance.getItem();
+            } else {
+                itemEnemie = null;
+            }
             try {
                 numberDicesEnemie = fightInstance.getDiceEnemie();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             int[] finalNumberDicesEnemie1 = numberDicesEnemie;
-            runOnUiThread(() -> animateDiceRoll(finalNumberDicesEnemie1, false, currentEnemieInstance.getInventory().getIndexOfItem(itemEnemie)));
+            runOnUiThread(() -> animateDiceRoll(finalNumberDicesEnemie1, false, itemEnemie == null ? -1 : currentEnemieInstance.getInventory().getIndexOfItem(itemEnemie)));
             waitForDelay();
             int resultEnemie = 0;
             try {
@@ -251,6 +279,13 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             }
             int finalResultEnemie = resultEnemie;
             int[] finalNumberDicesEnemie = numberDicesEnemie;
+            runOnUiThread(() -> {
+                try {
+                    initLinearItems(getLinearItemsEnemie(), currentEnemieInstance.getInventory(), false);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
             runOnUiThread(() -> updateDiceResult(finalNumberDicesEnemie, finalResultEnemie, false));
             waitForDelay();
             this.dataModel.addDamageToEnemy(resultPlayer);
@@ -263,7 +298,8 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
                 runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
             } else {
-                Random random = new Random();
+                //egalité
+                random = new Random();
                 if (random.nextInt(2) == 1) {
                     currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
                     runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
@@ -313,7 +349,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         setScoreText(getTextScoreEnemie(), 0);
         setScoreText(getTextScorePlayer(), 0);
         setCurrentLevelFront();
-        setVisibilityButtonTake(false);
+        setVisibilityButtonTake(true);
+        getButtonTakeItem().setText("use dice");
+        setListenerButtonTakeItem(false);
         initFrontPlayer();
         initFrontEnemie();
         setListener();
@@ -356,7 +394,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
 
     private void initFrontPlayer() throws Exception {
         initFrontHeart(getLinearHeartContainerPlayer(), playerInstance.getHPplayer(), GameConstant.FORMAT_HEART_PLAYER);
-        initAvatar(getPlayerImageView(), R.drawable.sf_gorath_le_guerrier, false);
+        initAvatar(getPlayerImageView(), getResources().getIdentifier(playerInstance.getImage(), "drawable", getPackageName()), false);
         initLinearItems(getViewChoiseLoot(), playerInstance.getInventory(), true);
     }
 
@@ -437,7 +475,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void animateDiceRoll(int[] resultDices, boolean isPlayer, int itemEnemie) {
         getTextViewGamePLay().setText("");
         getViewGameplay().removeAllViews();
-        if (!isPlayer) {
+        if (!isPlayer && itemEnemie != -1) {
             imageViewsEnemie.get(itemEnemie).setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             getTextViewGamePLay().setText(currentEnemieInstance.getInventory().getItem(itemEnemie).getDesc());
             getInformationTextView().setText(currentEnemieInstance.getName() + " joue");
@@ -560,7 +598,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     indexItemChoose = playerInstance.getInventory().getIndexOfItem(item);
                     imageView.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
                     getTextViewGamePLay().setText(String.valueOf(playerInstance.getInventory().getItem(indexItemChoose).getDesc()));
-                    setVisibilityButtonTake(true);
+                    getButtonTakeItem().setText("USE");
                     setListenerButtonTakeItem(false);
                 }
             };
@@ -592,9 +630,10 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             getButtonTakeItem().setOnClickListener(view -> {
                 GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                 removeClickListeners();
-                clearColorFilterImageView(imageViewsPLayer);
                 getTextViewGamePLay().setText("");
-                playerInstance.setCurrentItem(indexItemChoose);
+                if(indexItemChoose != -1){
+                    playerInstance.setCurrentItem(indexItemChoose);
+                }
                 setVisibilityButtonTake(false);
                 synchronized (lock) {
                     lock.notify();

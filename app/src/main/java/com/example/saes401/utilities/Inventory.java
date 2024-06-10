@@ -87,6 +87,27 @@ public class Inventory implements Parcelable {
         return items.length == 0;
     }
 
+    public void removeItem(Item item) {
+        int index = getIndexOfItem(item);
+        if (index < 0 || index >= items.length) {
+            throw new IllegalArgumentException("Index out of bounds or array is null");
+        }
+
+        // Créer un nouveau tableau de taille inférieure de 1
+        Item[] newArray = new Item[items.length - 1];
+
+        // Copier les éléments avant l'index
+        for (int i = 0; i < index; i++) {
+            newArray[i] = items[i];
+        }
+
+        // Copier les éléments après l'index
+        for (int i = index; i < items.length - 1; i++) {
+            newArray[i] = items[i + 1];
+        }
+        this.items = newArray;
+    }
+
     public int getIndexOfItem(Item item){
         for (int i = 0; i < items.length; i++)
             if (items[i].equals(item)) return i;

@@ -109,6 +109,10 @@ public class Enemie extends GameCharacter implements Parcelable {
         return inventory;
     }
 
+    public void removeItem(Item item) {
+        this.inventory.removeItem(item);
+    }
+
     public Item getItem() {
         //admet que son inventaire est full
         Random random = new Random();

@@ -24,12 +24,15 @@ public class GameFight {
         this.context = context;
     }
 
-    public int[] getDicePlayer() {
+    public int[] getDicePlayer() throws Exception {
+        /*
         int[] dices = new int[random.nextInt(3) + 1];
         for (int i = 0; i < dices.length; i++) {
             dices[i] = random.nextInt(6) + 1;
         }
         return dices;
+         */
+        return interpreter(this.player.getDegat());
     }
 
     private int[] interpreter(String s) throws Exception {
@@ -46,23 +49,33 @@ public class GameFight {
         );
     }
 
-    public int getResultPlayer(int result) throws Exception {
+    public int getResultPlayer(int result, boolean useItem) throws Exception {
         int resultPlayer = result;
-        String bonus = player.getItem().getDamage();
-        Object[] split = splitOperationObjectDamage(bonus);
-        if (split[0].equals("+")) {
-            resultPlayer += (int) split[1];
-        }
-        else if (split[0].equals("x")) {
-            resultPlayer *= (int) split[1];
+        if(useItem){
+            Item item = player.getItem();
+            String bonus = item.getDamage();
+            Object[] split = splitOperationObjectDamage(bonus);
+            if (split[0].equals("+")) {
+                resultPlayer += (int) split[1];
+            }
+            else if (split[0].equals("x")) {
+                resultPlayer *= (int) split[1];
+            }
+            this.player.removeItem(item);
         }
         return resultPlayer;
     }
 
     public int getResultEnemie(int result, Item item) throws Exception {
         int resultEnemie = result;
-        Object[] split = splitOperationObjectDamage(item.getDamage());
-        return resultEnemie = split[0].equals("+") ? resultEnemie + (int) split[1] : resultEnemie * (int) split[1];
+        if (item != null){
+            this.enemie.removeItem(item);
+            Object[] split = splitOperationObjectDamage(item.getDamage());
+            return resultEnemie = split[0].equals("+") ? resultEnemie + (int) split[1] : resultEnemie * (int) split[1];
+        }
+        else {
+            return resultEnemie;
+        }
     }
 
 

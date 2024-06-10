@@ -15,7 +15,7 @@ public interface DataMethodsAnalytics {
     public abstract void putMaxDamageToPlayer(); // put max damage to player
     public abstract void addDamageToEnemy(int damage); // add to arrayList damage to enemy by player
     public abstract int getMaxDamageToEnemy(); // get damage to enemy by player
-    public void putMaxDamageToEnemy(); // put max damage to enemy by player
+    public abstract void putMaxDamageToEnemy(); // put max damage to enemy by player
     public abstract void addHeartLost(int heartLost); // add to arrayList heartLost
     public abstract int getHeartLost(); // get heartLost
     public abstract void putHeartLost(); // put heartLost in dataBase
