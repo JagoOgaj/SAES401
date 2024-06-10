@@ -114,13 +114,15 @@ public class ParametreActivity extends AppCompatActivity {
             }
 
             Toast.makeText(ParametreActivity.this, message, Toast.LENGTH_SHORT).show();
-            finish(); // Retourne à l'activité précédente (MainActivity)
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
         mainButton.setOnClickListener(v -> {
             GameSound.playClickSound(v.getContext()); // Ajout du son de clic
             // Code pour retourner au menu principal
-            finish(); // Retourne à l'activité précédente (MainActivity)
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
     }
 
