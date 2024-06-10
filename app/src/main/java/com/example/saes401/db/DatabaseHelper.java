@@ -1,6 +1,7 @@
 package com.example.saes401.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -26,9 +27,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_IS_WIN + " INTEGER " + // Nouvelle colonne
                     ");";
 
-    public DatabaseHelper(Context context){
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_PLAYER_DATA);
@@ -39,12 +41,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
     public String getDatabaseName() {
         return DATABASE_NAME;
     }
-    public String getTotalCount(){
+
+    public String getTotalCount() {
 
         return "SELECT COUNT(*) FROM " + TABLE_NAME + ";";
+    }
+
+    public Cursor getDataByPage(int limit, int offset) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " LIMIT ? OFFSET ?";
+        return db.rawQuery(query, new String[]{String.valueOf(limit), String.valueOf(offset)});
     }
 
 

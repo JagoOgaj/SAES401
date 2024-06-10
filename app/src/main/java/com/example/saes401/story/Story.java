@@ -43,11 +43,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private boolean gameContinue;
     private boolean levelStart;
     private Thread thread;
-    private Map<String, ImageView> heartMap = new HashMap<String, ImageView>();
-    private ArrayList<ImageView> imageViewsPLayer = new ArrayList<ImageView>();
-    private ArrayList<ImageView> imageViewsEnemie = new ArrayList<ImageView>();
+    private final Map<String, ImageView> heartMap = new HashMap<String, ImageView>();
+    private final ArrayList<ImageView> imageViewsPLayer = new ArrayList<ImageView>();
+    private final ArrayList<ImageView> imageViewsEnemie = new ArrayList<ImageView>();
     private int indexItemChoose = -1;
-    private Map<ImageView, View.OnClickListener> savedOnClickListeners = new HashMap<>();
+    private final Map<ImageView, View.OnClickListener> savedOnClickListeners = new HashMap<>();
     private final Object lock = new Object();
     private DataModel dataModel;
     private Random random;
@@ -224,7 +224,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             synchronized (lock) {
                 try {
                     runOnUiThread(() -> {
-                        getInformationTextView().setText("Selectionnez un item");
+                        getInformationTextView().setText(R.string.item);
                     });
                     lock.wait();
                 } catch (InterruptedException e) {
@@ -299,19 +299,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
             } else {
                 //egalité
-                random = new Random();
-                if (random.nextInt(2) == 1) {
-                    currentEnemieInstance.setHP(currentEnemieInstance.getHPEnemie() - 1);
-                    runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
-                } else {
-                    this.dataModel.addHeartLost(1);
-                    playerInstance.setHP(playerInstance.getHPplayer() - 1);
-                    runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), true));
-                }
-                runOnUiThread(() -> {
-                    setFrontHeart(GameConstant.FORMAT_HEART_PLAYER, playerInstance.getHPplayer(), false);
-                    setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), false);
-                });
+                getTextViewGamePLay().setText(R.string.nullMatchFight);
             }
             if (playerInstance.getHPplayer() <= 0 || currentEnemieInstance.getHPEnemie() == 0) {
                 runOnUiThread(() -> {
@@ -320,7 +308,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     getTextScoreEnemie().setText("");
                     getTextScorePlayer().setText("");
                     getInformationTextView().setText("");
-                    String text = playerInstance.getHPplayer() == 0 ? "Vous avez perdu" : "Vous avez gagnez";
+                    int text = playerInstance.getHPplayer() == 0 ? R.string.looseFight : R.string.winFight;
                     getTextViewGamePLay().setText(text);
                 });
                 waitForDelay();
@@ -350,7 +338,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         setScoreText(getTextScorePlayer(), 0);
         setCurrentLevelFront();
         setVisibilityButtonTake(true);
-        getButtonTakeItem().setText("use dice");
+        getButtonTakeItem().setText(R.string.useDice);
         setListenerButtonTakeItem(false);
         initFrontPlayer();
         initFrontEnemie();
@@ -478,7 +466,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         if (!isPlayer && itemEnemie != -1) {
             imageViewsEnemie.get(itemEnemie).setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             getTextViewGamePLay().setText(currentEnemieInstance.getInventory().getItem(itemEnemie).getDesc());
-            getInformationTextView().setText(currentEnemieInstance.getName() + " joue");
         }
         for (int i = 0; i < resultDices.length; i++) {
             ImageView imageView = initImageView(R.drawable.animation_dice_test, true);
@@ -593,19 +580,31 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 @Override
                 public void onClick(View view) {
                     GameSound.playClickSound(view.getContext()); // Ajout du son de clic
-                    clearColorFilterImageView(imageViewsPLayer);
                     Item item = (Item) imageView.getTag();
-                    indexItemChoose = playerInstance.getInventory().getIndexOfItem(item);
-                    imageView.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
-                    getTextViewGamePLay().setText(String.valueOf(playerInstance.getInventory().getItem(indexItemChoose).getDesc()));
-                    getButtonTakeItem().setText("USE");
-                    setListenerButtonTakeItem(false);
+                    int selectedItemIndex = playerInstance.getInventory().getIndexOfItem(item);
+
+                    if (indexItemChoose == selectedItemIndex) {
+                        // Désélectionner l'item
+                        imageView.clearColorFilter();
+                        getTextViewGamePLay().setText("");
+                        getButtonTakeItem().setText(R.string.useDice); // Remettre le texte original
+                        indexItemChoose = -1; // Réinitialiser l'index de l'item sélectionné
+                    } else {
+                        // Sélectionner l'item
+                        clearColorFilterImageView(imageViewsPLayer);
+                        indexItemChoose = selectedItemIndex;
+                        imageView.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
+                        getTextViewGamePLay().setText(item.getDesc());
+                        getButtonTakeItem().setText(R.string.use);
+                        setListenerButtonTakeItem(false);
+                    }
                 }
             };
             savedOnClickListeners.put(imageView, listener);
             imageView.setOnClickListener(listener);
         }
     }
+
 
     private void removeClickListeners() {
         for (ImageView imageView : imageViewsPLayer) {
@@ -631,7 +630,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                 removeClickListeners();
                 getTextViewGamePLay().setText("");
-                if(indexItemChoose != -1){
+                if (indexItemChoose != -1) {
                     playerInstance.setCurrentItem(indexItemChoose);
                 }
                 setVisibilityButtonTake(false);
@@ -640,7 +639,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 }
             });
         } else {
-            getButtonTakeItem().setText("Continuer");
+            getButtonTakeItem().setText(R.string.continue_game);
             getButtonTakeItem().setVisibility(View.VISIBLE);
             getButtonTakeItem().setOnClickListener(view -> {
                 GameSound.playClickSound(view.getContext()); // Ajout du son de clic
@@ -650,6 +649,4 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             });
         }
     }
-
 }
-

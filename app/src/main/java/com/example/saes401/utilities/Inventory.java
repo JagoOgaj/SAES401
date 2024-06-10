@@ -62,7 +62,7 @@ public class Inventory implements Parcelable {
         items = newItems;
     }
 
-    public void addItemRandomPlayer(Item item){
+    public void addItemRandomPlayer(Item item) {
         Random random = new Random();
         this.items[random.nextInt(this.items.length)] = item;
     }
@@ -71,7 +71,7 @@ public class Inventory implements Parcelable {
         return this.slots;
     }
 
-    public int getCurentLength() throws Exception{
+    public int getCurentLength() throws Exception {
         return getLastIndex();
     }
 
@@ -108,11 +108,12 @@ public class Inventory implements Parcelable {
         this.items = newArray;
     }
 
-    public int getIndexOfItem(Item item){
+    public int getIndexOfItem(Item item) {
         for (int i = 0; i < items.length; i++)
             if (items[i].equals(item)) return i;
         return -1;
     }
+
     public boolean isFullInventory() throws Exception {
         return getLastIndex() == slots;
     }
@@ -122,7 +123,7 @@ public class Inventory implements Parcelable {
     }
 
 
-    private int getLastIndex() throws Exception{
+    private int getLastIndex() throws Exception {
         int index = -1;
         for (int i = 0; i < this.items.length; i++)
             if (this.items[i] == null) return i;

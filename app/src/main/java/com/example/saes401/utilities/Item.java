@@ -60,10 +60,11 @@ public class Item implements Parcelable {
         damage = newDamage;
     }
 
-    public String getImage(){
+    public String getImage() {
         return image;
     }
-    public String getDesc(){
+
+    public String getDesc() {
         return desc;
     }
 }

@@ -111,6 +111,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     public void startActivityPlayerChoise() {
         //void
     }
+
     private boolean addItemToPlayer() throws Exception {
         boolean result = true;
         Item item = getItem((JSONObject) selectedButton.getTag());
@@ -201,7 +202,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     private void initFrontWarning() throws Exception {
         if (playerInstance.isFullinventory()) {
-            showAlertDialog(getTextViewWarning(), "L'insertion d'un nouveau item remplacera un item aquis de maniere aleatoire");
+            showAlertDialog(getTextViewWarning(), String.valueOf(R.string.errorInsertItem));
         }
     }
 
