@@ -33,4 +33,11 @@
     <string name="stat">Statistics</string>
     <string name = "next">Next</string>
     <string name = "prev">Previous</string>
+    <string name="takeItem">Take</string>
+    <string name="nullMatchFight">Equality</string>
+    <string name="winFight">You have win</string>
+    <string name="looseFight">You lost</string>
+    <string name="useDice">Use dices</string>
+    <string name="use">Use</string>
+    <string name="errorInsertItem">Inserting a new item replaces a randomly acquired item</string>
 </resources>

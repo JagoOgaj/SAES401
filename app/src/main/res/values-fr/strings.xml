@@ -34,7 +34,11 @@
     <string name = "stat">Statistiques</string>
     <string name = "next">Suivant</string>
     <string name = "prev">Précédent</string>
-
-
-
+    <string name="takeItem">Prendre</string>
+    <string name="nullMatchFight">" Egalité"</string>
+    <string name="winFight">Vous avez gagné</string>
+    <string name="looseFight">Vous avez perdu</string>
+    <string name="useDice">Utiliser les dès</string>
+    <string name="use">Utiliser</string>
+    <string name="errorInsertItem">L\'insertion d\'un nouveau item remplacer un item acquis de maniere aleatoire</string>
 </resources>

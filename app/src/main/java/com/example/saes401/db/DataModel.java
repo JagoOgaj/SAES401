@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.example.saes401.helper.DataMethodsAnalytics;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -107,24 +108,6 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
     }
 
     @Override
-    public void putTime() {
-        if (start != null && end != null) {
-            try {
-                String time = getTime();
-                ContentValues values = new ContentValues();
-                values.put("date", start.toString());
-                values.put("duration", time);
-
-                SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                db.insert("playerGame", null, values);
-                db.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
     public void addDamageToPlayer(int damage) {
         if (damageToPlayer == null) {
             damageToPlayer = new ArrayList<>();
@@ -138,18 +121,6 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
             return damageToPlayer.stream().max(Integer::compare).orElse(0);
         }
         return 0;
-    }
-
-    @Override
-    public void putMaxDamageToPlayer() {
-        int maxDamage = getMaxDamageToPlayer();
-
-        ContentValues values = new ContentValues();
-        values.put("max_damage_to_player", maxDamage);
-
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.insert("playerGame", null, values);
-        db.close();
     }
 
     @Override
@@ -169,18 +140,6 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
     }
 
     @Override
-    public void putMaxDamageToEnemy() {
-        int maxDamage = getMaxDamageToEnemy();
-
-        ContentValues values = new ContentValues();
-        values.put("max_damage_to_enemy", maxDamage);
-
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.insert("playerGame", null, values);
-        db.close();
-    }
-
-    @Override
     public void addHeartLost(int heartLost) {
         this.heartLost += heartLost;
     }
@@ -188,16 +147,6 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
     @Override
     public int getHeartLost() {
         return heartLost;
-    }
-
-    @Override
-    public void putHeartLost() {
-        ContentValues values = new ContentValues();
-        values.put("heart_lost", getHeartLost());
-
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.insert("playerGame", null, values);
-        db.close();
     }
 
     @Override
@@ -210,15 +159,6 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
         return lastScore;
     }
 
-    @Override
-    public void putLastScore() {
-        ContentValues values = new ContentValues();
-        values.put("score", getLastScore());
-
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.insert("playerGame", null, values);
-        db.close();
-    }
 
     @Override
     public void addWin(boolean b) {
@@ -231,12 +171,26 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
     }
 
     @Override
-    public void putWin() {
-        ContentValues values = new ContentValues();
-        values.put("is_win", getWin());
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        db.insert("playerGame", null, values);
-        db.close();
+    public void putAllData() {
+        if (start != null && end != null) {
+            try {
+                String time = getTime();
+                ContentValues values = new ContentValues();
+                values.put("date", start.toString());
+                values.put("duration", time);
+                values.put("max_damage_to_player", getMaxDamageToPlayer());
+                values.put("max_damage_to_enemy", getMaxDamageToEnemy());
+                values.put("heart_lost", getHeartLost());
+                values.put("score", getLastScore());
+                values.put("is_win", getWin());
+
+                SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                db.insert("playerGame", null, values);
+                db.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setDatabaseHelper(DatabaseHelper databaseHelper) {

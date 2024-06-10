@@ -51,14 +51,13 @@ public class GameFight {
 
     public int getResultPlayer(int result, boolean useItem) throws Exception {
         int resultPlayer = result;
-        if(useItem){
+        if (useItem) {
             Item item = player.getItem();
             String bonus = item.getDamage();
             Object[] split = splitOperationObjectDamage(bonus);
             if (split[0].equals("+")) {
                 resultPlayer += (int) split[1];
-            }
-            else if (split[0].equals("x")) {
+            } else if (split[0].equals("x")) {
                 resultPlayer *= (int) split[1];
             }
             this.player.removeItem(item);
@@ -68,12 +67,11 @@ public class GameFight {
 
     public int getResultEnemie(int result, Item item) throws Exception {
         int resultEnemie = result;
-        if (item != null){
+        if (item != null) {
             this.enemie.removeItem(item);
             Object[] split = splitOperationObjectDamage(item.getDamage());
             return resultEnemie = split[0].equals("+") ? resultEnemie + (int) split[1] : resultEnemie * (int) split[1];
-        }
-        else {
+        } else {
             return resultEnemie;
         }
     }

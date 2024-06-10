@@ -28,12 +28,10 @@ public class Settings {
     }
 
     public static void changeLanguage(Context context, String language) {
-
-            Locale locale = new Locale(language);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 }

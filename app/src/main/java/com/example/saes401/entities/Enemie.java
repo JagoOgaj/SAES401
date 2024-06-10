@@ -122,6 +122,7 @@ public class Enemie extends GameCharacter implements Parcelable {
     public String getDamage() {
         return damage;
     }
+
     public String getImageSrc() {
         return imageSrc;
     }

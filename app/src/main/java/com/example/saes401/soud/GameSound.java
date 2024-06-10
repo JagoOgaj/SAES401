@@ -6,13 +6,13 @@ import android.media.MediaPlayer;
 import com.example.saes401.R;
 
 public class GameSound {
-    public static MediaPlayer launchFightSound(Context context){
+    public static MediaPlayer launchFightSound(Context context) {
         MediaPlayer mp = MediaPlayer.create(context, R.raw.undertale);
         mp.start();
         return mp;
     }
 
-    public static void stopFightSound(Context context, MediaPlayer mp){
+    public static void stopFightSound(Context context, MediaPlayer mp) {
         mp.pause();
     }
 
@@ -28,6 +28,7 @@ public class GameSound {
             mp.release();
         }
     }
+
     public static MediaPlayer narrationSound(Context context) {
         MediaPlayer mp = MediaPlayer.create(context, R.raw.medievale);
         mp.start();

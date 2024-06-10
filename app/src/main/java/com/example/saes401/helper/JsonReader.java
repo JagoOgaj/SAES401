@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class JsonReader {
 
-    public static int getNumberPlayer(Context context){
+    public static int getNumberPlayer(Context context) {
         int length = -1;
         try {
             String json = loadJsonFromRaw(context.getResources(), GameConstant.PLAYERS_JSON, context.getPackageName());
@@ -27,7 +27,7 @@ public class JsonReader {
         return length;
     }
 
-    private static JSONObject getPlayerAtIndex(Context context, int index){
+    private static JSONObject getPlayerAtIndex(Context context, int index) {
         JSONObject playerObjectJson = null;
         try {
             String json = loadJsonFromRaw(context.getResources(), GameConstant.PLAYERS_JSON, context.getPackageName());
@@ -44,31 +44,32 @@ public class JsonReader {
         return playerObjectJson;
     }
 
-    public static String getImagePLayer(Context context, int index) throws Exception{
+    public static String getImagePLayer(Context context, int index) throws Exception {
         String imageSrc = JsonReader.getPlayerAtIndex(context, index).getString("image_sansfond");
         if (imageSrc == null) throw new Exception("null image");
         else return imageSrc;
     }
 
-    public static String getNamePlayer(Context context, int index) throws Exception{
+    public static String getNamePlayer(Context context, int index) throws Exception {
         String name = JsonReader.getPlayerAtIndex(context, index).getString("name");
         if (name == null) throw new Exception("null name");
         else return name;
     }
 
-    public static String getDamagePlayer(Context context, int index) throws Exception{
+    public static String getDamagePlayer(Context context, int index) throws Exception {
         String damage = JsonReader.getPlayerAtIndex(context, index).getString("damage");
         if (damage == null) throw new Exception("null damage");
         else return damage;
     }
 
-    public static int getHP_Player(Context context, int index) throws Exception{
+    public static int getHP_Player(Context context, int index) throws Exception {
         int hp = JsonReader.getPlayerAtIndex(context, index) == null ||
-                !(JsonReader.getPlayerAtIndex(context, index).has("healPoint"))? -1 :
+                !(JsonReader.getPlayerAtIndex(context, index).has("healPoint")) ? -1 :
                 JsonReader.getPlayerAtIndex(context, index).getInt("healPoint");
-        if (hp == -1) throw  new Exception("null hp player");
+        if (hp == -1) throw new Exception("null hp player");
         else return hp;
     }
+
     public static String getNaration(Context context, int index) {
         String naration = null;
         try {
@@ -226,6 +227,7 @@ public class JsonReader {
         if (indexBoss == -1) throw new Exception("null indexForBoss");
         else return indexBoss;
     }
+
     public static String[] getChoise(Context context, String levelFile) {
         String[] choise = null;
         try {

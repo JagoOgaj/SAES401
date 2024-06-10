@@ -57,9 +57,9 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
         }
     }
 
-    private void initFront() throws Exception{
+    private void initFront() throws Exception {
         getButtonContinue().setVisibility(View.INVISIBLE);
-        if (JsonReader.getNumberPlayer(this) != 2)  throw new Exception("length must be 2");
+        if (JsonReader.getNumberPlayer(this) != 2) throw new Exception("length must be 2");
         else {
             imageButton1.setImageResource(
                     getResources().getIdentifier(
@@ -101,7 +101,7 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGameChoise() {
-         //void
+        //void
     }
 
     @Override
@@ -200,23 +200,23 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
         }
     }
 
-    private TextView getTextLevel(){
+    private TextView getTextLevel() {
         return findViewById(R.id.textLevel);
     }
 
-    private ImageButton getImageView1(){
+    private ImageButton getImageView1() {
         return findViewById(R.id.imageButton1);
     }
 
-    private ImageButton getImageView2(){
+    private ImageButton getImageView2() {
         return findViewById(R.id.imageButton2);
     }
 
-    private ImageButton getImageView3(){
+    private ImageButton getImageView3() {
         return findViewById(R.id.imageButton3);
     }
 
-    private Button getButtonContinue(){
+    private Button getButtonContinue() {
         return findViewById(R.id.takeItem);
     }
 

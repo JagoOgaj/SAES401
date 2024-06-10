@@ -52,7 +52,7 @@ public class Player extends GameCharacter implements Parcelable {
         this.inventory.setItemsInventory(item);
     }
 
-    public void setInentoryRandom(Item item){
+    public void setInentoryRandom(Item item) {
         this.inventory.addItemRandomPlayer(item);
     }
 
@@ -83,7 +83,7 @@ public class Player extends GameCharacter implements Parcelable {
         return inventory.getItem(this.currentItem);
     }
 
-    public void removeItem(Item item){
+    public void removeItem(Item item) {
         this.inventory.removeItem(item);
     }
 
@@ -107,6 +107,7 @@ public class Player extends GameCharacter implements Parcelable {
     public void setHP(int HP) {
         this.HP = HP;
     }
+
     public void setCurrentItem(int currentItem) {
         this.currentItem = currentItem;
     }

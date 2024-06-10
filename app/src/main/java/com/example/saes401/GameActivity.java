@@ -39,10 +39,9 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         if (this.previousActivity.contains(GameConstant.VALUE_PLAYER_CHOISE)) {
             startActivityGameNaration();
         } else if (this.previousActivity.contains(GameConstant.VALUE_STORY)) {
-            if (this.currentLevel > 3){
+            if (this.currentLevel > 3) {
                 startMainActivity();
-            }
-            else if (!noEnemieLeft(this.currentEnemieInstance)) {
+            } else if (!noEnemieLeft(this.currentEnemieInstance)) {
                 this.currentEnemieInstance++;
                 this.levelStart = false;
 
@@ -70,12 +69,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         this.dataModel.addLastScore(String.format(GameConstant.FORMAT_SCORE, this.currentLevel, this.currentEnemieInstance));
         this.dataModel.addWin(this.currentLevel >= 3 && noEnemieLeft(this.currentEnemieInstance));
         //put data to db
-        this.dataModel.putTime();
-        this.dataModel.putHeartLost();
-        this.dataModel.putLastScore();
-        this.dataModel.putMaxDamageToEnemy();
-        this.dataModel.putMaxDamageToPlayer();
-        this.dataModel.putWin();
+        this.dataModel.putAllData();
     }
 
     private boolean noEnemieLeft(int index) {
@@ -144,7 +138,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         startActivity(this.intent);
     }
 
-    private void putExtra(){
+    private void putExtra() {
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieInstance);
