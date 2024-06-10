@@ -18,7 +18,7 @@
 
     <LinearLayout
         android:id="@+id/choiseBeforeLevel"
-        android:layout_width="match_parent"
+        android:layout_width="550dp"
         android:layout_height="116dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
