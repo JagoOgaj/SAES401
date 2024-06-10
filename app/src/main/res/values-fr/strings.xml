@@ -28,4 +28,11 @@
     <string name="credits_text">
         "Ce jeu a été créé par ALIOUI Scander, OKI Samy et CHAOUCH Zakaria. Un grand merci à tous ceux qui ont contribué à ce projet et à tous les joueurs qui nous ont soutenus tout au long de cette aventure. Nous espérons que vous avez apprécié jouer autant que nous avons pris plaisir à créer ce jeu. Restez à l\'écoute pour nos futures créations!"
     </string>
+    <string name = "choiseperso">Veuillez choisir votre personnage</string>
+    <string name = "get">récupérer</string>
+    <string name = "item">Veuillez choisir un item</string>
+    <string name = "stat">Statistiques</string>
+
+
+
 </resources>

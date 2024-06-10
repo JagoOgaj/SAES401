@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
         startParametre();
     }
-
+  
     @Override
     public void initAttibuts() {
         // Initialize attributes if necessary
@@ -117,12 +117,20 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         startActivity(intent);
     }
 
+    public void startStat() {
+        intent = new Intent(this, statActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     public void setListener() {
         findViewById(R.id.creditsButton).setOnClickListener(view -> onClickCredits());
         findViewById(R.id.startButton).setOnClickListener(view -> onClickStart());
         findViewById(R.id.continueButton).setOnClickListener(view -> onClickContinue());
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
+        findViewById(R.id.statButton).setOnClickListener(view -> onClickStat());
+
     }
 
     private DataModel initDataModel() {
