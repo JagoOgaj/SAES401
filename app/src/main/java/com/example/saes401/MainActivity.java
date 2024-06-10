@@ -4,15 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.db.DataModel;
-import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.Settings;
@@ -47,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     }
 
     private void onClickSettings() {startParametre();}
+
+    private void onClickStat() {startStat();}
+
 
 
     @Override
@@ -86,12 +85,20 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         startActivity(intent);
 
     }
+    public void startStat() {
+        intent = new Intent(this, statActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     public void setListener() {
         findViewById(R.id.creditsButton).setOnClickListener(view -> onClickCredits());
         findViewById(R.id.startButton).setOnClickListener(view -> onClickStart());
         findViewById(R.id.continueButton).setOnClickListener(view -> onClickContinue());
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
+        findViewById(R.id.statButton).setOnClickListener(view -> onClickStat());
+
     }
 
 
