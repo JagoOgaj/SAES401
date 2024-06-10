@@ -31,6 +31,8 @@
     <string name = "choiseperso">Veuillez choisir votre personnage</string>
     <string name = "get">récupérer</string>
     <string name = "item">Veuillez choisir un item</string>
+    <string name = "stat">Statistiques</string>
+
 
 
 </resources>
