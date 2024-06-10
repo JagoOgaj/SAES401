@@ -26,7 +26,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_IS_WIN + " INTEGER " + // Nouvelle colonne
                     ");";
 
-
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -40,6 +39,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+    public String getDatabaseName() {
+        return DATABASE_NAME;
+    }
+    public String getTotalCount(){
+
+        return "SELECT COUNT(*) FROM " + TABLE_NAME + ";";
+    }
+
 
     //todo faire les méthodes de récupérations des données
 }

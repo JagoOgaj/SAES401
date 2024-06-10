@@ -1,58 +1,58 @@
 {
   "atouts": {
     "bague_de_regeneration": {
-      "nom": "Bague de régénération",
-      "effet": "Régénère 5 points de vie par tour.",
-      "description": "Une bague enchantée qui permet à son porteur de récupérer de la santé au fil du temps.",
-      "taille": "petite"
+      "nom": "Regeneration Ring",
+      "effet": "Regenerates 5 health points per turn.",
+      "description": "An enchanted ring that allows its wearer to recover health over time.",
+      "taille": "small"
     },
     "cape_invisibilite": {
-      "nom": "Cape d'invisibilité",
-      "effet": "Permet à son porteur de devenir invisible pendant une courte période.",
-      "description": "Une cape magique qui confère à celui qui la porte l'incroyable capacité de se rendre invisible.",
-      "taille": "moyenne"
+      "nom": "Invisibility Cloak",
+      "effet": "Allows its wearer to become invisible for a short period.",
+      "description": "A magical cloak that grants its wearer the incredible ability to become invisible.",
+      "taille": "medium"
     },
     "potion_de_bénédiction": {
-      "nom": "Potion de bénédiction",
-      "effet": "Augmente temporairement les statistiques de l'utilisateur.",
-      "description": "Une potion bénie par les dieux qui accorde à celui qui la boit des pouvoirs extraordinaires.",
-      "taille": "petite"
+      "nom": "Blessing Potion",
+      "effet": "Temporarily increases the user's stats.",
+      "description": "A potion blessed by the gods that grants extraordinary powers to its drinker.",
+      "taille": "small"
     },
     "amulette_de_protection": {
-      "nom": "Amulette de protection",
-      "effet": "Réduit les dégâts subis de 20%.",
-      "description": "Une amulette sacrée qui offre une protection divine à son porteur.",
-      "taille": "petite"
+      "nom": "Protection Amulet",
+      "effet": "Reduces damage taken by 20%.",
+      "description": "A sacred amulet that offers divine protection to its wearer.",
+      "taille": "small"
     },
     "gant_de_force": {
-      "nom": "Gant de force",
-      "effet": "Augmente la force de l'utilisateur de 10 points.",
-      "description": "Un gant magique qui décuple la puissance physique de celui qui le porte.",
-      "taille": "petite"
+      "nom": "Strength Glove",
+      "effet": "Increases the user's strength by 10 points.",
+      "description": "A magical glove that significantly increases the physical power of its wearer.",
+      "taille": "small"
     },
     "casque_de_clairvoyance": {
-      "nom": "Casque de clairvoyance",
-      "effet": "Permet à son porteur de voir à travers les illusions et les enchantements.",
-      "description": "Un casque enchanté qui confère à son porteur une vision claire et pénétrante.",
-      "taille": "moyenne"
+      "nom": "Clairvoyance Helmet",
+      "effet": "Allows its wearer to see through illusions and enchantments.",
+      "description": "An enchanted helmet that provides its wearer with clear and penetrating vision.",
+      "taille": "medium"
     },
     "bouclier_reflechissant": {
-      "nom": "Bouclier réfléchissant",
-      "effet": "Renvoie 50% des dégâts physiques subis à l'attaquant.",
-      "description": "Un bouclier magique qui renvoie la force de l'ennemi contre lui-même.",
-      "taille": "grande"
+      "nom": "Reflecting Shield",
+      "effet": "Reflects 50% of the physical damage taken back to the attacker.",
+      "description": "A magical shield that turns the enemy's force against themselves.",
+      "taille": "large"
     },
     "flèche_enflammée": {
-      "nom": "Flèche enflammée",
-      "effet": "Inflige des dégâts de feu supplémentaires à la cible.",
-      "description": "Une flèche enchantée qui s'embrase au moment de l'impact, infligeant des brûlures à la cible.",
-      "taille": "petite"
+      "nom": "Flaming Arrow",
+      "effet": "Inflicts additional fire damage to the target.",
+      "description": "An enchanted arrow that ignites upon impact, causing burns to the target.",
+      "taille": "small"
     },
     "pierre_de_téléportation": {
-      "nom": "Pierre de téléportation",
-      "effet": "Permet à son porteur de se téléporter vers un lieu connu.",
-      "description": "Une pierre magique qui ouvre des portails vers d'autres endroits, offrant à son porteur une grande mobilité.",
-      "taille": "petite"
+      "nom": "Teleportation Stone",
+      "effet": "Allows its bearer to teleport to a known location.",
+      "description": "A magical stone that opens portals to other places, providing great mobility to its bearer.",
+      "taille": "small"
     }
   }
 }

@@ -11,20 +11,20 @@
     "arc_SSR",
     "grimoire_SSR"
   ],
-  "nom": "Les Conjurateurs Maudits",
-  "lieu": "Les Ruines Ensorcelées",
+  "nom": "The Cursed Conjurers",
+  "lieu": "The Enchanted Ruins",
   "enemies": [
     {
-      "nom": "Zarek le Sorcier",
-      "description": "Sorcier paria, maître des arcanes interdits, il offre ses services pour renverser l'ordre naturel.",
+      "nom": "Zarek the Sorcerer",
+      "description": "Outcast sorcerer, master of forbidden arcane arts, he offers his services to overturn the natural order.",
       "image": "zarek_le_sorcier",
       "image_sansfond": "sf_zarek_le_sorcier",
       "win": {
         "dropPossible": ["bouclier_SR", "epee_SR"],
-        "narration": "Avec la défaite de Zarek, les ombres qui enveloppaient les ruines se dissipent lentement."
+        "narration": "With the defeat of Zarek, the shadows that shrouded the ruins slowly dissipate."
       },
       "loose": {
-        "narration": "La magie sombre de Zarek vous engloutit, vous laissant sans espoir face à ses pouvoirs anciens."
+        "narration": "Zarek's dark magic engulfs you, leaving you hopeless against his ancient powers."
       },
       "stats": {
         "pv": 3,
@@ -33,16 +33,16 @@
       }
     },
     {
-      "nom": "Helga l'Enchanteresse",
-      "description": "Utilise sa magie noire pour corrompre et contrôler, essentielle pour les plans de Zarek.",
+      "nom": "Helga the Enchantress",
+      "description": "Uses her dark magic to corrupt and control, essential for Zarek's plans.",
       "image": "helga_l_enchanteresse",
       "image_sansfond": "sf_helga_l_enchanteresse",
       "win": {
         "dropPossible": ["lance_SR", "arc_SR"],
-        "narration": "En brisant le sortilège de Helga, vous libérez les esprits qu'elle avait ensorcelés."
+        "narration": "By breaking Helga's spell, you free the spirits she had bewitched."
       },
       "loose": {
-        "narration": "Le charme de Helga vous submerge, vous liant à sa volonté."
+        "narration": "Helga's charm overwhelms you, binding you to her will."
       },
       "stats": {
         "pv": 4,
@@ -51,16 +51,16 @@
       }
     },
     {
-      "nom": "Baldur l'Ancien",
-      "description": "Gardien des connaissances anciennes et des sorts maléfiques, renforce les capacités magiques du groupe.",
+      "nom": "Baldur the Ancient",
+      "description": "Keeper of ancient knowledge and malevolent spells, enhances the magical abilities of the group.",
       "image": "baldur_l_ancien",
       "image_sansfond": "sf_baldur_l_ancien",
       "win": {
         "dropPossible": ["grimoire_SR", "bouclier_SSR"],
-        "narration": "Baldur, dépossédé de ses runes maléfiques, s'effondre, rendant ses pouvoirs à la terre."
+        "narration": "Baldur, stripped of his malevolent runes, collapses, returning his powers to the earth."
       },
       "loose": {
-        "narration": "Les incantations de Baldur vous enveloppent dans un réseau de douleur et de désespoir."
+        "narration": "Baldur's incantations wrap you in a web of pain and despair."
       },
       "stats": {
         "pv": 5,
@@ -69,16 +69,16 @@
       }
     },
     {
-      "nom": "Lyria la Sirène",
-      "description": "Utilise son chant pour hypnotiser et entraîner ses victimes dans les profondeurs pour les noyer.",
+      "nom": "Lyria the Siren",
+      "description": "Uses her song to hypnotize and lure her victims into the depths to drown them.",
       "image": "lyria_la_sirene",
       "image_sansfond": "sf_lyria_la_sirene",
       "win": {
         "dropPossible": ["epee_SSR", "lance_SSR"],
-        "narration": "Le silence retombe sur les ruines alors que Lyria, vaincue, retourne aux profondeurs d'où elle venait."
+        "narration": "Silence falls over the ruins as Lyria, defeated, returns to the depths from whence she came."
       },
       "loose": {
-        "narration": "Le chant mélodieux de Lyria vous attire irrésistiblement vers une fin aquatique."
+        "narration": "Lyria's melodious song irresistibly draws you towards a watery end."
       },
       "stats": {
         "pv": 5,
@@ -87,16 +87,16 @@
       }
     },
     {
-      "nom": "Aldrok, le Chevalier Gobelin",
-      "description": "Assassin d'élite, exécute les ordres de Zarek avec une précision mortelle.",
+      "nom": "Aldrok, the Goblin Knight",
+      "description": "Elite assassin, executes Zarek's orders with deadly precision.",
       "image": "aldrok_le_chevalier_gobelin",
       "image_sansfond": "sf_aldrok_le_chevalier_gobelin",
       "win": {
         "dropPossible": ["arc_SSR", "grimoire_SSR"],
-        "narration": "Aldrok, privé de sa mission, tombe enfin, son dernier coup manqué."
+        "narration": "Aldrok, deprived of his mission, finally falls, his last blow missed."
       },
       "loose": {
-        "narration": "Rapide et mortel, Aldrok vous frappe là où vous vous y attendez le moins, mettant fin à votre quête."
+        "narration": "Quick and deadly, Aldrok strikes where you least expect it, ending your quest."
       },
       "stats": {
         "pv": 6,

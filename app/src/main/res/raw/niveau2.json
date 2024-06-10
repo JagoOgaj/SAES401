@@ -11,20 +11,20 @@
     "arc_SR",
     "grimoire_SR"
   ],
-  "nom": "La Horde Sauvage",
-  "lieu": "La Forêt de Griffe-Noire",
+  "nom": "The Wild Horde",
+  "lieu": "Black Claw Forest",
   "enemies": [
     {
-      "nom": "Morda, Roi des Bêtes",
-      "description": "Roi impitoyable des créatures sauvages, il utilise bêtes et monstres comme agents de chaos.",
+      "nom": "Morda, King of Beasts",
+      "description": "A ruthless king of wild creatures, he uses beasts and monsters as agents of chaos.",
       "image": "morda_roi_des_betes",
       "image_sansfond": "sf_morda_roi_des_betes",
       "win": {
         "dropPossible": ["bouclier_R", "epee_R"],
-        "narration": "La défaite de Morda apaise les esprits des bêtes féroces, ramenant le calme dans la forêt."
+        "narration": "The defeat of Morda calms the spirits of the fierce beasts, bringing peace to the forest."
       },
       "loose": {
-        "narration": "Morda déchaîne ses bêtes sur vous, et vous êtes submergé par une marée de griffes et de crocs."
+        "narration": "Morda unleashes his beasts upon you, and you are overwhelmed by a tide of claws and fangs."
       },
       "stats": {
         "pv": 2,
@@ -33,16 +33,16 @@
       }
     },
     {
-      "nom": "Gromm la Bête",
-      "description": "Puissante créature bestiale servant de général à Morda, semant la terreur.",
+      "nom": "Gromm the Beast",
+      "description": "A powerful beastly creature serving as a general to Morda, spreading terror.",
       "image": "gromm_la_bete",
       "image_sansfond": "sf_gromm_la_bete",
       "win": {
         "dropPossible": ["lance_R", "arc_R"],
-        "narration": "Gromm tombe sous vos coups, et ses hurlements résonnent à travers la forêt."
+        "narration": "Gromm falls under your strikes, and his howls echo through the forest."
       },
       "loose": {
-        "narration": "La rage de Gromm est inépuisable, et vous êtes rapidement submergé par sa fureur bestiale."
+        "narration": "Gromm's rage is inexhaustible, and you are quickly overwhelmed by his bestial fury."
       },
       "stats": {
         "pv": 3,
@@ -51,16 +51,16 @@
       }
     },
     {
-      "nom": "Garnar le Cornu",
-      "description": "Combattant féroce qui utilise sa force brute pour écraser les opposants.",
+      "nom": "Garnar the Horned",
+      "description": "A fierce fighter who uses his brute strength to crush opponents.",
       "image": "garnar_le_cornu",
       "image_sansfond": "sf_garnar_le_cornu",
       "win": {
         "dropPossible": ["grimoire_R", "bouclier_SR"],
-        "narration": "Garnar s'effondre, son dernier rugissement étouffé par la victoire."
+        "narration": "Garnar collapses, his last roar muffled by victory."
       },
       "loose": {
-        "narration": "La puissance brute de Garnar est insurmontable, et vous êtes renversé par son assaut dévastateur."
+        "narration": "The raw power of Garnar is insurmountable, and you are overturned by his devastating assault."
       },
       "stats": {
         "pv": 3,
@@ -69,16 +69,16 @@
       }
     },
     {
-      "nom": "Thorne le Berserker",
-      "description": "Guerrier féroce qui utilise sa rage inégalée pour pulvériser les lignes ennemies.",
+      "nom": "Thorne the Berserker",
+      "description": "A fierce warrior who uses his unmatched rage to pulverize enemy lines.",
       "image": "thorne_le_berserker",
       "image_sansfond": "sf_thorne_le_berserker",
       "win": {
         "dropPossible": ["epee_SR", "lance_SR"],
-        "narration": "Thorne est vaincu, sa fureur s'éteignant avec son dernier souffle."
+        "narration": "Thorne is defeated, his fury extinguishing with his last breath."
       },
       "loose": {
-        "narration": "Vous ne parvenez pas à contenir la fureur de Thorne, qui balaye tout sur son passage."
+        "narration": "You fail to contain Thorne’s fury, which sweeps away everything in its path."
       },
       "stats": {
         "pv": 4,
@@ -87,21 +87,21 @@
       }
     },
     {
-      "nom": "Gorath le Guerrier",
-      "description": "Commandant des forces militaires de Morda, expert en tactiques de siège.",
+      "nom": "Gorath the Warrior",
+      "description": "Commander of Morda’s military forces, expert in siege tactics.",
       "image": "gorath_le_guerrier",
       "image_sansfond": "sf_gorath_le_guerrier",
       "win": {
         "dropPossible": ["arc_SR", "grimoire_SSR"],
-        "narration": "Avec la chute de Gorath, le commandement des troupes ennemies s'effondre."
+        "narration": "With the fall of Gorath, the command of the enemy troops collapses."
       },
       "loose": {
-        "narration": "La stratégie de Gorath vous surpasse, et vous êtes rapidement submergé par les forces ennemies."
+        "narration": "Gorath’s strategy outmatches you, and you are quickly overwhelmed by the enemy forces."
       },
       "stats": {
         "pv": 4,
         "degats": "2d5",
-        "items": [ "lance_SR", "arc_SR", "grimoire_SR"]
+        "items": ["lance_SR", "arc_SR", "grimoire_SR"]
       }
     }
   ]

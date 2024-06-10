@@ -31,4 +31,6 @@
     <string name="get">recover</string>
     <string name="item">Please select an item</string>
     <string name="stat">Statistics</string>
+    <string name = "next">Next</string>
+    <string name = "prev">Previous</string>
 </resources>

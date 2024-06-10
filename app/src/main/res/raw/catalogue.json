@@ -2,15 +2,15 @@
   "catalogues": [
     {
       "fichier": "niveau1.json",
-      "naration": "Vous entrez dans la sombre forêt, où d'innombrables dangers vous guettent. Des créatures hostiles se cachent parmi les arbres, prêtes à attaquer à tout moment. Êtes-vous prêt à affronter les défis de la Forêt sombre ?"
+      "naration": "You enter the dark forest, where countless dangers await you. Hostile creatures lurk among the trees, ready to attack at any moment. Are you ready to face the challenges of the Dark Forest?"
     },
     {
       "fichier": "niveau2.json",
-      "naration": "Vous pénétrez dans la mystérieuse Caverne souterraine, où les ténèbres règnent en maître. Des dangers mortels vous attendent à chaque tournant, mais aussi de précieux trésors enfouis dans les profondeurs. Oserez-vous affronter les secrets de la Caverne souterraine ?"
+      "naration": "You penetrate the mysterious Underground Cavern, where darkness reigns supreme. Deadly dangers await you at every turn, but also precious treasures buried deep within. Dare you confront the secrets of the Underground Cavern?"
     },
     {
       "fichier": "niveau3.json",
-      "naration": "Vo"
+      "naration": "You"
     }
   ]
 }

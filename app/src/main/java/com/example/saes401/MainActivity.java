@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
         startParametre();
     }
-  
+    private void onClickStat() {startStat();}
     @Override
     public void initAttibuts() {
         //void

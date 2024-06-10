@@ -1,0 +1,16 @@
+{
+  "catalogues": [
+    {
+      "fichier": "niveau1.json",
+      "naration": "Vous entrez dans la sombre forêt, où d'innombrables dangers vous guettent. Des créatures hostiles se cachent parmi les arbres, prêtes à attaquer à tout moment. Êtes-vous prêt à affronter les défis de la Forêt sombre ?"
+    },
+    {
+      "fichier": "niveau2.json",
+      "naration": "Vous pénétrez dans la mystérieuse Caverne souterraine, où les ténèbres règnent en maître. Des dangers mortels vous attendent à chaque tournant, mais aussi de précieux trésors enfouis dans les profondeurs. Oserez-vous affronter les secrets de la Caverne souterraine ?"
+    },
+    {
+      "fichier": "niveau3.json",
+      "naration": "Vo"
+    }
+  ]
+}
