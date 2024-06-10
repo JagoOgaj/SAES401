@@ -79,6 +79,11 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     }
 
     @Override
+    public void startActivityPlayerChoise() {
+
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);

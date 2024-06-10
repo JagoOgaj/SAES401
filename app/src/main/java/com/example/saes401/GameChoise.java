@@ -106,6 +106,11 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         startActivity(this.intent);
     }
 
+    @Override
+    public void startActivityPlayerChoise() {
+        //void
+    }
+
 
     private boolean addItemToPlayer() throws Exception {
         boolean result = true;

@@ -9,6 +9,7 @@ public final class GameConstant {
     public static final String NIVEAU1 = "niveau1";
     public static final String NIVEAU2 = "niveau2";
     public static final String NIVEAU3 = "niveau3";
+    public static final String PLAYERS_JSON = "players";
     public static final String KEY_LEVEL = "currentLevelInstance";
     public static final String KEY_PLAYER = "playerInstance";
     public static final String KEY_ENEMIE_INDEX = "currentEnemie";
@@ -18,6 +19,7 @@ public final class GameConstant {
     public static final String VALUE_GAME_CHOISE = "gameChoise";
     public static final String VALUE_GAME_NARATION = "gameNaration";
     public static final String VALUE_MAIN_ACTIVITY = "mainActivity";
+    public static final String VALUE_PLAYER_CHOISE = "playerChoise";
     public static final String VALUE_STORY = "story";
     public static final String KEY_PREVIOUS_ACTIVITY = "previousActivity";
     public static final String FORMAT_LEVEL = "niveau%d";

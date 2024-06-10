@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         loadParametre();
         setContentView(R.layout.activity_main);
         this.setListener();
-
     }
 
 
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     }
 
     private void onClickStart() {
-        startActivityGame();
+        startActivityPlayerChoise();
     }
 
     private void onClickContinue() {
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
 
     @Override
     public void initAttibuts() {
-
+        //void
     }
 
     @Override
@@ -70,16 +69,15 @@ public class MainActivity extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        intent = new Intent(this, GameActivity.class);
-        intent.putExtra(GameConstant.KEY_LEVEL, 1);
-        intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_MAIN_ACTIVITY);
-        intent.putExtra(GameConstant.KEY_PLAYER, new Player(GameConstant.DEFAULT_HP));
-        intent.putExtra(GameConstant.KEY_START_LEVEL, true);
-        intent.putExtra(GameConstant.KEY_PLAYER_WIN, true);
-        DataModel dataModel = initDataModel();
-        intent.putExtra(GameConstant.KEY_DATA_MODEL, dataModel);
+           //void
+    }
+
+    @Override
+    public void startActivityPlayerChoise() {
+        intent = new Intent(this, PlayerChoise.class);
         startActivity(intent);
     }
+
     public void startParametre() {
         intent = new Intent(this, ParametreActivity.class);
         startActivity(intent);
@@ -100,14 +98,6 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         findViewById(R.id.statButton).setOnClickListener(view -> onClickStat());
 
     }
-
-
-    private DataModel initDataModel() {
-        //don't insert in database
-        DataModel dataModel = new DataModel();
-        dataModel.addStart();
-        return dataModel;
-    }
     private void loadParametre() {
         // Charger la langue
         String language = Settings.loadLanguage(this);
@@ -117,8 +107,6 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         int volume = Settings.loadVolume(this);
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
-
-
     }
 
 }

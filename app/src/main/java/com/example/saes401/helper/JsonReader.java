@@ -14,6 +14,61 @@ import java.util.List;
 import java.util.Scanner;
 
 public class JsonReader {
+
+    public static int getNumberPlayer(Context context){
+        int length = -1;
+        try {
+            String json = loadJsonFromRaw(context.getResources(), GameConstant.PLAYERS_JSON, context.getPackageName());
+            JSONObject jsonObject = new JSONObject(json);
+            length = jsonObject.getJSONArray("players").length() - 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return length;
+    }
+
+    private static JSONObject getPlayerAtIndex(Context context, int index){
+        JSONObject playerObjectJson = null;
+        try {
+            String json = loadJsonFromRaw(context.getResources(), GameConstant.PLAYERS_JSON, context.getPackageName());
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray players = jsonObject.getJSONArray("players");
+
+            // Vérifiez si l'indice est valide
+            if (index >= 0 && index < players.length()) {
+                playerObjectJson = players.getJSONObject(index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return playerObjectJson;
+    }
+
+    public static String getImagePLayer(Context context, int index) throws Exception{
+        String imageSrc = JsonReader.getPlayerAtIndex(context, index).getString("image_sansfond");
+        if (imageSrc == null) throw new Exception("null image");
+        else return imageSrc;
+    }
+
+    public static String getNamePlayer(Context context, int index) throws Exception{
+        String name = JsonReader.getPlayerAtIndex(context, index).getString("name");
+        if (name == null) throw new Exception("null name");
+        else return name;
+    }
+
+    public static String getDamagePlayer(Context context, int index) throws Exception{
+        String damage = JsonReader.getPlayerAtIndex(context, index).getString("damage");
+        if (damage == null) throw new Exception("null damage");
+        else return damage;
+    }
+
+    public static int getHP_Player(Context context, int index) throws Exception{
+        int hp = JsonReader.getPlayerAtIndex(context, index) == null ||
+                !(JsonReader.getPlayerAtIndex(context, index).has("healPoint"))? -1 :
+                JsonReader.getPlayerAtIndex(context, index).getInt("healPoint");
+        if (hp == -1) throw  new Exception("null hp player");
+        else return hp;
+    }
     public static String getNaration(Context context, int index) {
         String naration = null;
         try {

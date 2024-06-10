@@ -10,6 +10,7 @@ public interface Utilities {
     public abstract void statActivityStory();
 
     public abstract void startActivityGame();
+    public abstract void startActivityPlayerChoise();
 
     public abstract void setListener();
 }

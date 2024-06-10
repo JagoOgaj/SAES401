@@ -10,7 +10,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "playerGame";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SCORE = "score";
-    private static final String COLUMN_DATE = "date";
     private static final String COLUMN_DURATION = "duration";
     private static final String COLUMN_MAX_DAMAGE_TO_PLAYER = "max_damage_to_player";
     private static final String COLUMN_MAX_DAMAGE_TO_ENEMY = "max_damage_to_enemy";
@@ -20,7 +19,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_SCORE + " INTEGER, " +
-                    COLUMN_DATE + " TEXT, " +
                     COLUMN_DURATION + " INTEGER, " +
                     COLUMN_MAX_DAMAGE_TO_PLAYER + " INTEGER, " +
                     COLUMN_MAX_DAMAGE_TO_ENEMY + " INTEGER, " +

@@ -36,7 +36,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
 
     private void initStartActivity() {
         // Nartion -> GameChoise -> Story
-        if (this.previousActivity.contains(GameConstant.VALUE_MAIN_ACTIVITY)) {
+        if (this.previousActivity.contains(GameConstant.VALUE_PLAYER_CHOISE)) {
             startActivityGameNaration();
         } else if (this.previousActivity.contains(GameConstant.VALUE_STORY)) {
             if (this.currentLevel > 3){
@@ -155,6 +155,11 @@ public class GameActivity extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
+        //void
+    }
+
+    @Override
+    public void startActivityPlayerChoise() {
         //void
     }
 
