@@ -3,6 +3,7 @@ package com.example.saes401;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -13,11 +14,11 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.Settings;
 import com.example.saes401.helper.Utilities;
-
+import com.example.saes401.soud.GameSound;
 
 public class MainActivity extends AppCompatActivity implements Utilities {
     private Intent intent;
-    String selectedLanguage;
+    private static MediaPlayer homeScreenMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,27 +27,57 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         loadParametre();
         setContentView(R.layout.activity_main);
         this.setListener();
+        if (homeScreenMediaPlayer == null) {
+            homeScreenMediaPlayer = GameSound.homeScreenSound(this);
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (homeScreenMediaPlayer != null && !homeScreenMediaPlayer.isPlaying()) {
+            homeScreenMediaPlayer.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+    }
+
+    private void stopHomeScreenSound() {
+        if (homeScreenMediaPlayer != null) {
+            GameSound.stopHomeScreenSound(homeScreenMediaPlayer);
+            homeScreenMediaPlayer = null;
+        }
+    }
 
     private void onClickCredits() {
+        GameSound.playClickSound(this);
+        stopHomeScreenSound();
         intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 
     private void onClickStart() {
         startActivityPlayerChoise();
+        GameSound.playClickSound(this);
+        stopHomeScreenSound();
     }
 
     private void onClickContinue() {
+        GameSound.playClickSound(this);
+        stopHomeScreenSound();
+        // Implementation for continue action
     }
 
-    private void onClickSettings() {startParametre();}
-
-    private void onClickStat() {startStat();}
-
-
-
+    private void onClickSettings() {
+        GameSound.playClickSound(this);
+        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+        startParametre();
+    }
+  
     @Override
     public void initAttibuts() {
         //void
@@ -54,17 +85,17 @@ public class MainActivity extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGameChoise() {
-        //void
+        // Not used
     }
 
     @Override
     public void startActivityGameNaration() {
-        //void
+        // Not used
     }
 
     @Override
     public void statActivityStory() {
-        //void
+        // Not used
     }
 
     @Override
@@ -81,8 +112,8 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     public void startParametre() {
         intent = new Intent(this, ParametreActivity.class);
         startActivity(intent);
-
     }
+
     public void startStat() {
         intent = new Intent(this, statActivity.class);
         startActivity(intent);
@@ -98,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         findViewById(R.id.statButton).setOnClickListener(view -> onClickStat());
 
     }
+
     private void loadParametre() {
         // Charger la langue
         String language = Settings.loadLanguage(this);
@@ -108,5 +140,4 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
     }
-
 }
