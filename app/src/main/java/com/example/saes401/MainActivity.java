@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     }
 
     private void onClickStart() {
-        startActivityPlayerChoise();
         GameSound.playClickSound(this);
         stopHomeScreenSound();
+        startActivityPlayerChoise();
     }
 
     private void onClickContinue() {

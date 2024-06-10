@@ -258,7 +258,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             random = new Random();
             boolean souldGetItem = random.nextBoolean();
             Item itemEnemie;
-            if (true) {
+            if (souldGetItem) {
                 itemEnemie = currentEnemieInstance.getItem();
             } else {
                 itemEnemie = null;
