@@ -1,9 +1,13 @@
 package com.example.saes401;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -25,6 +29,7 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.service.ClickSound;
 
 import org.json.JSONObject;
 
@@ -36,9 +41,23 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
     private boolean isPLayerWin;
     private DataModel dataModel;
     private ImageButton imageButton1;
+    private ClickSound clickSoundService;
+    private boolean isBound = false;
     private ImageButton imageButton2;
     private ImageButton imageButton3;
     private int selectedImageButton;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +76,34 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
+    }
+
+    private void initSoundService() {
+        bindClickSoundService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
+
+    public void onButtonClick() {
+        if (isBound) {
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
+        }
+    }
+    private void bindClickSoundService() {
+        Intent intent2 = new Intent(this, ClickSound.class);
+        bindService(intent2, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
     private void initFront() throws Exception {
         getButtonContinue().setVisibility(View.INVISIBLE);
         if (JsonReader.getNumberPlayer(this) != 2) throw new Exception("length must be 2");
@@ -135,6 +182,7 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
     @Override
     public void setListener() {
         imageButton1.setOnClickListener(v -> {
+            onButtonClick();
             onClickButton(0);
             imageButton1.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             resetImageButtonSelection();
@@ -142,6 +190,7 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
             setContinueButton();
         });
         imageButton2.setOnClickListener(v -> {
+            onButtonClick();
             onClickButton(1);
             imageButton2.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             resetImageButtonSelection();
@@ -149,6 +198,7 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
             setContinueButton();
         });
         imageButton3.setOnClickListener(v -> {
+            onButtonClick();
             onClickButton(2);
             imageButton3.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             resetImageButtonSelection();

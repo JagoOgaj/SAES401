@@ -22,7 +22,6 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
-import com.example.saes401.soud.GameSound;
 import com.example.saes401.utilities.GameFight;
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
@@ -47,7 +46,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private final ArrayList<ImageView> imageViewsPLayer = new ArrayList<ImageView>();
     private final ArrayList<ImageView> imageViewsEnemie = new ArrayList<ImageView>();
     private int indexItemChoose = -1;
-    private final Map<ImageView, View.OnClickListener> savedOnClickListeners = new HashMap<>();
     private final Object lock = new Object();
     private DataModel dataModel;
     private Random random;
@@ -218,9 +216,10 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     @Override
     public void run() {
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
-        MediaPlayer mp = GameSound.launchFightSound(this);
         while (true) {
-            runOnUiThread(() -> setVisibilityButtonTake(true));
+            runOnUiThread(() -> {
+                setVisibilityButtonTake(true);
+            });
             synchronized (lock) {
                 try {
                     runOnUiThread(() -> {
@@ -300,6 +299,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             } else {
                 //egalité
                 getTextViewGamePLay().setText(R.string.nullMatchFight);
+                getViewGameplay().removeAllViews();
             }
             if (playerInstance.getHPplayer() <= 0 || currentEnemieInstance.getHPEnemie() == 0) {
                 runOnUiThread(() -> {
@@ -313,8 +313,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 });
                 waitForDelay();
                 break;
-            } else {
-                restoreClickListeners();
+            }
+            else {
+                runOnUiThread(() -> setListener());
             }
         }
         runOnUiThread(() -> {
@@ -328,7 +329,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 Log.d("error -> InitFront", Objects.requireNonNull(e.getMessage()));
             }
         }
-        GameSound.stopFightSound(this, mp);
         startActivityGame();
     }
 
@@ -579,7 +579,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                     Item item = (Item) imageView.getTag();
                     int selectedItemIndex = playerInstance.getInventory().getIndexOfItem(item);
 
@@ -600,7 +599,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     }
                 }
             };
-            savedOnClickListeners.put(imageView, listener);
             imageView.setOnClickListener(listener);
         }
     }
@@ -609,12 +607,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void removeClickListeners() {
         for (ImageView imageView : imageViewsPLayer) {
             imageView.setOnClickListener(null);
-        }
-    }
-
-    private void restoreClickListeners() {
-        for (Map.Entry<ImageView, View.OnClickListener> entry : savedOnClickListeners.entrySet()) {
-            entry.getKey().setOnClickListener(entry.getValue());
         }
     }
 
@@ -627,7 +619,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void setListenerButtonTakeItem(boolean isEnd) {
         if (!isEnd) {
             getButtonTakeItem().setOnClickListener(view -> {
-                GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                 removeClickListeners();
                 getTextViewGamePLay().setText("");
                 if (indexItemChoose != -1) {
@@ -642,7 +633,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             getButtonTakeItem().setText(R.string.continue_game);
             getButtonTakeItem().setVisibility(View.VISIBLE);
             getButtonTakeItem().setOnClickListener(view -> {
-                GameSound.playClickSound(view.getContext()); // Ajout du son de clic
                 synchronized (lock) {
                     lock.notify();
                 }

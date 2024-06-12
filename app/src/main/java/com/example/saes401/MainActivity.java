@@ -1,24 +1,39 @@
 package com.example.saes401;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.IBinder;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.saes401.db.DataModel;
-import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.Settings;
 import com.example.saes401.helper.Utilities;
-import com.example.saes401.soud.GameSound;
+import com.example.saes401.service.BackGroundSound;
+import com.example.saes401.service.ClickSound;
 
 public class MainActivity extends AppCompatActivity implements Utilities {
     private Intent intent;
-    private static MediaPlayer homeScreenMediaPlayer;
+    private ClickSound clickSoundService;
+    private boolean isBound = false;
+    private float volume;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,54 +42,59 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         loadParametre();
         setContentView(R.layout.activity_main);
         this.setListener();
-        if (homeScreenMediaPlayer == null) {
-            homeScreenMediaPlayer = GameSound.homeScreenSound(this);
-        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (homeScreenMediaPlayer != null && !homeScreenMediaPlayer.isPlaying()) {
-            homeScreenMediaPlayer.start();
-        }
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
     }
 
-    private void stopHomeScreenSound() {
-        if (homeScreenMediaPlayer != null) {
-            GameSound.stopHomeScreenSound(homeScreenMediaPlayer);
-            homeScreenMediaPlayer = null;
+    public void onButtonClick() {
+        if (isBound) {
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
         }
+    }
+
+    private void initSoundService() {
+        bindBackGroundSoundService();
+        bindClickSoundService();
+    }
+
+    private void bindClickSoundService() {
+        Intent intent2 = new Intent(this, ClickSound.class);
+        bindService(intent2, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void bindBackGroundSoundService() {
+        Intent intent1 = new Intent(this, BackGroundSound.class);
+        intent1.putExtra(GameConstant.VOLUME, volume);
+        startService(intent1);
     }
 
     private void onClickCredits() {
-        GameSound.playClickSound(this);
-        stopHomeScreenSound();
         intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 
     private void onClickStart() {
-        GameSound.playClickSound(this);
-        stopHomeScreenSound();
         startActivityPlayerChoise();
     }
 
     private void onClickContinue() {
-        GameSound.playClickSound(this);
-        stopHomeScreenSound();
-        // Implementation for continue action
+        onButtonClick();
     }
 
     private void onClickSettings() {
-        GameSound.playClickSound(this);
-        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
         startParametre();
     }
 
@@ -121,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     public void startStat() {
         intent = new Intent(this, statActivity.class);
         startActivity(intent);
-
     }
 
     @Override
@@ -131,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         findViewById(R.id.continueButton).setOnClickListener(view -> onClickContinue());
         findViewById(R.id.parametreButton).setOnClickListener(view -> onClickSettings());
         findViewById(R.id.statButton).setOnClickListener(view -> onClickStat());
-
     }
 
     private void loadParametre() {
@@ -140,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         Settings.changeLanguage(MainActivity.this, language);
 
         // Charger le volume et l'appliquer
-        int volume = Settings.loadVolume(this);
+        volume = Settings.loadVolume(this);
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) volume, 0);
     }
 }

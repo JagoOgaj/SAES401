@@ -27,6 +27,7 @@ public final class GameConstant {
     public static final String FORMAT_CURRENT_LEVEL = "%d - %d";
     public static final String FORMAT_HEART_ENEMIE = "heart_enemie_%d";
     public static final String FORMAT_HEART_PLAYER = "heart_player_%d";
+    public static final String FORMAT_BUTTON_CHOISE = "imageButton%d";
     public static final String REGEX_SPLITER = "d";
     public static final String KEY_PLAYER_WIN = "isPlayerWin";
     public static final String KEY_START_LEVEL = "onStarLevel";
