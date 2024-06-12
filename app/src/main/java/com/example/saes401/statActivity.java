@@ -3,12 +3,17 @@ package com.example.saes401;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,8 +35,8 @@ public class statActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stat);
         initAttibuts();
         setListener();
-        setPaginationListeners();
         loadDataForCurrentPage();
+
     }
 
     public void initAttibuts() {
@@ -42,11 +47,27 @@ public class statActivity extends AppCompatActivity {
 
     public void setListener() {
         findViewById(R.id.mainButton).setOnClickListener(view -> onClickMain());
+        findViewById(R.id.deleteButton).setOnClickListener(view -> onClickDelete());
+        findViewById(R.id.nextButton).setOnClickListener(view -> onClickNext());
+        findViewById(R.id.prevButton).setOnClickListener(view -> onClickPrev());
     }
 
     private void onClickMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+    private void onClickDelete() {
+        deleteAllRow();
+    }
+    private void onClickNext() {
+            currentPage++;
+            loadDataForCurrentPage();
+    }
+    private void onClickPrev() {
+        if (currentPage > 0) {
+            currentPage--;
+        }
+        loadDataForCurrentPage();
     }
 
     private int getTotalItemCount() {
@@ -57,18 +78,8 @@ public class statActivity extends AppCompatActivity {
         return count;
     }
 
-    private void setPaginationListeners() {
-        findViewById(R.id.nextButton).setOnClickListener(view -> {
-            currentPage++;
-            loadDataForCurrentPage();
-        });
-
-        findViewById(R.id.prevButton).setOnClickListener(view -> {
-            if (currentPage > 0) {
-                currentPage--;
-            }
-            loadDataForCurrentPage();
-        });
+    private void deleteAllRow() {
+        db.execSQL(db_helper.deleteAllRow());
     }
 
 
@@ -88,14 +99,41 @@ public class statActivity extends AppCompatActivity {
 
                 // Créer une vue pour afficher ces données
                 TextView textView = new TextView(this);
-                textView.setText(String.format("Score: %d, Duration: %s, Max Damage to Player: %d, Max Damage to Enemy: %d, Heart Lost: %d, Win: %b",
-                        score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, isWin));
+                textView.setBackground(ContextCompat.getDrawable(this, R.drawable.encadrementtextview)); // Appliquer le fond avec bordure
+                setColoredKeywords(textView,score,duration,maxDamageToPlayer,maxDamageToEnemy,heartLost,isWin);
 
                 // Ajouter la vue au LinearLayout
                 linearLayout.addView(textView);
             } while (cursor.moveToNext());
         }
         cursor.close();
+    }
+
+
+    public static void setColoredKeywords(TextView textView, int score, String duration, int maxDamageToPlayer, int maxDamageToEnemy, int heartLost, boolean isWin) {
+        // Format du texte initial
+        String fullText = String.format("Score: %d \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nWin: %b",
+                score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, isWin);
+
+
+        // Création d'un SpannableString à partir du texte complet
+        SpannableString spannableString = new SpannableString(fullText);
+
+        // Définir la couleur
+        int color = Color.parseColor("#A3E34C");
+
+        // Appliquer le style aux mots clés
+        String[] keywords = {"Score:", "Duration:", "Max Damage to Player:", "Max Damage to Enemy:", "Heart Lost:", "Win:"};
+        for (String keyword : keywords) {
+            int start = spannableString.toString().indexOf(keyword);
+            int end = start + keyword.length();
+            if (start >= 0) {
+                spannableString.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        // Mettre le texte formaté dans le TextView
+        textView.setText(spannableString);
     }
 
 

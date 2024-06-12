@@ -39,5 +39,6 @@
     <string name="looseFight">You lost</string>
     <string name="useDice">Use dices</string>
     <string name="use">Use</string>
+    <string name="delete">Delete scores</string>
     <string name="errorInsertItem">Inserting a new item replaces a randomly acquired item</string>
 </resources>

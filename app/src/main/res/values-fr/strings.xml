@@ -40,5 +40,6 @@
     <string name="looseFight">Vous avez perdu</string>
     <string name="useDice">Utiliser les dès</string>
     <string name="use">Utiliser</string>
+    <string name="delete">Supprimer les scores</string>
     <string name="errorInsertItem">L\'insertion d\'un nouveau item remplacer un item acquis de maniere aleatoire</string>
 </resources>

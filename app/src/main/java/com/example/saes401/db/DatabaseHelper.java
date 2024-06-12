@@ -50,6 +50,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return "SELECT COUNT(*) FROM " + TABLE_NAME + ";";
     }
+    public String deleteAllRow() {
+
+        return "DELETE FROM " + TABLE_NAME + ";";
+    }
 
     public Cursor getDataByPage(int limit, int offset) {
         SQLiteDatabase db = this.getReadableDatabase();

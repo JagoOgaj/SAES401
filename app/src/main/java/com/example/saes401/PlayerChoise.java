@@ -136,22 +136,22 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
     public void setListener() {
         imageButton1.setOnClickListener(v -> {
             onClickButton(0);
-            imageButton1.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             resetImageButtonSelection();
+            imageButton1.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             selectedImageButton = 0;
             setContinueButton();
         });
         imageButton2.setOnClickListener(v -> {
             onClickButton(1);
-            imageButton2.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             resetImageButtonSelection();
+            imageButton2.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             selectedImageButton = 1;
             setContinueButton();
         });
         imageButton3.setOnClickListener(v -> {
             onClickButton(2);
-            imageButton3.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             resetImageButtonSelection();
+            imageButton3.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             selectedImageButton = 2;
             setContinueButton();
         });
@@ -172,7 +172,7 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
 
             // Créez le texte avec les labels et les valeurs
             String labelObjet = "Nom : ";
-            String labelDescription = "Degats : ";
+            String labelDescription = "Dégats : ";
             String labelPv = "Pv :";
 
             // Combinez le tout dans un SpannableString
@@ -190,6 +190,11 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
 
             start = end + objetName.length() + 2;
             end = start + labelDescription.length();
+            spannable.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            start =end + objetDescription.length() + 2;
+            end =start + labelPv.length();
             spannable.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
