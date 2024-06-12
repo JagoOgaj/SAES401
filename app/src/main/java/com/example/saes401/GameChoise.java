@@ -22,7 +22,6 @@ import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
-import com.example.saes401.soud.GameSound;
 import com.example.saes401.utilities.Item;
 
 import org.json.JSONArray;
@@ -95,7 +94,6 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        GameSound.playClickSound(this);
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
@@ -140,14 +138,12 @@ public class GameChoise extends AppCompatActivity implements Utilities {
             handleItemClick(view, imageButton3);
         });
         buttonContinueToLevel.setOnClickListener(view -> {
-            GameSound.playClickSound(this);
             setContinueButon();
         });
         buttonContinueToLevel.setVisibility(View.INVISIBLE);
     }
 
     private void handleItemClick(View view, ImageButton button) {
-        GameSound.playClickSound(this);
         onClickButton((JSONObject) button.getTag());
         resetImageButtonSelection();
         selectedButton = button;
@@ -158,7 +154,6 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private void setContinueButon() {
         buttonContinueToLevel.setVisibility(View.VISIBLE);
         buttonContinueToLevel.setOnClickListener(v -> {
-            GameSound.playClickSound(this);
             try {
                 if (getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE)) {
                     currentEnemieIndex = JsonReader.getIndexBoss(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
@@ -211,27 +206,42 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         initFrontWarning();
     }
 
-    private void initItems() {
-        JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
-        try {
-            if (objets != null && objets.length() > 0) {
-                JSONObject objet1 = objets.getJSONObject(0);
-                imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
-                imageButton1.setTag(objet1);
+    private void initItems() throws Exception {
+        if(levelStart){
+            JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
+            try {
+                if (objets != null && objets.length() > 0) {
+                    JSONObject objet1 = objets.getJSONObject(0);
+                    imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
+                    imageButton1.setTag(objet1);
+                }
+                if (objets != null && objets.length() > 1) {
+                    JSONObject objet2 = objets.getJSONObject(1);
+                    imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
+                    imageButton2.setTag(objet2);
+                }
+                if (objets != null && objets.length() > 2) {
+                    JSONObject objet3 = objets.getJSONObject(2);
+                    imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
+                    imageButton3.setTag(objet3);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (objets != null && objets.length() > 1) {
-                JSONObject objet2 = objets.getJSONObject(1);
-                imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
-                imageButton2.setTag(objet2);
-            }
-            if (objets != null && objets.length() > 2) {
-                JSONObject objet3 = objets.getJSONObject(2);
-                imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
-                imageButton3.setTag(objet3);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        else {
+            //modifier la textView (en disant vous avez vaincu etc)
+            String[] drops = JsonReader.getDropOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel), currentEnemieIndex -1);
+            for (int i = 0; i < drops.length; i++) {
+                String buttonID = String.format(GameConstant.FORMAT_BUTTON_CHOISE, i + 1);
+                int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
+                ImageButton button = findViewById(resID);
+                JSONObject object = JsonReader.getObject(this, drops[i]);
+                button.setImageResource(getResources().getIdentifier(object.getString("image"), "drawable", getPackageName()));
+                button.setTag(object);
+            }
+        }
+
     }
 
     private void onClickButton(JSONObject objet) {

@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.helper.Settings;
-import com.example.saes401.soud.GameSound;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -106,7 +105,6 @@ public class ParametreActivity extends AppCompatActivity {
 
     private void setupButtons() {
         sauvegardeButton.setOnClickListener(v -> {
-            GameSound.playClickSound(v.getContext()); // Ajout du son de clic
             Settings.saveSettings(this, volume, selectedLanguage);
             String message = "Saved parameters";
             if (selectedLanguage.equals("fr")) {
@@ -119,7 +117,6 @@ public class ParametreActivity extends AppCompatActivity {
         });
 
         mainButton.setOnClickListener(v -> {
-            GameSound.playClickSound(v.getContext()); // Ajout du son de clic
             // Code pour retourner au menu principal
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

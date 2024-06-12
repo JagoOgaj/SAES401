@@ -21,7 +21,6 @@ import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.OnTextLoadedListener;
 import com.example.saes401.helper.Utilities;
-import com.example.saes401.soud.GameSound;
 
 public class GameNaration extends AppCompatActivity implements Utilities {
     private Intent intent;
@@ -33,7 +32,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private Player playerInstance;
     private DataModel dataModel;
     private volatile boolean clickScreen = false;
-    private static MediaPlayer narrationMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -56,9 +54,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
             e.printStackTrace();
         }
 
-        if (narrationMediaPlayer == null) {
-            narrationMediaPlayer = GameSound.narrationSound(this);
-        }
     }
 
     @Override
@@ -67,12 +62,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
     }
 
-    private void stopNarrationSound() {
-        if (narrationMediaPlayer != null) {
-            GameSound.stopNarrationSound(narrationMediaPlayer);
-            narrationMediaPlayer = null;
-        }
-    }
 
     @Override
     public void initAttibuts() {
@@ -86,8 +75,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        GameSound.playClickSound(this);
-        stopNarrationSound();
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_NARATION);
@@ -136,7 +123,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         ConstraintLayout rootLayout = findViewById(R.id.rootLayout);
         rootLayout.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                GameSound.playClickSound(this);
                 stopLoadingText();
                 try {
                     loadFullNaration(getTextView(), naration, getButtonContinue());
@@ -197,7 +183,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private void initContinueButton(Button btn) throws Exception {
         btn.setVisibility(View.VISIBLE);
         btn.setOnClickListener(v -> {
-            GameSound.playClickSound(this);
             startActivityGame();
         });
     }

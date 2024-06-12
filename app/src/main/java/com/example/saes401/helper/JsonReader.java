@@ -243,7 +243,7 @@ public class JsonReader {
         return choise;
     }
 
-    private static JSONObject getObject(Context context, String nameOfObject) {
+    public static JSONObject getObject(Context context, String nameOfObject) {
         JSONObject object = null;
         try {
             object = new JSONObject(loadJsonFromRaw(context.getResources(), GameConstant.OBJETS, context.getPackageName()))

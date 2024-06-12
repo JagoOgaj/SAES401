@@ -11,11 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.saes401.soud.GameSound;
-
 public class CreditsActivity extends AppCompatActivity {
 
-    private MediaPlayer creditMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +30,6 @@ public class CreditsActivity extends AppCompatActivity {
         animation.setDuration(15000);
 
         mainButton.setOnClickListener(v -> {
-            // Code pour retourner au menu principal
-            if (creditMediaPlayer != null) {
-                GameSound.stopCreditSound(creditMediaPlayer);
-            }
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
@@ -60,14 +53,5 @@ public class CreditsActivity extends AppCompatActivity {
 
         // Démarrer l'animation
         creditsText.startAnimation(animation);
-        creditMediaPlayer = GameSound.creditSound(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (creditMediaPlayer != null) {
-            GameSound.stopCreditSound(creditMediaPlayer);
-        }
     }
 }
