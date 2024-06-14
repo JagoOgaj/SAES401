@@ -1,9 +1,12 @@
 package com.example.saes401;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,9 +29,9 @@ public class statActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     SQLiteDatabase db;
     DatabaseHelper db_helper;
-    private int currentPage = 0;
-    private static final int ITEMS_PER_PAGE = 10;
-
+    private int pageActuel = 0;
+    private static final int nombreParPage = 3;
+    TextView affichagePagination;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +39,7 @@ public class statActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stat);
         initAttibuts();
         setListener();
-        loadDataForCurrentPage();
+        loadDataForpageActuel();
 
     }
 
@@ -50,6 +54,7 @@ public class statActivity extends AppCompatActivity {
         findViewById(R.id.deleteButton).setOnClickListener(view -> onClickDelete());
         findViewById(R.id.nextButton).setOnClickListener(view -> onClickNext());
         findViewById(R.id.prevButton).setOnClickListener(view -> onClickPrev());
+        affichagePagination = findViewById(R.id.affichagePagination);
     }
 
     private void onClickMain() {
@@ -60,14 +65,18 @@ public class statActivity extends AppCompatActivity {
         deleteAllRow();
     }
     private void onClickNext() {
-            currentPage++;
-            loadDataForCurrentPage();
+        int totalItemCount = getTotalItemCount();
+        int maxPage = (totalItemCount + nombreParPage - 1) / nombreParPage - 1;
+        if (pageActuel < maxPage) {
+            pageActuel++;
+            loadDataForpageActuel();
+        }
     }
     private void onClickPrev() {
-        if (currentPage > 0) {
-            currentPage--;
+        if (pageActuel > 0) {
+            pageActuel--;
         }
-        loadDataForCurrentPage();
+        loadDataForpageActuel();
     }
 
     private int getTotalItemCount() {
@@ -83,8 +92,8 @@ public class statActivity extends AppCompatActivity {
     }
 
 
-    private void loadDataForCurrentPage() {
-        Cursor cursor = db_helper.getDataByPage(ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+    private void loadDataForpageActuel() {
+        Cursor cursor = db_helper.getDataByPage(nombreParPage, pageActuel * nombreParPage);
         linearLayout.removeAllViews();
 
         if (cursor.moveToFirst()) {
@@ -100,17 +109,24 @@ public class statActivity extends AppCompatActivity {
                 // Créer une vue pour afficher ces données
                 TextView textView = new TextView(this);
                 textView.setBackground(ContextCompat.getDrawable(this, R.drawable.encadrementtextview)); // Appliquer le fond avec bordure
-                setColoredKeywords(textView,score,duration,maxDamageToPlayer,maxDamageToEnemy,heartLost,isWin);
-
+                setColoredKeywords(textView,score,duration,maxDamageToPlayer,maxDamageToEnemy,heartLost,isWin,this);
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    textView.setTextSize(9); // Taille plus petite en paysage
+                } else {
+                    textView.setTextSize(25); // Taille plus grande en portrait
+                }
                 // Ajouter la vue au LinearLayout
                 linearLayout.addView(textView);
             } while (cursor.moveToNext());
         }
         cursor.close();
+        int totalItemCount = getTotalItemCount();
+        int totalPageCount = (totalItemCount + nombreParPage - 1) / nombreParPage;
+        affichagePagination.setText("Page " + (pageActuel + 1) + " of " + totalPageCount);
     }
 
 
-    public static void setColoredKeywords(TextView textView, int score, String duration, int maxDamageToPlayer, int maxDamageToEnemy, int heartLost, boolean isWin) {
+    public static void setColoredKeywords(TextView textView, int score, String duration, int maxDamageToPlayer, int maxDamageToEnemy, int heartLost, boolean isWin, Context context) {
         // Format du texte initial
         String fullText = String.format("Score: %d \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nWin: %b",
                 score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, isWin);
@@ -131,10 +147,23 @@ public class statActivity extends AppCompatActivity {
                 spannableString.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
+        Typeface typeface = ResourcesCompat.getFont(context, R.font.dpcomic);
+        textView.setTypeface(typeface);
 
         // Mettre le texte formaté dans le TextView
         textView.setText(spannableString);
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("pageActuel", pageActuel); // Sauvegarder la page actuelle
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        pageActuel = savedInstanceState.getInt("pageActuel", 0); // Restaurer la page actuelle
+        loadDataForpageActuel(); // Recharger les données pour la page restaurée
+    }
 
 }
