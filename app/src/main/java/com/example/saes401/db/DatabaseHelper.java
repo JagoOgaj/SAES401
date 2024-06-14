@@ -1,9 +1,12 @@
 package com.example.saes401.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.Random;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "gameDataBase.db";
@@ -60,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_NAME + " LIMIT ? OFFSET ?";
         return db.rawQuery(query, new String[]{String.valueOf(limit), String.valueOf(offset)});
     }
+
 
 
     //todo faire les méthodes de récupérations des données
