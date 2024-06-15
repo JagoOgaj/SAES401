@@ -7,11 +7,13 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.GameSave;
 import com.example.saes401.helper.Settings;
 import com.example.saes401.helper.Utilities;
 import com.example.saes401.service.BackGroundSound;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     private ClickSound clickSoundService;
     private boolean isBound = false;
     private float volume;
+    private boolean test;
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -82,23 +85,33 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     }
 
     private void onClickCredits() {
-        intent = new Intent(this, CreditsActivity.class);
-        startActivity(intent);
+        onButtonClick();
+        startCredit();
+
     }
 
     private void onClickStart() {
+        onButtonClick();
         startActivityPlayerChoise();
     }
 
     private void onClickContinue() {
         onButtonClick();
+        if (GameSave.isGameSaveExists(this)){
+            startActivityGame();
+        }
+        else {
+            Toast.makeText(this, R.string.errorGameContinue, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void onClickSettings() {
+        onButtonClick();
         startParametre();
     }
 
     private void onClickStat() {
+        onButtonClick();
         startStat();
     }
 
@@ -124,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
-        //void
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_GAME_CONTINUE);
+        startActivity(intent);
     }
 
     @Override
@@ -140,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements Utilities {
 
     public void startStat() {
         intent = new Intent(this, statActivity.class);
+        startActivity(intent);
+    }
+
+    public void startCredit() {
+        intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 

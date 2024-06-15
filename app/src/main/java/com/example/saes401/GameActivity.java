@@ -10,9 +10,11 @@ import com.example.saes401.db.DataModel;
 import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.GameSave;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
 import com.example.saes401.story.Story;
+import com.example.saes401.utilities.Inventory;
 
 public class GameActivity extends AppCompatActivity implements Utilities {
     private Intent intent;
@@ -23,6 +25,8 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     private Boolean gameContinue;
     private Boolean levelStart;
     private DataModel dataModel;
+    private boolean isEndFight;
+    private Inventory inventoryEnemie;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -35,12 +39,30 @@ public class GameActivity extends AppCompatActivity implements Utilities {
     }
 
     private void initStartActivity() {
+        if(this.previousActivity.contains(GameConstant.VALUE_GAME_CONTINUE)) {
+            this.playerInstance = GameSave.loadPlayer(this);
+            this.currentLevel = GameSave.loadLevel(this);
+            this.currentEnemieInstance = GameSave.loadCurrentEnemyIndex(this);
+            this.levelStart = GameSave.loadLevelStart(this);
+            this.gameContinue = GameSave.loadPlayerWin(this);
+            this.isEndFight = GameSave.loadEndFight(this);
+            this.inventoryEnemie = GameSave.loadEnemieInventory(this);
+            if (GameSave.loadPreviousActivity(this).contains(GameConstant.VALUE_GAME_CHOISE))
+                startActivityGameChoise();
+            else if (GameSave.loadPreviousActivity(this).contains(GameConstant.VALUE_GAME_NARATION))
+                startActivityGameNaration();
+            else if (GameSave.loadPreviousActivity(this).contains(GameConstant.VALUE_STORY))
+                statActivityStory();
+            else
+                startActivityPlayerChoise();
+        }
         // Nartion -> GameChoise -> Story
-        if (this.previousActivity.contains(GameConstant.VALUE_PLAYER_CHOISE)) {
+        else if (this.previousActivity.contains(GameConstant.VALUE_PLAYER_CHOISE)) {
             startActivityGameNaration();
         } else if (this.previousActivity.contains(GameConstant.VALUE_STORY)) {
             if (this.currentLevel > 3) {
-                startMainActivity();
+                GameSave.clearGameSaveKeys(this);
+                startCredit();
             } else if (!noEnemieLeft(this.currentEnemieInstance)) {
                 this.currentEnemieInstance++;
                 this.levelStart = false;
@@ -56,7 +78,8 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_NARATION)) {
             if (this.currentLevel > 3 || !this.gameContinue) {
                 setDataToDB();
-                startMainActivity();
+                GameSave.clearGameSaveKeys(this);
+                startCredit();
             } else startActivityGameChoise();
 
         }
@@ -90,7 +113,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.previousActivity = intent.getStringExtra(GameConstant.KEY_PREVIOUS_ACTIVITY);
-        this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
+        this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL) == null ? new DataModel() : intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
     }
 
     @Override
@@ -138,6 +161,11 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         startActivity(this.intent);
     }
 
+    private void startCredit() {
+        this.intent = new Intent(this, CreditsActivity.class);
+        startActivity(this.intent);
+    }
+
     private void putExtra() {
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
@@ -145,6 +173,8 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         this.intent.putExtra(GameConstant.KEY_START_LEVEL, this.levelStart);
         this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         this.intent.putExtra(GameConstant.KEY_DATA_MODEL, this.dataModel);
+        this.intent.putExtra(GameConstant.KEY_INVENTORY_ENEMIE, this.inventoryEnemie);
+        this.intent.putExtra(GameConstant.KEY_END_FIGHT, this.isEndFight);
     }
 
     @Override
@@ -154,17 +184,13 @@ public class GameActivity extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityPlayerChoise() {
-        //void
+       this.intent = new Intent(this, PlayerChoise.class);
+       putExtra();
+       startActivity(this.intent);
     }
 
     @Override
     public void setListener() {
 
     }
-
-    private void startMainActivity() {
-        intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
 }

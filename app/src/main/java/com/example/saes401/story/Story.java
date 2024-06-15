@@ -1,10 +1,13 @@
 package com.example.saes401.story;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.saes401.GameActivity;
@@ -20,8 +24,12 @@ import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Enemie;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.GameSave;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.service.BackGroundFightSound;
+import com.example.saes401.service.BackGroundSound;
+import com.example.saes401.service.ClickSound;
 import com.example.saes401.utilities.GameFight;
 import com.example.saes401.utilities.Inventory;
 import com.example.saes401.utilities.Item;
@@ -47,8 +55,25 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private final ArrayList<ImageView> imageViewsEnemie = new ArrayList<ImageView>();
     private int indexItemChoose = -1;
     private final Object lock = new Object();
+    private boolean fightEnd = false;
     private DataModel dataModel;
     private Random random;
+    private boolean isBound = false;
+    private ClickSound clickSoundService;
+    private int hpLeftEnemie = -1;
+    private Inventory inventoryEnemieInstance;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +92,81 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+        if (!gameContinue) {
+            stopService(new Intent(this, BackGroundFightSound.class));
+            startService(new Intent(this, BackGroundSound.class));
+        } else {
+            stopService(new Intent(this, BackGroundFightSound.class));
+            startService(new Intent(this, BackGroundSound.class));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GameSave.saveGame(
+                this,
+                this.currentLevel,
+                this.playerInstance,
+                this.currentEnemieIndex,
+                this.levelStart,
+                GameConstant.VALUE_STORY,
+                this.gameContinue,
+                this.fightEnd,
+                this.currentEnemieInstance.getInventory(),
+                this.currentEnemieInstance.getHPEnemie()
+        );
+    }
+
+    private void initSoundService() {
+        stopService(new Intent(this, BackGroundSound.class));
+        startService(new Intent(this, BackGroundFightSound.class));
+        bindService(new Intent(this, ClickSound.class), serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void onClickButton() {
+        if (isBound){
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
+        }
+    }
+
+    @Override
     public void initAttibuts() {
+        this.inventoryEnemieInstance = intent.getParcelableExtra(GameConstant.KEY_INVENTORY_ENEMIE);
+        this.hpLeftEnemie = intent.getIntExtra(GameConstant.KEY_HP_LEFT_ENEMIE, -1);
         this.playerInstance = intent.getParcelableExtra(GameConstant.KEY_PLAYER);
         this.currentLevel = intent.getIntExtra(GameConstant.KEY_LEVEL, 0);
         this.currentEnemieIndex = intent.getIntExtra(GameConstant.KEY_ENEMIE_INDEX, 0);
         this.levelStart = intent.getBooleanExtra(GameConstant.KEY_START_LEVEL, false);
         this.gameContinue = intent.getBooleanExtra(GameConstant.KEY_PLAYER_WIN, false);
         this.dataModel = intent.getParcelableExtra(GameConstant.KEY_DATA_MODEL);
-        try {
-            initEnemie();
-            addItemOfEnemie();
-        } catch (Exception e) {
-            e.printStackTrace();
+        this.fightEnd = intent.getBooleanExtra(GameConstant.KEY_END_FIGHT, false);
+        if (currentEnemieInstance == null){
+            try {
+                initEnemie();
+                addItemOfEnemie();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void initEnemie() throws Exception {
-        int hp = JsonReader.getEnemieHP(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
+        int hp = this.hpLeftEnemie == -1 ? JsonReader.getEnemieHP(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex) : this.hpLeftEnemie;
         String name = JsonReader.getEnemieName(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
-        Inventory inventory = new Inventory(JsonReader.getItemsOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex).length);
+        Inventory inventory = this.inventoryEnemieInstance == null ? new Inventory(JsonReader.getItemsOfEnemie(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex).length) : this.inventoryEnemieInstance;
         String damage = JsonReader.getEnemieDamageStringFormat(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
         String image = JsonReader.getEnemieImageSrc(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel), this.currentEnemieIndex);
         this.currentEnemieInstance = new Enemie(
@@ -180,7 +261,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         thread.start();
     }
 
-    private int getResultPlayer(int[] dices, boolean useItem) {
+    private int getResultPlayer(@NonNull int[] dices, boolean useItem) {
         int resultPlayer = 0;
         int result = 0;
         for (int i = 0; i < dices.length; i++) {
@@ -216,7 +297,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     @Override
     public void run() {
         this.fightInstance = new GameFight(playerInstance, currentEnemieInstance, this);
-        while (true) {
+        while (!this.fightEnd) {
             runOnUiThread(() -> {
                 setVisibilityButtonTake(true);
             });
@@ -257,10 +338,14 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             random = new Random();
             boolean souldGetItem = random.nextBoolean();
             Item itemEnemie;
-            if (souldGetItem) {
-                itemEnemie = currentEnemieInstance.getItem();
-            } else {
-                itemEnemie = null;
+            try {
+                if (souldGetItem && !currentEnemieInstance.getInventory().isEmptyInventory()) {
+                    itemEnemie = currentEnemieInstance.getItem();
+                } else {
+                    itemEnemie = null;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
             try {
                 numberDicesEnemie = fightInstance.getDiceEnemie();
@@ -298,10 +383,12 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 runOnUiThread(() -> setFrontHeart(GameConstant.FORMAT_HEART_ENEMIE, currentEnemieInstance.getHPEnemie(), true));
             } else {
                 //egalité
-                getTextViewGamePLay().setText(R.string.nullMatchFight);
-                getViewGameplay().removeAllViews();
+                runOnUiThread(() ->  {
+                    getTextViewGamePLay().setText(R.string.nullMatchFight);
+                    getViewGameplay().removeAllViews();
+                });
             }
-            if (playerInstance.getHPplayer() <= 0 || currentEnemieInstance.getHPEnemie() == 0) {
+            if (playerInstance.getHPplayer() == 0 || currentEnemieInstance.getHPEnemie() == 0) {
                 runOnUiThread(() -> {
                     getViewGameplay().removeAllViews();
                     getTextViewGamePLay().setText("");
@@ -321,6 +408,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         runOnUiThread(() -> {
             setListenerButtonTakeItem(true);
         });
+        this.fightEnd = true;
         this.gameContinue = playerInstance.getHPplayer() > 0;
         synchronized (lock) {
             try {
@@ -333,16 +421,38 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     private void initFront() throws Exception {
-        setTextGameplay(-1);
-        setScoreText(getTextScoreEnemie(), 0);
-        setScoreText(getTextScorePlayer(), 0);
-        setCurrentLevelFront();
-        setVisibilityButtonTake(true);
-        getButtonTakeItem().setText(R.string.useDice);
-        setListenerButtonTakeItem(false);
-        initFrontPlayer();
-        initFrontEnemie();
-        setListener();
+        if (!this.gameContinue && fightEnd) {
+            getViewGameplay().removeAllViews();
+            getTextViewGamePLay().setText("");
+            getTextScoreEnemie().setText("");
+            getTextScorePlayer().setText("");
+            getInformationTextView().setText("");
+            setListenerButtonTakeItem(true);
+            int text =R.string.looseFight ;
+            getTextViewGamePLay().setText(text);
+        }
+        else if (this.gameContinue && fightEnd) {
+            getViewGameplay().removeAllViews();
+            getTextViewGamePLay().setText("");
+            getTextScoreEnemie().setText("");
+            getTextScorePlayer().setText("");
+            getInformationTextView().setText("");
+            setListenerButtonTakeItem(true);
+            int text = R.string.winFight;
+            getTextViewGamePLay().setText(text);
+        }
+        else {
+            setTextGameplay(-1);
+            setScoreText(getTextScoreEnemie(), 0);
+            setScoreText(getTextScorePlayer(), 0);
+            setCurrentLevelFront();
+            setVisibilityButtonTake(true);
+            getButtonTakeItem().setText(R.string.useDice);
+            setListenerButtonTakeItem(false);
+            initFrontPlayer();
+            initFrontEnemie();
+            setListener();
+        }
     }
 
     private void setCurrentLevelFront() {
@@ -359,7 +469,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         else getTextViewGamePLay().setText(String.valueOf(result));
     }
 
-    private void setScoreText(TextView textView, int result) {
+    private void setScoreText(@NonNull TextView textView, int result) {
         textView.setText(
                 String.format(
                         GameConstant.FORMAT_SCORE,
@@ -386,7 +496,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         initLinearItems(getViewChoiseLoot(), playerInstance.getInventory(), true);
     }
 
-    private void initFrontHeart(LinearLayout layout, int hp, String prefix) {
+    private void initFrontHeart(@NonNull LinearLayout layout, int hp, String prefix) {
         layout.removeAllViews();
         for (int i = 0; i < hp; i++) {
             ImageView imageView = new ImageView(this);
@@ -426,7 +536,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         } else setVisibilityOfHeart(index, prefix);
     }
 
-    private void initLinearItems(LinearLayout layout, Inventory inventory, boolean isPlayer) throws Exception {
+    private void initLinearItems(@NonNull LinearLayout layout, @NonNull Inventory inventory, boolean isPlayer) throws Exception {
         layout.removeAllViews();
         for (int i = 0; i < inventory.getCurentLength(); i++) {
             ImageView imageView = new ImageView(this);
@@ -475,7 +585,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         }
     }
 
-    private void updateDiceResult(int[] dicesResult, int result, boolean isPlayer) {
+    private void updateDiceResult(@NonNull int[] dicesResult, int result, boolean isPlayer) {
         getTextViewGamePLay().setText("");
         getTextScoreEnemie().setText("");
         clearColorFilterImageView(imageViewsEnemie);
@@ -497,6 +607,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         setScoreText(textView, result);
     }
 
+    @NonNull
     private ImageView initImageView(int res, boolean isAnimation) {
         ImageView imageView = new ImageView(this);
         if (isAnimation) imageView.setBackgroundResource(res);
@@ -509,11 +620,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         return imageView;
     }
 
-    private void initNameEnemie(TextView textView, String name) {
+    private void initNameEnemie(@NonNull TextView textView, String name) {
         textView.setText(name);
     }
 
-    private void initAvatar(ImageView imageView, int resID, boolean needRotation) {
+    private void initAvatar(@NonNull ImageView imageView, int resID, boolean needRotation) {
         imageView.setImageResource(resID);
         if (needRotation) imageView.setScaleX(-1);
     }
@@ -579,13 +690,14 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    onClickButton();
                     Item item = (Item) imageView.getTag();
                     int selectedItemIndex = playerInstance.getInventory().getIndexOfItem(item);
 
                     if (indexItemChoose == selectedItemIndex) {
                         // Désélectionner l'item
                         imageView.clearColorFilter();
-                        getTextViewGamePLay().setText("");
+                        setTextGameplay(-1);
                         getButtonTakeItem().setText(R.string.useDice); // Remettre le texte original
                         indexItemChoose = -1; // Réinitialiser l'index de l'item sélectionné
                     } else {
@@ -610,7 +722,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         }
     }
 
-    private void clearColorFilterImageView(ArrayList<ImageView> imageViews) {
+    private void clearColorFilterImageView(@NonNull ArrayList<ImageView> imageViews) {
         for (ImageView imageView : imageViews) {
             imageView.clearColorFilter();
         }
@@ -619,8 +731,9 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void setListenerButtonTakeItem(boolean isEnd) {
         if (!isEnd) {
             getButtonTakeItem().setOnClickListener(view -> {
+                onClickButton();
                 removeClickListeners();
-                getTextViewGamePLay().setText("");
+                setTextGameplay(-1);
                 if (indexItemChoose != -1) {
                     playerInstance.setCurrentItem(indexItemChoose);
                 }
@@ -633,6 +746,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             getButtonTakeItem().setText(R.string.continue_game);
             getButtonTakeItem().setVisibility(View.VISIBLE);
             getButtonTakeItem().setOnClickListener(view -> {
+                onClickButton();
                 synchronized (lock) {
                     lock.notify();
                 }
