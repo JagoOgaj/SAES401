@@ -1,6 +1,5 @@
 package com.example.saes401.service;
 
-
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -9,14 +8,13 @@ import android.os.IBinder;
 import com.example.saes401.R;
 import com.example.saes401.helper.GameConstant;
 
-
 public class BackGroundSound extends Service {
     private MediaPlayer mediaPlayer;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mediaPlayer = MediaPlayer.create(this, R.raw.medievale);
+        mediaPlayer = MediaPlayer.create(this, R.raw.loose_sound);
         mediaPlayer.setLooping(true);
     }
 
@@ -48,8 +46,9 @@ public class BackGroundSound extends Service {
     private void playBackgroundSound(float volume) {
         if (mediaPlayer != null) {
             mediaPlayer.setVolume(volume, volume);
-            mediaPlayer.start();
+            if (!mediaPlayer.isPlaying()) {
+                mediaPlayer.start();
+            }
         }
     }
 }
-

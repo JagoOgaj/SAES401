@@ -1,13 +1,16 @@
 package com.example.saes401;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -18,12 +21,10 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.service.ClickSound;
 
 public class statActivity extends AppCompatActivity {
     LinearLayout linearLayout;
@@ -32,6 +33,20 @@ public class statActivity extends AppCompatActivity {
     private int pageActuel = 0;
     private static final int nombreParPage = 3;
     TextView affichagePagination;
+    private boolean isBound = false;
+    private ClickSound clickSoundService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +55,43 @@ public class statActivity extends AppCompatActivity {
         initAttibuts();
         setListener();
         loadDataForpageActuel();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
+
+    public void onButtonClick() {
+        if (isBound) {
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
+        }
+    }
+
+    private void initSoundService() {
+        bindClickSoundService();
+    }
+
+    private void bindClickSoundService() {
+        Intent intent2 = new Intent(this, ClickSound.class);
+        bindService(intent2, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public void initAttibuts() {
         linearLayout = findViewById(R.id.linear);
         db_helper = new DatabaseHelper(this);
         db = openOrCreateDatabase(db_helper.getDatabaseName(), MODE_PRIVATE, null);
+        affichagePagination = findViewById(R.id.affichagePagination);
     }
 
     public void setListener() {
@@ -54,17 +99,19 @@ public class statActivity extends AppCompatActivity {
         findViewById(R.id.deleteButton).setOnClickListener(view -> onClickDelete());
         findViewById(R.id.nextButton).setOnClickListener(view -> onClickNext());
         findViewById(R.id.prevButton).setOnClickListener(view -> onClickPrev());
-        affichagePagination = findViewById(R.id.affichagePagination);
     }
 
     private void onClickMain() {
+        onButtonClick();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
     private void onClickDelete() {
+        onButtonClick();
         deleteAllRow();
     }
     private void onClickNext() {
+        onButtonClick();
         int totalItemCount = getTotalItemCount();
         int maxPage = (totalItemCount + nombreParPage - 1) / nombreParPage - 1;
         if (pageActuel < maxPage) {
@@ -73,6 +120,7 @@ public class statActivity extends AppCompatActivity {
         }
     }
     private void onClickPrev() {
+        onButtonClick();
         if (pageActuel > 0) {
             pageActuel--;
         }
@@ -128,9 +176,7 @@ public class statActivity extends AppCompatActivity {
 
     public static void setColoredKeywords(TextView textView, int score, String duration, int maxDamageToPlayer, int maxDamageToEnemy, int heartLost, boolean isWin, Context context) {
         // Format du texte initial
-        String fullText = String.format("Score: %d \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nWin: %b",
-                score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, isWin);
-
+        String fullText = String.format(GameConstant.FORMAT_STAT, score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, isWin);
 
         // Création d'un SpannableString à partir du texte complet
         SpannableString spannableString = new SpannableString(fullText);
@@ -156,13 +202,13 @@ public class statActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("pageActuel", pageActuel); // Sauvegarder la page actuelle
+        outState.putInt(GameConstant.KEY_PAGINATION, pageActuel); // Sauvegarder la page actuelle
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        pageActuel = savedInstanceState.getInt("pageActuel", 0); // Restaurer la page actuelle
+        pageActuel = savedInstanceState.getInt(GameConstant.KEY_PAGINATION, 0); // Restaurer la page actuelle
         loadDataForpageActuel(); // Recharger les données pour la page restaurée
     }
 

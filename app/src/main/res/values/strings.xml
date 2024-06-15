@@ -41,4 +41,5 @@
     <string name="use">Use</string>
     <string name="delete">Delete scores</string>
     <string name="errorInsertItem">Inserting a new item replaces a randomly acquired item</string>
+    <string name="errorGameContinue">No saved game</string>
 </resources>

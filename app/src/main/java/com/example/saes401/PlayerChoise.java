@@ -27,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.GameSave;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
 import com.example.saes401.service.ClickSound;
@@ -93,6 +94,24 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
             unbindService(serviceConnection);
             isBound = false;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        GameSave.saveGame(
+                this,
+                this.currentLevel,
+                this.instancePLayer == null ? null : this.instancePLayer,
+                0,
+                this.isStartLevel,
+                GameConstant.VALUE_PLAYER_CHOISE,
+                this.isPLayerWin,
+                false,
+                null,
+                -1
+        );
     }
 
     public void onButtonClick() {
@@ -163,6 +182,7 @@ public class PlayerChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
+        onButtonClick();
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PREVIOUS_ACTIVITY, GameConstant.VALUE_PLAYER_CHOISE);

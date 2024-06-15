@@ -1,9 +1,12 @@
 package com.example.saes401;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -20,8 +23,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.GameSave;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.service.ClickSound;
 import com.example.saes401.utilities.Item;
 
 import org.json.JSONArray;
@@ -44,6 +49,20 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private boolean levelStart;
     private boolean gameContinue;
     private DataModel dataModel;
+    private boolean isBound = false;
+    private ClickSound clickSoundService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +78,52 @@ public class GameChoise extends AppCompatActivity implements Utilities {
             Log.d("error -> initFront", e.getMessage());
         }
         setListener();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GameSave.saveGame(
+                this,
+                this.currentLevel,
+                this.playerInstance,
+                this.currentEnemieIndex,
+                this.levelStart,
+                GameConstant.VALUE_GAME_CHOISE,
+                this.gameContinue,
+                false,
+                null,
+                -1
+        );
+    }
+
+    public void onButtonClick() {
+        if (isBound) {
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
+        }
+    }
+    private void initSoundService() {
+        bindClickSoundService();
+    }
+
+    private void bindClickSoundService() {
+        Intent intent2 = new Intent(this, ClickSound.class);
+        bindService(intent2, serviceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -94,6 +159,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     public void startActivityGame() {
+        onButtonClick();
         this.intent = new Intent(this, GameActivity.class);
         this.intent.putExtra(GameConstant.KEY_LEVEL, this.currentLevel);
         this.intent.putExtra(GameConstant.KEY_PLAYER, this.playerInstance);
@@ -129,15 +195,19 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     @Override
     public void setListener() {
         imageButton1.setOnClickListener(view -> {
+            onButtonClick();
             handleItemClick(view, imageButton1);
         });
         imageButton2.setOnClickListener(view -> {
+            onButtonClick();
             handleItemClick(view, imageButton2);
         });
         imageButton3.setOnClickListener(view -> {
+            onButtonClick();
             handleItemClick(view, imageButton3);
         });
         buttonContinueToLevel.setOnClickListener(view -> {
+            onButtonClick();
             setContinueButon();
         });
         buttonContinueToLevel.setVisibility(View.INVISIBLE);

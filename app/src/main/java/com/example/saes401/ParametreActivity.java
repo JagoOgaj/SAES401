@@ -1,9 +1,12 @@
 package com.example.saes401;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +17,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.saes401.helper.GameConstant;
 import com.example.saes401.helper.Settings;
+import com.example.saes401.service.BackGroundSound;
+import com.example.saes401.service.ClickSound;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -26,6 +32,20 @@ public class ParametreActivity extends AppCompatActivity {
     String selectedLanguage;
     int volume;
     private AudioManager audioManager;
+    private boolean isBound = false;
+    private ClickSound clickSoundService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +63,38 @@ public class ParametreActivity extends AppCompatActivity {
         setupButtons();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
+
+    private void initSoundService() {
+        bindClickSoundService();
+    }
+
+    public void onButtonClick() {
+        if (isBound) {
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
+        }
+    }
+
+    private void bindClickSoundService() {
+        Intent intent2 = new Intent(this, ClickSound.class);
+        bindService(intent2, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
     private void setupSpinner() {
+        onButtonClick();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.langues_array, R.layout.spinner_vert);
         adapter.setDropDownViewResource(R.layout.spinner_vert);
@@ -53,7 +104,7 @@ public class ParametreActivity extends AppCompatActivity {
         langueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Ce code est exécuté lorsque l'utilisateur sélectionne une langue dans le Spinner
+                onButtonClick();
                 selectedLanguage = parent.getItemAtPosition(position).toString();
                 if (Objects.equals(selectedLanguage, "French") || Objects.equals(selectedLanguage, "Français")) {
                     selectedLanguage = "fr";
@@ -64,29 +115,28 @@ public class ParametreActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Ce code est exécuté si aucune sélection n'est faite
+                // Aucun code nécessaire ici
             }
         });
     }
 
     private void setupSeekBar() {
-        //objet audio
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         volumeSeekBar.setMax(maxVolume);
-        //initialise le volume max de la machine
+
+        // Initialise le volume avec la valeur sauvegardée
         int volumeSave = Settings.loadVolume(this);
         volumeSeekBar.setProgress(volumeSave);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeSave, 0);
 
+        // Assigner la valeur initiale du volume
+        volume = volumeSave;
+
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // Ce code est exécuté chaque fois que l'utilisateur modifie la position du curseur
-
                 if (fromUser) {  // Vérifie si le changement vient de l'utilisateur
-                    // Applique le volume sélectionné au flux de musique
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, AudioManager.FLAG_SHOW_UI);
-                    // FLAG_SHOW_UI permet d'afficher un indicateur visuel de changement de volume sur l'écran
                     volume = progress;
                 }
             }
@@ -105,7 +155,10 @@ public class ParametreActivity extends AppCompatActivity {
 
     private void setupButtons() {
         sauvegardeButton.setOnClickListener(v -> {
+            onButtonClick();
             Settings.saveSettings(this, volume, selectedLanguage);
+            restartBackgroundSoundService();
+
             String message = "Saved parameters";
             if (selectedLanguage.equals("fr")) {
                 message = "Paramètres sauvegardés";
@@ -117,10 +170,22 @@ public class ParametreActivity extends AppCompatActivity {
         });
 
         mainButton.setOnClickListener(v -> {
+            onButtonClick();
             // Code pour retourner au menu principal
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void restartBackgroundSoundService() {
+        // Arrêter le service s'il est en cours d'exécution
+        stopService(new Intent(this, BackGroundSound.class));
+
+        // Redémarrer le service avec le nouveau volume
+        Intent intent = new Intent(this, BackGroundSound.class);
+        float volumePercentage = volume / (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        intent.putExtra(GameConstant.VOLUME, volumePercentage);
+        startService(intent);
     }
 
     private void chargementParDefaut(String langue) {
@@ -134,49 +199,3 @@ public class ParametreActivity extends AppCompatActivity {
         return locale.getDisplayName(locale);
     }
 }
-
-
-//    private void save(int volume, String langue) {
-//        SharedPreferences sharedPreferences = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putInt("SavedVolume", volume);
-//        editor.putString("SavedLanguage", langue);
-//        editor.apply();
-//    }
-//
-//    private void load() {
-//        // Obtenir l'instance de SharedPreferences
-//        SharedPreferences sharedPreferences = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE);
-//        // Lire la valeur du volume, avec une valeur par défaut si non trouvée
-//        int savedVolume = sharedPreferences.getInt("SavedVolume", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-//        // Définir la progression du SeekBar avec la valeur sauvegardée
-//        volumeSeekBar.setProgress(savedVolume);
-//        String langue = sharedPreferences.getString("SavedLanguage", "en");
-//        changeLanguage(langue);
-//        if(Objects.equals(langue,"en")){
-//            langue = "English";
-//        }
-//        int spinnerPosition = ((ArrayAdapter) langueSpinner.getAdapter()).getPosition(langue);
-//        langueSpinner.setSelection(spinnerPosition, false);
-//    }
-//    private void changeLanguage(String langue) {
-//
-//        if(Objects.equals(langue, "French") || Objects.equals(langue, "Français")){
-//            langue="fr";
-//        }
-//        else if (Objects.equals(langue, "English") || Objects.equals(langue, "Anglais")){
-//            langue="en";
-//        }
-//        selectedLanguage=langue;
-//        if (!Locale.getDefault().getLanguage().equals(langue)) {
-//            Locale locale = new Locale(langue);
-//            Locale.setDefault(locale);
-//            Configuration config = new Configuration();
-//            config.setLocale(locale);
-//            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-//
-//            // Redémarrage de l'activité pour appliquer la nouvelle configuration de langue
-//            recreate();
-//        }
-//    }
-

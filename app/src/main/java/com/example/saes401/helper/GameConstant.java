@@ -14,6 +14,9 @@ public final class GameConstant {
     public static final String KEY_PLAYER = "playerInstance";
     public static final String KEY_ENEMIE_INDEX = "currentEnemie";
     public static final String KEY_ENEMIE_INSTANCE = "currentEnemieIntance";
+    public static final String KEY_INVENTORY_ENEMIE = "inventoryEnemie";
+    public static final String KEY_HP_LEFT_ENEMIE = "hpLeftEnemie";
+    public static final String KEY_END_FIGHT = "endFight";
     public static final String KEY_DATA_MODEL = "dataModel";
     public static final String VALUE_GAME_ACTIVITY = "gameActivity";
     public static final String VALUE_GAME_CHOISE = "gameChoise";
@@ -37,6 +40,9 @@ public final class GameConstant {
     public static final String CLEE_MAUDITE = "cle maudite";
     public static final String VOLUME = "SavedVolume";
     public static final String LANGUE = "SavedLanguage";
-
-
+    public static final String FORMAT_STAT = "Score: %d \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nWin: %b";
+    public static final String KEY_PAGINATION = "pageActuel";
+    public static final String KEY_GAME_SAVE = "gameSave";
+    public static final String CONTINUE_GAME = "continueGame";
+    public static final String VALUE_GAME_CONTINUE = "gameContinue";
 }

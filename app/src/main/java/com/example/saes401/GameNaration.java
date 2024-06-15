@@ -1,9 +1,12 @@
 package com.example.saes401;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,9 +21,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.saes401.db.DataModel;
 import com.example.saes401.entities.Player;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.GameSave;
 import com.example.saes401.helper.JsonReader;
 import com.example.saes401.helper.OnTextLoadedListener;
 import com.example.saes401.helper.Utilities;
+import com.example.saes401.service.ClickSound;
 
 public class GameNaration extends AppCompatActivity implements Utilities {
     private Intent intent;
@@ -32,6 +37,20 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private Player playerInstance;
     private DataModel dataModel;
     private volatile boolean clickScreen = false;
+    private boolean isBound = false;
+    private ClickSound clickSoundService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClickSound.LocalBinder binder = (ClickSound.LocalBinder) service;
+            clickSoundService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -53,15 +72,54 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initSoundService();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Ne pas arrêter le son ici pour qu'il continue de jouer en arrière-plan
+        GameSave.saveGame(
+                this,
+                this.currentLevel,
+                this.playerInstance,
+                this.currentIndexEnemie,
+                this.levelStart,
+                GameConstant.VALUE_GAME_NARATION,
+                this.gameContinue,
+                false,
+                null,
+                -1
+        );
     }
 
+    private void initSoundService() {
+        bindClickSoundService();
+    }
+
+    private void bindClickSoundService() {
+        Intent intent2 = new Intent(this, ClickSound.class);
+        bindService(intent2, serviceConnection, BIND_AUTO_CREATE);
+    }
+
+    public void onButtonClick() {
+        if (isBound) {
+            clickSoundService.playClickSound(R.raw.button_click, 1.0f);
+        }
+    }
 
     @Override
     public void initAttibuts() {
@@ -183,6 +241,7 @@ public class GameNaration extends AppCompatActivity implements Utilities {
     private void initContinueButton(Button btn) throws Exception {
         btn.setVisibility(View.VISIBLE);
         btn.setOnClickListener(v -> {
+            onButtonClick();
             startActivityGame();
         });
     }
