@@ -302,7 +302,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     private void initFrontWarning() throws Exception {
         if (playerInstance.isFullinventory()) {
-            showAlertDialog(getTextViewWarning(), String.valueOf(R.string.errorInsertItem));
+            showAlertDialog(getTextViewWarning(), getString(R.string.errorInsertItem));
         }
     }
 

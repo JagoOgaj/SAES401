@@ -52,7 +52,7 @@ public class Player extends GameCharacter implements Parcelable {
         this.inventory.setItemsInventory(item);
     }
 
-    public void setInentoryRandom(Item item) {
+    public void setInentoryRandom(Item item) throws Exception {
         this.inventory.addItemRandomPlayer(item);
     }
 

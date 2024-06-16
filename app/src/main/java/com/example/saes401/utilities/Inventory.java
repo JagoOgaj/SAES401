@@ -62,7 +62,7 @@ public class Inventory implements Parcelable {
         items = newItems;
     }
 
-    public void addItemRandomPlayer(Item item) {
+    public void addItemRandomPlayer(Item item) throws Exception {
         Random random = new Random();
         this.items[random.nextInt(this.items.length)] = item;
     }
@@ -89,12 +89,11 @@ public class Inventory implements Parcelable {
 
     public void removeItem(Item item) {
         int index = getIndexOfItem(item);
-        if (index < 0 || index >= items.length) {
+        if (index < 0 || index >= slots) {
             throw new IllegalArgumentException("Index out of bounds or array is null");
         }
 
-        // Créer un nouveau tableau de taille inférieure de 1
-        Item[] newArray = new Item[items.length - 1];
+        Item[] newArray = new Item[slots];
 
         // Copier les éléments avant l'index
         for (int i = 0; i < index; i++) {
@@ -102,7 +101,7 @@ public class Inventory implements Parcelable {
         }
 
         // Copier les éléments après l'index
-        for (int i = index; i < items.length - 1; i++) {
+        for (int i = index; i < slots - 1; i++) {
             newArray[i] = items[i + 1];
         }
         this.items = newArray;
@@ -119,14 +118,14 @@ public class Inventory implements Parcelable {
     }
 
     private boolean canInserItem() throws Exception {
-        return getLastIndex() <= items.length - 1;
+        int index = getLastIndex();
+        return index < slots;
     }
 
 
     private int getLastIndex() throws Exception {
-        int index = -1;
         for (int i = 0; i < this.items.length; i++)
             if (this.items[i] == null) return i;
-        return this.items.length;
+        return slots;
     }
 }
