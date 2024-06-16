@@ -20,7 +20,7 @@
       "image": "morda_roi_des_betes",
       "image_sansfond": "sf_morda_roi_des_betes",
       "win": {
-        "dropPossible": ["bouclier_R", "epee_R"],
+        "dropPossible": ["bouclier_R", "epee_R","grimoire_R"],
         "narration": "The defeat of Morda calms the spirits of the fierce beasts, bringing peace to the forest."
       },
       "loose": {
@@ -38,7 +38,7 @@
       "image": "gromm_la_bete",
       "image_sansfond": "sf_gromm_la_bete",
       "win": {
-        "dropPossible": ["lance_R", "arc_R"],
+        "dropPossible": ["lance_R", "arc_R","epee_R"],
         "narration": "Gromm falls under your strikes, and his howls echo through the forest."
       },
       "loose": {
@@ -56,7 +56,7 @@
       "image": "garnar_le_cornu",
       "image_sansfond": "sf_garnar_le_cornu",
       "win": {
-        "dropPossible": ["grimoire_R", "bouclier_SR"],
+        "dropPossible": ["grimoire_R", "bouclier_SR","epee_SR"],
         "narration": "Garnar collapses, his last roar muffled by victory."
       },
       "loose": {
@@ -74,7 +74,7 @@
       "image": "thorne_le_berserker",
       "image_sansfond": "sf_thorne_le_berserker",
       "win": {
-        "dropPossible": ["epee_SR", "lance_SR"],
+        "dropPossible": ["epee_SR", "lance_SR","arc_SR"],
         "narration": "Thorne is defeated, his fury extinguishing with his last breath."
       },
       "loose": {
@@ -92,7 +92,7 @@
       "image": "gorath_le_guerrier",
       "image_sansfond": "sf_gorath_le_guerrier",
       "win": {
-        "dropPossible": ["arc_SR", "grimoire_SSR"],
+        "dropPossible": ["arc_SR", "grimoire_SSR","epee_SSR"],
         "narration": "With the fall of Gorath, the command of the enemy troops collapses."
       },
       "loose": {
