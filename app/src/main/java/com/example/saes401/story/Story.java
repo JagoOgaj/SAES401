@@ -269,25 +269,21 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         }
         try {
             resultPlayer = fightInstance.getResultPlayer(result, useItem);
+            indexItemChoose = -1;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return resultPlayer;
     }
 
-    private int getResultEnemie(int[] dices, boolean isBoss, Item itemEnemie) {
+    private int getResultEnemie(int[] dices, Item itemEnemie) {
         int result = 0;
         try {
-            if (isBoss) { //Multiplie ou ajoute touts les bonus pour chaque dès
-                for (int i = 0; i < dices.length; i++) {
-                    result += fightInstance.getResultEnemie(dices[i], itemEnemie);
-                }
-            } else { //Multiplie ou ajoute aux résultat des dès
                 for (int i = 0; i < dices.length; i++) {
                     result += (dices[i]);
                 }
                 result = fightInstance.getResultEnemie(result, itemEnemie);
-            }
+
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -357,7 +353,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             waitForDelay();
             int resultEnemie = 0;
             try {
-                resultEnemie = getResultEnemie(numberDicesEnemie, this.currentEnemieIndex == JsonReader.getNumberEnemies(this, String.format(GameConstant.FORMAT_LEVEL, this.currentLevel)), itemEnemie);
+                resultEnemie = getResultEnemie(numberDicesEnemie, itemEnemie);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -460,7 +456,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                 String.format(
                         GameConstant.FORMAT_CURRENT_LEVEL,
                         this.currentLevel,
-                        this.currentEnemieIndex
+                        this.currentEnemieIndex + 1
                 ));
     }
 
