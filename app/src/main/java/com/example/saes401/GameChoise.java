@@ -51,6 +51,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
     private DataModel dataModel;
     private boolean isBound = false;
     private ClickSound clickSoundService;
+    private JSONObject[] infoButton = new JSONObject[3];
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -240,13 +241,37 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstance) {
-        super.onRestoreInstanceState(savedInstance);
-        currentLevel = savedInstance.getInt(GameConstant.KEY_LEVEL);
-        playerInstance = savedInstance.getParcelable(GameConstant.KEY_PLAYER);
-        levelStart = savedInstance.getBoolean(GameConstant.KEY_START_LEVEL);
-        gameContinue = savedInstance.getBoolean(GameConstant.KEY_PLAYER_WIN);
-        currentEnemieIndex = savedInstance.getInt(GameConstant.KEY_ENEMIE_INDEX);
-        dataModel = savedInstance.getParcelable(GameConstant.KEY_DATA_MODEL);
+        try {
+            super.onRestoreInstanceState(savedInstance);
+            currentLevel = savedInstance.getInt(GameConstant.KEY_LEVEL);
+            playerInstance = savedInstance.getParcelable(GameConstant.KEY_PLAYER);
+            levelStart = savedInstance.getBoolean(GameConstant.KEY_START_LEVEL);
+            gameContinue = savedInstance.getBoolean(GameConstant.KEY_PLAYER_WIN);
+            currentEnemieIndex = savedInstance.getInt(GameConstant.KEY_ENEMIE_INDEX);
+            dataModel = savedInstance.getParcelable(GameConstant.KEY_DATA_MODEL);
+            int selectedButtonId= savedInstance.getInt("selectedButtonId", -1);
+            String tagString = savedInstance.getString("selectedButtonTag", null);
+            infoButton[0] = new JSONObject(savedInstance.getString("buttonTag0"));
+            infoButton[1] = new JSONObject(savedInstance.getString("buttonTag1"));
+            infoButton[2] = new JSONObject(savedInstance.getString("buttonTag2"));
+            initItems();
+            if (selectedButtonId != -1) {
+                JSONObject tagObject = null;
+                tagObject = new JSONObject(tagString);
+                selectedButton = findViewById(selectedButtonId);
+                selectedButton.setColorFilter(Color.argb(150, 0, 0, 0));
+                onClickButton(tagObject);
+                setContinueButon();
+            }
+            else{
+                selectedButton = null;
+            }
+        }   catch (JSONException e) {
+        throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
@@ -258,6 +283,16 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         outState.putBoolean(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         outState.putInt(GameConstant.KEY_ENEMIE_INDEX, this.currentEnemieIndex);
         outState.putParcelable(GameConstant.KEY_DATA_MODEL, this.dataModel);
+        outState.putString("buttonTag0", infoButton[0].toString());
+        outState.putString("buttonTag1", infoButton[1].toString());
+        outState.putString("buttonTag2", infoButton[2].toString());
+        if (selectedButton != null) {
+            outState.putInt("selectedButtonId", selectedButton.getId());
+            JSONObject tagObject = (JSONObject) selectedButton.getTag();
+            outState.putString("selectedButtonTag", tagObject.toString());
+
+        }
+
     }
 
     private void showAlertDialog(TextView textView, String message) {
@@ -278,26 +313,40 @@ public class GameChoise extends AppCompatActivity implements Utilities {
 
     private void initItems() throws Exception {
         if(levelStart){
-            JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
-            try {
-                if (objets != null && objets.length() > 0) {
-                    JSONObject objet1 = objets.getJSONObject(0);
-                    imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
-                    imageButton1.setTag(objet1);
+            if (infoButton[0] == null) {  // Supposons que si le premier est nul, tous le sont
+                JSONArray objets = JsonReader.getItem(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
+                try {
+                    if (objets != null && objets.length() > 0) {
+                        JSONObject objet1 = objets.getJSONObject(0);
+                        imageButton1.setImageResource(getResources().getIdentifier(objet1.getString("image"), "drawable", getPackageName()));
+                        imageButton1.setTag(objet1);
+                        infoButton[0] = objet1;  // Stockage du tag
+
+                        JSONObject objet2 = objets.getJSONObject(1);
+                        imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
+                        imageButton2.setTag(objet2);
+                        infoButton[1] = objet2;  // Stockage du tag
+
+                        JSONObject objet3 = objets.getJSONObject(2);
+                        imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
+                        imageButton3.setTag(objet3);
+                        infoButton[2] = objet3;  // Stockage du tag
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (objets != null && objets.length() > 1) {
-                    JSONObject objet2 = objets.getJSONObject(1);
-                    imageButton2.setImageResource(getResources().getIdentifier(objet2.getString("image"), "drawable", getPackageName()));
-                    imageButton2.setTag(objet2);
-                }
-                if (objets != null && objets.length() > 2) {
-                    JSONObject objet3 = objets.getJSONObject(2);
-                    imageButton3.setImageResource(getResources().getIdentifier(objet3.getString("image"), "drawable", getPackageName()));
-                    imageButton3.setTag(objet3);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                // Utilisation des tags stockés pour initialiser les boutons
+                imageButton1.setImageResource(getResources().getIdentifier(infoButton[0].getString("image"), "drawable", getPackageName()));
+                imageButton1.setTag(infoButton[0]);
+
+                imageButton2.setImageResource(getResources().getIdentifier(infoButton[1].getString("image"), "drawable", getPackageName()));
+                imageButton2.setTag(infoButton[1]);
+
+                imageButton3.setImageResource(getResources().getIdentifier(infoButton[2].getString("image"), "drawable", getPackageName()));
+                imageButton3.setTag(infoButton[2]);
             }
+
         }
         else {
             //modifier la textView (en disant vous avez vaincu etc)
@@ -309,6 +358,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
                 JSONObject object = JsonReader.getObject(this, drops[i]);
                 button.setImageResource(getResources().getIdentifier(object.getString("image"), "drawable", getPackageName()));
                 button.setTag(object);
+                infoButton[i]=object;
             }
         }
 

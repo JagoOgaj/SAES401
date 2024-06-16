@@ -101,7 +101,7 @@
         android:id="@+id/textWarning"
         android:layout_width="390dp"
         android:layout_height="80dp"
-        android:fontFamily="@font/normal_font"
+        android:fontFamily="@font/dpcomic"
         android:gravity="center"
         android:textColor="#E10808"
         android:textStyle="bold"

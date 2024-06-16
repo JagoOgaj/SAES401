@@ -20,7 +20,7 @@
       "image": "skull_guerrier_des_morts",
       "image_sansfond": "sf_skull_guerrier_des_morts",
       "win": {
-        "dropPossible": ["epee_N", "lance_N"],
+        "dropPossible": ["epee_N", "lance_N","bouclier_N"],
         "narration": "La défaite de Skull disperse les esprits vengeurs qui hantaient les lieux."
       },
       "loose": {
@@ -38,7 +38,7 @@
       "image": "skal_le_necromancien",
       "image_sansfond": "sf_skal_le_necromancien",
       "win": {
-        "dropPossible": ["epee_R", "arc_N"],
+        "dropPossible": ["epee_R", "arc_N","lance_N"],
         "narration": "En mettant fin aux rituels de Skal, vous arrêtez la marée montante des morts."
       },
       "loose": {
@@ -56,7 +56,7 @@
       "image": "grim_le_faucheur",
       "image_sansfond": "sf_grim_le_faucheur",
       "win": {
-        "dropPossible": [ "bouclier_R", "arc_R"],
+        "dropPossible": [ "bouclier_R", "arc_R", "lance_N"],
         "narration": "La chute de Grim met un terme à la récolte des âmes innocentes."
       },
       "loose": {
@@ -74,7 +74,7 @@
       "image": "eldrin_le_magicien",
       "image_sansfond": "sf_eldrin_le_magicien",
       "win": {
-        "dropPossible": ["bouclier_N", "grimoire_R"],
+        "dropPossible": ["bouclier_N", "grimoire_R", "arc_R"],
         "narration": "En déjouant les illusions d'Eldrin, vous ramenez la clarté aux Cryptes Sombres."
       },
       "loose": {
@@ -92,7 +92,7 @@
       "image": "lif_roi_des_morts",
       "image_sansfond": "sf_lif_roi_des_morts",
       "win": {
-        "dropPossible": ["epee_R", "arc_SR"],
+        "dropPossible": ["epee_R", "arc_SR", "lance_SR"],
         "narration": "En vainquant Lif, vous avez dissipé les ombres qui enveloppaient les cryptes."
       },
       "loose": {

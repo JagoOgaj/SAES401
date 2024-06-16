@@ -15,8 +15,8 @@
 
     <TextView
         android:id="@+id/creditsText"
-        android:layout_width="643dp"
-        android:layout_height="192dp"
+        android:layout_width="627dp"
+        android:layout_height="251dp"
         android:fontFamily="@font/dpcomic"
         android:lineSpacingExtra="25dp"
         android:text="@string/credits_text"

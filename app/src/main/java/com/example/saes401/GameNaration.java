@@ -158,11 +158,6 @@ public class GameNaration extends AppCompatActivity implements Utilities {
         playerInstance = savedInstanceState.getParcelable(GameConstant.KEY_PLAYER);
         levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
         this.dataModel = savedInstanceState.getParcelable(GameConstant.KEY_DATA_MODEL);
-        try {
-            launchNaration();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

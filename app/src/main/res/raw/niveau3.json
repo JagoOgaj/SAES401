@@ -20,7 +20,7 @@
       "image": "zarek_le_sorcier",
       "image_sansfond": "sf_zarek_le_sorcier",
       "win": {
-        "dropPossible": ["bouclier_SR", "epee_SR"],
+        "dropPossible": ["bouclier_SR", "epee_SR","lance_SR"],
         "narration": "With the defeat of Zarek, the shadows that shrouded the ruins slowly dissipate."
       },
       "loose": {
@@ -38,7 +38,7 @@
       "image": "helga_l_enchanteresse",
       "image_sansfond": "sf_helga_l_enchanteresse",
       "win": {
-        "dropPossible": ["lance_SR", "arc_SR"],
+        "dropPossible": ["lance_SR", "arc_SR", "epee_SR"],
         "narration": "By breaking Helga's spell, you free the spirits she had bewitched."
       },
       "loose": {
@@ -56,7 +56,7 @@
       "image": "baldur_l_ancien",
       "image_sansfond": "sf_baldur_l_ancien",
       "win": {
-        "dropPossible": ["grimoire_SR", "bouclier_SSR"],
+        "dropPossible": ["grimoire_SR", "bouclier_SSR","lance_SSR"],
         "narration": "Baldur, stripped of his malevolent runes, collapses, returning his powers to the earth."
       },
       "loose": {
@@ -74,7 +74,7 @@
       "image": "lyria_la_sirene",
       "image_sansfond": "sf_lyria_la_sirene",
       "win": {
-        "dropPossible": ["epee_SSR", "lance_SSR"],
+        "dropPossible": ["epee_SSR", "lance_SSR", "bouclier_SSR"],
         "narration": "Silence falls over the ruins as Lyria, defeated, returns to the depths from whence she came."
       },
       "loose": {
@@ -92,7 +92,7 @@
       "image": "aldrok_le_chevalier_gobelin",
       "image_sansfond": "sf_aldrok_le_chevalier_gobelin",
       "win": {
-        "dropPossible": ["arc_SSR", "grimoire_SSR"],
+        "dropPossible": ["arc_SSR", "grimoire_SSR", "epee_SSR"],
         "narration": "Aldrok, deprived of his mission, finally falls, his last blow missed."
       },
       "loose": {
