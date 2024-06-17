@@ -237,7 +237,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         currentLevel = savedInstanceState.getInt(GameConstant.KEY_LEVEL);
         playerInstance = savedInstanceState.getParcelable(GameConstant.KEY_PLAYER);
         currentEnemieIndex = savedInstanceState.getInt(GameConstant.KEY_ENEMIE_INDEX);
-        currentEnemieInstance = (Enemie) savedInstanceState.getSerializable(GameConstant.KEY_ENEMIE_INSTANCE);
+        currentEnemieInstance = savedInstanceState.getParcelable(GameConstant.KEY_ENEMIE_INSTANCE);
         gameContinue = savedInstanceState.getBoolean(GameConstant.KEY_PLAYER_WIN);
         levelStart = savedInstanceState.getBoolean(GameConstant.KEY_START_LEVEL);
         dataModel = savedInstanceState.getParcelable(GameConstant.KEY_DATA_MODEL);
@@ -451,13 +451,20 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
         }
     }
 
-    private void setCurrentLevelFront() {
-        getCurrentLevelTextView().setText(
-                String.format(
-                        GameConstant.FORMAT_CURRENT_LEVEL,
-                        this.currentLevel,
-                        this.currentEnemieIndex + 1
-                ));
+    private void setCurrentLevelFront() throws Exception {
+        String text;
+        if (this.currentEnemieIndex == JsonReader.getIndexBoss(this,String.format(GameConstant.FORMAT_LEVEL,currentLevel)) ){
+            text="Boss";
+        }
+        else{
+            text = String.format(
+                    GameConstant.FORMAT_CURRENT_LEVEL,
+                    this.currentLevel,
+                    this.currentEnemieIndex + 1
+            );
+        }
+        getCurrentLevelTextView().setText(text);
+
     }
 
     private void setTextGameplay(int result) {

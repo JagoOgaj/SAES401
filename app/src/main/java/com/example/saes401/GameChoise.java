@@ -230,7 +230,7 @@ public class GameChoise extends AppCompatActivity implements Utilities {
                         getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE_EN)) {
                     currentEnemieIndex = JsonReader.getIndexBoss(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
                 }
-                if (!addItemToPlayer()) {
+                else if (!addItemToPlayer()) {
                     this.playerInstance.setInentoryRandom(getItem((JSONObject) selectedButton.getTag()));
                 }
             } catch (Exception e) {
