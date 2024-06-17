@@ -38,7 +38,7 @@
       "image": "gromm_la_bete",
       "image_sansfond": "sf_gromm_la_bete",
       "win": {
-        "dropPossible": ["lance_R", "arc_R","epee_R"],
+        "dropPossible": ["lance_R", "arc_R","clee_maudite"],
         "narration": "Gromm tombe sous vos coups, et ses hurlements résonnent à travers la forêt."
       },
       "loose": {

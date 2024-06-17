@@ -2,7 +2,7 @@
   "players": [
     {
       "name": "Thane Braddock, the Knight",
-      "damage": "3d6",
+      "damage": "1d1",
       "image": "choix1",
       "image_sansfond": "sf_choix1",
       "healPoint": 3

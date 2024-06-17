@@ -176,7 +176,6 @@ public class DataModel implements DataMethodsAnalytics, Parcelable {
             try {
                 String time = getTime();
                 ContentValues values = new ContentValues();
-                values.put("date", start.toString());
                 values.put("duration", time);
                 values.put("max_damage_to_player", getMaxDamageToPlayer());
                 values.put("max_damage_to_enemy", getMaxDamageToEnemy());

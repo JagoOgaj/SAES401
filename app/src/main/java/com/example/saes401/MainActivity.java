@@ -176,10 +176,5 @@ public class MainActivity extends AppCompatActivity implements Utilities {
         // Charger la langue
         String language = Settings.loadLanguage(this);
         Settings.changeLanguage(MainActivity.this, language);
-
-        // Charger le volume et l'appliquer
-        volume = Settings.loadVolume(this);
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) volume, 0);
     }
 }

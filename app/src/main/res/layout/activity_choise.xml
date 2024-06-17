@@ -7,15 +7,14 @@
     >
 
 
-
     <ImageView
         android:id="@+id/imageViewForest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/choixportrait"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <LinearLayout
         android:id="@+id/choiseBeforeLevel"

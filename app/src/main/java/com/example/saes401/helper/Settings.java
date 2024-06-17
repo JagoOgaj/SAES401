@@ -9,18 +9,13 @@ import android.preference.PreferenceManager;
 import java.util.Locale;
 
 public class Settings {
-    public static void saveSettings(Context context, int volume, String language) {
+    public static void saveLanguage(Context context, String language) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(GameConstant.VOLUME, volume);
         editor.putString(GameConstant.LANGUE, language);
         editor.apply();
     }
 
-    public static int loadVolume(Context context) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPreferences.getInt(GameConstant.VOLUME, 50);  // Default volume 50
-    }
 
     public static String loadLanguage(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
