@@ -20,7 +20,7 @@
       "image": "skull_guerrier_des_morts",
       "image_sansfond": "sf_skull_guerrier_des_morts",
       "win": {
-        "dropPossible": ["epee_N", "lance_N","bouclier_N"],
+        "dropPossible": ["epee_N", "lance_N","clee_maudite"],
         "narration": "The defeat of Skull scatters the vengeful spirits that haunted the place."
       },
       "loose": {
