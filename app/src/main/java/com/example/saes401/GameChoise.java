@@ -226,7 +226,8 @@ public class GameChoise extends AppCompatActivity implements Utilities {
         buttonContinueToLevel.setVisibility(View.VISIBLE);
         buttonContinueToLevel.setOnClickListener(v -> {
             try {
-                if (getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE)) {
+                if (getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE_FR) ||
+                        getItem((JSONObject) selectedButton.getTag()).getName().contains(GameConstant.CLEE_MAUDITE_EN)) {
                     currentEnemieIndex = JsonReader.getIndexBoss(this, String.format(GameConstant.FORMAT_LEVEL, currentLevel));
                 }
                 if (!addItemToPlayer()) {

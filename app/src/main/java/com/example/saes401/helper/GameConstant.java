@@ -37,7 +37,8 @@ public final class GameConstant {
     public static final int WIDTH_HEIGHT_ITEMS = 130;
     public static final int MARGIN_ITEM = 40;
     public static final int DELAY_TIME = 3000;
-    public static final String CLEE_MAUDITE = "cle maudite";
+    public static final String CLEE_MAUDITE_FR = "cle maudite";
+    public static final String CLEE_MAUDITE_EN = "Cursed Key";
     public static final String VOLUME = "SavedVolume";
     public static final String LANGUE = "SavedLanguage";
     public static final String FORMAT_STAT = "Score: %d \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nWin: %b";
