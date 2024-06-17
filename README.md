@@ -1,5 +1,7 @@
 # Jeu dont vous êtes le héros
 
+![Page principal](images/main.png)
+
 ## Contexte
 Comme dans les “livres dont vous êtes le héros”, ce projet vise à améliorer une application existante pour permettre l'intégration de scénarios échangeables. Les utilisateurs pourront ainsi naviguer entre différentes situations, collecter des objets uniques et affronter des adversaires, tout en influençant le déroulement de leur aventure par leurs choix.
 
@@ -31,3 +33,14 @@ Les objets sont uniques et définis par une description textuelle, un identifian
 Les rencontres, associées à chaque situation, sont décrites sous forme de tableau et activent un mode combat interactif. Les combats utilisent des scores chiffrés (entre 1 et 6) et une composante aléatoire, dépendant des objets possédés par le joueur. Les résultats de rencontres débloquent des situations spécifiques et peuvent entraîner l’acquisition d’objets uniques.
 
 ![Exemple de rencontre](images/rencontre.png)
+
+## Équipe de projet
+Ce projet est réalisé par :
+- Samy OKI
+- Scander ALIOUI
+- Zakaria CHAOUI
+
+Étudiants en deuxième année de BUT informatique en Alternance à l'Université Paris 13.
+
+## Remerciements
+Merci à l'équipe pédagogique pour leur soutien continu et les ressources mises à notre disposition.
