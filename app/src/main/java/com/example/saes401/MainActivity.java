@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
     private Intent intent;
     private ClickSound clickSoundService;
     private boolean isBound = false;
-    private float volume;
+
     private boolean test;
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements Utilities {
 
     private void bindBackGroundSoundService() {
         Intent intent1 = new Intent(this, BackGroundSound.class);
-        intent1.putExtra(GameConstant.VOLUME, volume);
+        intent1.putExtra(GameConstant.VOLUME, 1.0f);
         startService(intent1);
     }
 
