@@ -34,6 +34,18 @@ Les rencontres, associées à chaque situation, sont décrites sous forme de tab
 
 ![Exemple de rencontre](images/rencontre.png)
 
+#### Statistiques
+Chaque partie jouée est stockée pour des analyses statistiques. Cela permet de suivre les performances des joueurs, d'identifier les tendances et d'améliorer le jeu en conséquence.
+
+![Statistiques des parties](images/statistiques.png)
+
+#### Page de paramètres
+L'application inclut une page de paramètres où les utilisateurs peuvent personnaliser leur expérience de jeu. Les paramètres disponibles incluent la configuration des sons, la gestion des notifications, et d'autres options de personnalisation.
+
+![Page de paramètres](images/parametres.png)
+
+![Page de paramètres](images/you_lost.png)
+
 ## Équipe de projet
 Ce projet est réalisé par :
 - Samy OKI
