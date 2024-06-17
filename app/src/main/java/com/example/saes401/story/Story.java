@@ -301,7 +301,11 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             synchronized (lock) {
                 try {
                     runOnUiThread(() -> {
+                        int color = Color.parseColor("#B3FFFFFF");
                         getInformationTextView().setText(R.string.item);
+                        getInformationTextView().setBackgroundColor(color);
+                        getTextViewGamePLay().setBackgroundColor(Color.TRANSPARENT);
+
                     });
                     lock.wait();
                 } catch (InterruptedException e) {
@@ -310,6 +314,8 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             }
             runOnUiThread(() -> {
                 getInformationTextView().setText("");
+                getInformationTextView().setBackgroundColor(Color.TRANSPARENT);
+
             });
             int[] dicesResultPlayer = new int[0];
             try {
@@ -418,6 +424,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     }
 
     private void initFront() throws Exception {
+        int color = Color.parseColor("#B3FFFFFF");
         if (!this.gameContinue && fightEnd) {
             getViewGameplay().removeAllViews();
             getTextViewGamePLay().setText("");
@@ -427,6 +434,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             setListenerButtonTakeItem(true);
             int text =R.string.looseFight ;
             getTextViewGamePLay().setText(text);
+            getTextViewGamePLay().setBackgroundColor(color);
         }
         else if (this.gameContinue && fightEnd) {
             getViewGameplay().removeAllViews();
@@ -437,6 +445,8 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             setListenerButtonTakeItem(true);
             int text = R.string.winFight;
             getTextViewGamePLay().setText(text);
+            getTextViewGamePLay().setBackgroundColor(color);
+
         }
         else {
             setTextGameplay(-1);
@@ -446,6 +456,7 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             setVisibilityButtonTake(true);
             getButtonTakeItem().setText(R.string.useDice);
             setListenerButtonTakeItem(false);
+            getTextViewGamePLay().setBackgroundColor(color);
             initFrontPlayer();
             initFrontEnemie();
             setListener();
@@ -577,7 +588,10 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
     private void animateDiceRoll(int[] resultDices, boolean isPlayer, int itemEnemie) {
         getTextViewGamePLay().setText("");
         getViewGameplay().removeAllViews();
+        getTextViewGamePLay().setBackgroundColor(Color.TRANSPARENT);
         if (!isPlayer && itemEnemie != -1) {
+            int color = Color.parseColor("#B3FFFFFF");
+            getTextViewGamePLay().setBackgroundColor(color);
             imageViewsEnemie.get(itemEnemie).setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
             getTextViewGamePLay().setText(currentEnemieInstance.getInventory().getItem(itemEnemie).getDesc());
         }
@@ -606,6 +620,8 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
             ImageView imageView = initImageView(drawable[dicesResult[i] - 1], false);
             getViewGameplay().addView(imageView);
         }
+        int color = Color.parseColor("#B3FFFFFF");
+        getTextViewGamePLay().setBackgroundColor(color);
         setTextGameplay(result);
         TextView textView = isPlayer ? getTextScorePlayer() : getTextScoreEnemie();
         setScoreText(textView, result);

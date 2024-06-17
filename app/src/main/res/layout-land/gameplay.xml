@@ -18,10 +18,10 @@
     <Button
         android:id="@+id/takeItem"
         android:layout_width="166dp"
-        android:layout_height="58dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="#A3E34C"
-        android:fontFamily="@font/normal_font"
         android:text="Use"
+        android:fontFamily="@font/dpcomic"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -70,11 +70,12 @@
 
     <TextView
         android:id="@+id/enemieName"
-        android:layout_width="138dp"
+        android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginBottom="52dp"
         android:background="#B3FFFFFF"
         android:text="TextView"
+        android:fontFamily="@font/dpcomic"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintEnd_toStartOf="@+id/enemieImage"
@@ -119,10 +120,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.297"
+        app:layout_constraintHorizontal_bias="0.335"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.698"></LinearLayout>
+        app:layout_constraintVertical_bias="0.741"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/heartContainer2"
@@ -132,10 +133,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.705"
+        app:layout_constraintHorizontal_bias="0.675"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageFond"
-        app:layout_constraintVertical_bias="0.261"></LinearLayout>
+        app:layout_constraintVertical_bias="0.258"></LinearLayout>
 
     <ImageView
         android:id="@+id/playerImage"
@@ -169,6 +170,7 @@
         android:textColor="@color/black"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:fontFamily="@font/dpcomic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.941"
@@ -185,6 +187,7 @@
         android:textColor="@color/black"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:fontFamily="@font/dpcomic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.08"
@@ -197,7 +200,7 @@
         android:layout_width="91dp"
         android:layout_height="43dp"
         android:layout_marginBottom="88dp"
-        android:background="#B3FFFFFF"
+        android:fontFamily="@font/dpcomic"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="34sp"
@@ -213,8 +216,8 @@
         android:id="@+id/infoTextView"
         android:layout_width="273dp"
         android:layout_height="90dp"
-        android:background="#B3FFFFFF"
         android:gravity="center"
+        android:fontFamily="@font/dpcomic"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -229,8 +232,8 @@
         android:id="@+id/resultTextGamplay"
         android:layout_width="180dp"
         android:layout_height="66dp"
-        android:background="#B3FFFFFF"
         android:gravity="center"
+        android:fontFamily="@font/dpcomic"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/black"

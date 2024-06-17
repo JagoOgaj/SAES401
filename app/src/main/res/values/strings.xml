@@ -3,7 +3,7 @@
     <string name="start_game">Start new adventure</string>
     <string name="continue_game">Continue your adventure</string>
     <string name="title">Ninja Warrior</string>
-    <string name="title2">Village Revenge</string>
+    <string name="title2">Legends of the Kingdom of Paloria</string>
     <string name="credits">Credits</string>
     <string name="previous">Previous game</string>
     <string name="creditsName"> AlIOUI Scander\n CHAOUCH Zakaria\n OKI Samy</string>
@@ -31,8 +31,8 @@
     <string name="get">recover</string>
     <string name="item">Please select an item</string>
     <string name="stat">Statistics</string>
-    <string name = "next">Next</string>
-    <string name = "prev">Previous</string>
+    <string name="next">Next</string>
+    <string name="prev">Previous</string>
     <string name="takeItem">Take</string>
     <string name="nullMatchFight">Equality</string>
     <string name="winFight">You have win</string>
@@ -42,4 +42,7 @@
     <string name="delete">Delete scores</string>
     <string name="errorInsertItem">Inserting a new item replaces a randomly acquired item</string>
     <string name="errorGameContinue">No saved game</string>
+    <string name="continuer">Continue</string>
+    <string name="win">You win !</string>
+    <string name="lose">You lost !</string>
 </resources>

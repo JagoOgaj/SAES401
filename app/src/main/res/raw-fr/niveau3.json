@@ -38,7 +38,7 @@
       "image": "helga_l_enchanteresse",
       "image_sansfond": "sf_helga_l_enchanteresse",
       "win": {
-        "dropPossible": ["lance_SR", "arc_SR", "epee_SR"],
+        "dropPossible": ["lance_SR", "arc_SR","clee_maudite"],
         "narration": "En brisant le sortilège de Helga, vous libérez les esprits qu'elle avait ensorcelés."
       },
       "loose": {

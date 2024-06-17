@@ -4,7 +4,7 @@
     <string name="start_game">Commencez une nouvelle aventure</string>
     <string name="continue_game">Continuez votre aventure</string>
     <string name="title">Ninja Warrior</string>
-    <string name="title2">La Vengeance Du Village</string>
+    <string name="title2">Les Légendes du Royaume de Paloria</string>
     <string name="credits">Credits</string>
     <string name="previous">Précédentes parties</string>
     <string name="creditsName">AlIOUI Scander \n CHAOUCH Zakaria \n OKI Samy</string>
@@ -43,4 +43,7 @@
     <string name="delete">Supprimer les scores</string>
     <string name="errorInsertItem">L\'insertion d\'un nouveau item remplacer un item acquis de maniere aleatoire</string>
     <string name="errorGameContinue">Aucune partie sauvegardée</string>
+    <string name="continuer">Continuer</string>
+    <string name="win">Tu as gagné !</string>
+    <string name="lose">Tu as perdu !</string>
 </resources>

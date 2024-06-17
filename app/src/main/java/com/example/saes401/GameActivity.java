@@ -64,7 +64,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         } else if (this.previousActivity.contains(GameConstant.VALUE_STORY)) {
             if (this.currentLevel > 3) {
                 GameSave.clearGameSaveKeys(this);
-                startCredit();
+                startResultat();
             } else if (!noEnemieLeft(this.currentEnemieInstance)) {
                 this.currentEnemieInstance++;
                 this.levelStart = false;
@@ -81,7 +81,7 @@ public class GameActivity extends AppCompatActivity implements Utilities {
             if (this.currentLevel > 3 || !this.gameContinue) {
                 setDataToDB();
                 GameSave.clearGameSaveKeys(this);
-                startCredit();
+                startResultat();
             } else startActivityGameChoise();
 
         }
@@ -163,8 +163,9 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         startActivity(this.intent);
     }
 
-    private void startCredit() {
-        this.intent = new Intent(this, CreditsActivity.class);
+    private void startResultat() {
+        this.intent = new Intent(this, ResultatActivity.class);
+        this.intent.putExtra(GameConstant.KEY_PLAYER_WIN, this.gameContinue);
         startActivity(this.intent);
     }
 

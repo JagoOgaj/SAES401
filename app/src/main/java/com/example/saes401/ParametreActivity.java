@@ -126,7 +126,7 @@ public class ParametreActivity extends AppCompatActivity {
         volumeSeekBar.setMax(maxVolume);
 
         // Initialise le volume avec la valeur sauvegardée
-        int volumeSave = Settings.loadVolume(this);
+        int volumeSave = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         volumeSeekBar.setProgress(volumeSave);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeSave, 0);
 
@@ -138,7 +138,7 @@ public class ParametreActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {  // Vérifie si le changement vient de l'utilisateur
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, AudioManager.FLAG_SHOW_UI);
-                    volume = progress;
+
                 }
             }
 
@@ -157,7 +157,7 @@ public class ParametreActivity extends AppCompatActivity {
     private void setupButtons() {
         sauvegardeButton.setOnClickListener(v -> {
             onButtonClick();
-            Settings.saveSettings(this, volume, selectedLanguage);
+            Settings.saveLanguage(this, selectedLanguage);
             restartBackgroundSoundService();
 
             String message = "Saved parameters";
@@ -175,6 +175,7 @@ public class ParametreActivity extends AppCompatActivity {
             // Code pour retourner au menu principal
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_SHOW_UI);
         });
     }
 
