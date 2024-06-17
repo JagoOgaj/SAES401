@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SAES401</string>
     <string name="start_game">Commencez une nouvelle aventure</string>
@@ -24,16 +23,16 @@
     <string name="menu">Menu principal</string>
     <string name="take">Prendre</string>
     <string name="volume">Volume :  </string>
-    <string name = "saveSetting">Paramètres sauvegardés</string>
+    <string name="saveSetting">Paramètres sauvegardés</string>
     <string name="credits_text">
         "Ce jeu a été créé par ALIOUI Scander, OKI Samy et CHAOUCH Zakaria. Un grand merci à tous ceux qui ont contribué à ce projet et à tous les joueurs qui nous ont soutenus tout au long de cette aventure. Nous espérons que vous avez apprécié jouer autant que nous avons pris plaisir à créer ce jeu. Restez à l\'écoute pour nos futures créations!"
     </string>
-    <string name = "choiseperso">Veuillez choisir votre personnage</string>
-    <string name = "get">récupérer</string>
-    <string name = "item">Veuillez choisir un item</string>
-    <string name = "stat">Statistiques</string>
-    <string name = "next">Suivant</string>
-    <string name = "prev">Précédent</string>
+    <string name="choiseperso">Veuillez choisir votre personnage</string>
+    <string name="get">récupérer</string>
+    <string name="item">Veuillez choisir un item</string>
+    <string name="stat">Statistiques</string>
+    <string name="next">Suivant</string>
+    <string name="prev">Précédent</string>
     <string name="takeItem">Prendre</string>
     <string name="nullMatchFight">" Egalité"</string>
     <string name="winFight">Vous avez gagné</string>
@@ -46,4 +45,10 @@
     <string name="continuer">Continuer</string>
     <string name="win">Tu as gagné !</string>
     <string name="lose">Tu as perdu !</string>
+    <string name="score">Score:</string>
+    <string name="duration">Durée:</string>
+    <string name="max_damage_to_player">Dégats maximum au joueur:</string>
+    <string name="max_damage_to_enemy">Dégats maximum au ennemi:</string>
+    <string name="heart_lost">Vie perdue:</string>
+    <string name="winResult">Résultat:</string>
 </resources>

@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_PLAYER_DATA =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_SCORE + " INTEGER, " +
+                    COLUMN_SCORE + " TEXT, " +
                     COLUMN_DURATION + " INTEGER, " +
                     COLUMN_MAX_DAMAGE_TO_PLAYER + " INTEGER, " +
                     COLUMN_MAX_DAMAGE_TO_ENEMY + " INTEGER, " +

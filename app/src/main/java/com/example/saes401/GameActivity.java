@@ -65,14 +65,17 @@ public class GameActivity extends AppCompatActivity implements Utilities {
             if (this.currentLevel > 3) {
                 GameSave.clearGameSaveKeys(this);
                 startResultat();
-            } else if (!noEnemieLeft(this.currentEnemieInstance)) {
-                this.currentEnemieInstance++;
-                this.levelStart = false;
+            }
+            if (gameContinue) {
+                  if (!noEnemieLeft(this.currentEnemieInstance)) {
+                    this.currentEnemieInstance++;
+                    this.levelStart = false;
 
-            } else if (noEnemieLeft(this.currentEnemieInstance)) {
-                this.currentLevel++;
-                this.currentEnemieInstance = 0;
-                this.levelStart = true;
+                } else if (noEnemieLeft(this.currentEnemieInstance)) {
+                    this.currentLevel++;
+                    this.currentEnemieInstance = 0;
+                    this.levelStart = true;
+                }
             }
             startActivityGameNaration();
         } else if (this.previousActivity.contains(GameConstant.VALUE_GAME_CHOISE)) {
@@ -91,8 +94,9 @@ public class GameActivity extends AppCompatActivity implements Utilities {
         this.dataModel.setDatabaseHelper(new DatabaseHelper(this));
         //add last data
         this.dataModel.addEnd();
-        this.dataModel.addLastScore(String.format(GameConstant.FORMAT_SCORE, this.currentLevel, this.currentEnemieInstance));
-        this.dataModel.addWin(this.currentLevel >= 3 && noEnemieLeft(this.currentEnemieInstance));
+        String test = String.format(GameConstant.FORMAT_CURRENT_LEVEL, this.currentLevel, this.currentEnemieInstance);
+        this.dataModel.addLastScore(test);
+        this.dataModel.addWin(this.currentLevel > 3 && noEnemieLeft(this.currentEnemieInstance));
         //put data to db
         this.dataModel.putAllData();
     }

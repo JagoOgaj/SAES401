@@ -84,8 +84,14 @@ public class Inventory implements Parcelable {
     }
 
     public boolean isEmptyInventory() {
-        return items.length == 0;
+        for (Item item : items) {
+            if (item != null) {
+                return false;
+            }
+        }
+        return true;
     }
+
 
     public void removeItem(Item item) {
         int index = getIndexOfItem(item);

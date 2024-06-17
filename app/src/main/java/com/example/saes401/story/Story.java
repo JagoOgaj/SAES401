@@ -305,7 +305,6 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                         getInformationTextView().setText(R.string.item);
                         getInformationTextView().setBackgroundColor(color);
                         getTextViewGamePLay().setBackgroundColor(Color.TRANSPARENT);
-
                     });
                     lock.wait();
                 } catch (InterruptedException e) {
@@ -713,18 +712,20 @@ public class Story extends AppCompatActivity implements Utilities, Runnable {
                     onClickButton();
                     Item item = (Item) imageView.getTag();
                     int selectedItemIndex = playerInstance.getInventory().getIndexOfItem(item);
-
                     if (indexItemChoose == selectedItemIndex) {
                         // Désélectionner l'item
                         imageView.clearColorFilter();
+                        getTextViewGamePLay().setBackgroundColor(Color.TRANSPARENT);
                         setTextGameplay(-1);
                         getButtonTakeItem().setText(R.string.useDice); // Remettre le texte original
                         indexItemChoose = -1; // Réinitialiser l'index de l'item sélectionné
                     } else {
+                        int color = Color.parseColor("#B3FFFFFF");
                         // Sélectionner l'item
                         clearColorFilterImageView(imageViewsPLayer);
                         indexItemChoose = selectedItemIndex;
                         imageView.setColorFilter(Color.argb(150, 0, 0, 0)); // Assombrir l'image
+                        getTextViewGamePLay().setBackgroundColor(color);
                         getTextViewGamePLay().setText(item.getDesc());
                         getButtonTakeItem().setText(R.string.use);
                         setListenerButtonTakeItem(false);
