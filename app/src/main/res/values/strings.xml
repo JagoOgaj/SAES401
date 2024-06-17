@@ -6,7 +6,7 @@
     <string name="title2">Legends of the Kingdom of Paloria</string>
     <string name="credits">Credits</string>
     <string name="previous">Previous game</string>
-    <string name="creditsName"> AlIOUI Scander\n CHAOUCH Zakaria\n OKI Samy</string>
+    <string name="creditsName">AlIOUI Scander\n CHAOUCH Zakaria\n OKI Samy</string>
     <string name="go_back">Go back to menu</string>
     <string name="hp">HP : %1$d</string>
     <string name="time">%1$d s</string>
@@ -45,4 +45,10 @@
     <string name="continuer">Continue</string>
     <string name="win">You win !</string>
     <string name="lose">You lost !</string>
+    <string name="score">Score:</string>
+    <string name="duration">Duration:</string>
+    <string name="max_damage_to_player">Max Damage to Player:</string>
+    <string name="max_damage_to_enemy">Max Damage to Enemy:</string>
+    <string name="heart_lost">Heart Lost:</string>
+    <string name="winResult">Result :</string>
 </resources>

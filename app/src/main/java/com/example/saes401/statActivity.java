@@ -25,7 +25,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.saes401.db.DatabaseHelper;
 import com.example.saes401.helper.GameConstant;
+import com.example.saes401.helper.Settings;
 import com.example.saes401.service.ClickSound;
+
+import java.util.Locale;
 
 public class statActivity extends AppCompatActivity {
     LinearLayout linearLayout;
@@ -149,7 +152,7 @@ public class statActivity extends AppCompatActivity {
         if (cursor.moveToFirst()) {
             do {
                 // Récupérer les données de chaque ligne
-                int score = cursor.getInt(cursor.getColumnIndex("score"));
+                String score = cursor.getString(cursor.getColumnIndex("score"));
                 String duration = cursor.getString(cursor.getColumnIndex("duration"));
                 int maxDamageToPlayer = cursor.getInt(cursor.getColumnIndex("max_damage_to_player"));
                 int maxDamageToEnemy = cursor.getInt(cursor.getColumnIndex("max_damage_to_enemy"));
@@ -176,9 +179,14 @@ public class statActivity extends AppCompatActivity {
     }
 
 
-    public static void setColoredKeywords(TextView textView, int score, String duration, int maxDamageToPlayer, int maxDamageToEnemy, int heartLost, boolean isWin, Context context) {
+    public void setColoredKeywords(TextView textView, String score, String duration, int maxDamageToPlayer, int maxDamageToEnemy, int heartLost, boolean isWin, Context context) {
+
+        String languageCode = Settings.loadLanguage(this);
+        String format = languageCode.equals("fr") ? GameConstant.FORMAT_STAT_FR : GameConstant.FORMAT_STAT_EN;
         // Format du texte initial
-        String fullText = String.format(GameConstant.FORMAT_STAT, score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, isWin);
+        String result = isWin ? getString(R.string.win) : getString(R.string.lose);
+
+        String fullText = String.format(format, score, duration, maxDamageToPlayer, maxDamageToEnemy, heartLost, result);
 
         // Création d'un SpannableString à partir du texte complet
         SpannableString spannableString = new SpannableString(fullText);
@@ -187,7 +195,15 @@ public class statActivity extends AppCompatActivity {
         int color = Color.parseColor("#A3E34C");
 
         // Appliquer le style aux mots clés
-        String[] keywords = {"Score:", "Duration:", "Max Damage to Player:", "Max Damage to Enemy:", "Heart Lost:", "Win:"};
+        String[] keywords =  {
+                getString(R.string.score),
+                getString(R.string.duration),
+                getString(R.string.max_damage_to_player),
+                getString(R.string.max_damage_to_enemy),
+                getString(R.string.heart_lost),
+                getString(R.string.winResult)
+        };
+
         for (String keyword : keywords) {
             int start = spannableString.toString().indexOf(keyword);
             int end = start + keyword.length();

@@ -41,7 +41,8 @@ public final class GameConstant {
     public static final String CLEE_MAUDITE_EN = "Cursed Key";
     public static final String VOLUME = "SavedVolume";
     public static final String LANGUE = "SavedLanguage";
-    public static final String FORMAT_STAT = "Score: %d \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nWin: %b";
+    public static final String FORMAT_STAT_EN = "Score: %s \nDuration: %s \nMax Damage to Player: %d \nMax Damage to Enemy: %d \nHeart Lost: %d \nResult: %s";
+    public static final String FORMAT_STAT_FR = "Score: %s \nDurée: %s \nDégats maximum au joueur: %d \nDégats maximum au ennemi: %d \nVie perdue: %d \nRésultat: %s";
     public static final String KEY_PAGINATION = "pageActuel";
     public static final String KEY_GAME_SAVE = "gameSave";
     public static final String CONTINUE_GAME = "continueGame";
