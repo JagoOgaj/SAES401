@@ -35,7 +35,7 @@ public class statActivity extends AppCompatActivity {
     SQLiteDatabase db;
     DatabaseHelper db_helper;
     private int pageActuel = 0;
-    private static final int nombreParPage = 3;
+    private static final int nombreParPage = 2;
     TextView affichagePagination;
     private boolean isBound = false;
     private ClickSound clickSoundService;
